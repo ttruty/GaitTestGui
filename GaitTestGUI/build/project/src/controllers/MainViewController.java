@@ -1,0 +1,514 @@
+package controllers;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+import org.controlsfx.control.StatusBar;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
+import models.Marker;
+import models.Recording;
+import models.SaveOMX;
+import models.WriteCSV;
+import javafx.scene.control.Alert.AlertType;
+import serialcoms.ComConnect;
+import serialcoms.CommPortSender;
+
+/** Controls the main application screen */
+public class MainViewController {
+  
+  @FXML private Button startTest;
+  @FXML private Button stopTest;
+  @FXML private Button saveButton;
+  
+  @FXML private Label  sessionLabel;
+  @FXML private Label  timeLabel;
+  @FXML private Label  projIdLabel;  
+  @FXML private Label  fuYearLabel;  
+  @FXML private Label  staffIdLabel;    
+  @FXML private Label  comPortLabel;    
+  @FXML private StatusBar  statusBar;
+  @FXML private GridPane gridPane;
+  //@FXML private GridPane pane_8ft1;
+  
+  // performance buttons
+  @FXML private Button perf_8ft1;
+  @FXML private Button perf_8ft2;
+  @FXML private Button perf_eo;
+  @FXML private Button perf_3601;
+  @FXML private Button perf_ll;
+  @FXML private Button perf_3602;
+  @FXML private Button perf_ec;
+  @FXML private Button perf_tug1;
+  @FXML private Button perf_rl;
+  @FXML private Button perf_tug2;
+  @FXML private Button perf_tan;
+  @FXML private Button perf_32ft;
+  @FXML private Button perf_toe;
+  @FXML private Button perf_cog1;
+  @FXML private Button perf_cog2;
+  
+//performance complete buttons
+ @FXML private Button perf_8ft1_complete;
+ @FXML private Button perf_8ft2_complete;
+ @FXML private Button perf_eo_complete;
+ @FXML private Button perf_3601_complete;
+ @FXML private Button perf_ll_complete;
+ @FXML private Button perf_3602_complete;
+ @FXML private Button perf_ec_complete;
+ @FXML private Button perf_tug1_complete;
+ @FXML private Button perf_rl_complete;
+ @FXML private Button perf_tug2_complete;
+ @FXML private Button perf_tan_complete;
+ @FXML private Button perf_32ft_complete;
+ @FXML private Button perf_toe_complete;
+ @FXML private Button perf_cog1_complete;
+ @FXML private Button perf_cog2_complete;
+ 
+  @FXML private Label perf_8ft1_start;
+  @FXML private Label perf_8ft1_stop;
+  @FXML private Label perf_8ft2_start;
+  @FXML private Label perf_8ft2_stop;
+  @FXML private Label perf_eo_start;
+  @FXML private Label perf_eo_stop;
+  @FXML private Label perf_3601_start;
+  @FXML private Label perf_3601_stop;
+  @FXML private Label perf_ll_start;
+  @FXML private Label perf_ll_stop;
+  @FXML private Label perf_3602_start;
+  @FXML private Label perf_3602_stop;
+  @FXML private Label perf_ec_start;
+  @FXML private Label perf_ec_stop;
+  @FXML private Label perf_tug1_start;
+  @FXML private Label perf_tug1_stop;
+  @FXML private Label perf_rl_start;
+  @FXML private Label perf_rl_stop;
+  @FXML private Label perf_tug2_start;
+  @FXML private Label perf_tug2_stop;
+  @FXML private Label perf_tan_start;
+  @FXML private Label perf_tan_stop;
+  @FXML private Label perf_32ft_start;
+  @FXML private Label perf_32ft_stop;
+  @FXML private Label perf_toe_start;
+  @FXML private Label perf_toe_stop;
+  @FXML private Label perf_cog1_start;
+  @FXML private Label perf_cog1_stop;
+  @FXML private Label perf_cog2_start;
+  @FXML private Label perf_cog2_stop;
+  
+  @FXML private Label perf_8ft1_count;
+  @FXML private Label perf_8ft2_count;
+  @FXML private Label perf_eo_count;
+  @FXML private Label perf_3601_count;
+  @FXML private Label perf_ll_count;
+  @FXML private Label perf_3602_count;
+  @FXML private Label perf_tug1_count;
+  @FXML private Label perf_rl_count;
+  @FXML private Label perf_tug2_count;
+  @FXML private Label perf_32ft_count;
+  @FXML private Label perf_tan_count;
+  @FXML private Label perf_toe_count;
+  @FXML private Label perf_cog1_count;
+  @FXML private Label perf_cog2_count;
+  @FXML private Label perf_ec_count;
+  
+  @FXML private Label perf_8ft1_timeD;
+  @FXML private Label perf_8ft2_timeD;
+  @FXML private Label perf_eo_timeD;
+  @FXML private Label perf_3601_timeD;
+  @FXML private Label perf_ll_timeD;
+  @FXML private Label perf_3602_timeD;
+  @FXML private Label perf_tug1_timeD;
+  @FXML private Label perf_rl_timeD;
+  @FXML private Label perf_tug2_timeD;
+  @FXML private Label perf_32ft_timeD;
+  @FXML private Label perf_tan_timeD;
+  @FXML private Label perf_toe_timeD;
+  @FXML private Label perf_cog1_timeD;
+  @FXML private Label perf_cog2_timeD;
+  @FXML private Label perf_ec_timeD;
+  
+  
+  private int clickCount = 0;
+  //private int perfCount = 0;
+  long start;
+  long stop;
+  
+
+  Button[] buttonList = new Button[15];
+  ArrayList<Marker> markerList = new ArrayList<Marker>();
+  
+  //Drive info
+  String driveLetter;
+  String driveName;
+  
+  public void initSessionID(final LoginManager loginManager, String sessionID) {	  
+	  buttonList[0] = perf_8ft1;
+	  buttonList[1] = perf_8ft2;
+	  buttonList[2] = perf_eo;
+	  buttonList[3]= perf_3601;
+	  buttonList[4]= perf_ll;
+	  buttonList[5]=perf_3602;
+	  buttonList[6]=perf_ec;
+	  buttonList[7]=perf_tug1;
+	  buttonList[8]=perf_rl;
+	  buttonList[9]=perf_tug2;
+	  buttonList[10]=perf_tan;
+	  buttonList[11]=perf_32ft;
+	  buttonList[12]=perf_toe;
+	  buttonList[13]=perf_cog1;
+	  buttonList[14]=perf_cog2;
+	  
+	 System.out.println(sessionID);
+	 sessionLabel.setText("Session ID: " + sessionID);
+	 timeLabel.setText("00:00:00");
+	 projIdLabel.setText("ProjID: " + Recording.getRecordingId());
+	 fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
+	 staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
+	 
+	
+	 //perf_8ft1_start.setText("00:00:00");
+	 //perf_8ft1_stop.setText("00:00:00");
+	 
+	 //status bar
+	 //statusBar.setText("Starting, please wait");	 
+
+	 //connectiong object
+ 	 ComConnect com = new ComConnect();
+
+ 	
+ 	 //all grid objects
+ 	 ObservableList<Node> childrens = gridPane.getChildren();
+ 	 
+ 	 // set all objects as disabled until start of test
+ 	for (Node node : childrens) {
+		if (node instanceof Control) {
+			node.setDisable(true);
+	    }
+	}
+	 
+	 //status bar	 
+	 StringProperty connectedString = new SimpleStringProperty();
+	 connectedString.set("Gait Test in Progress...");
+	 
+	 Recording.connectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if (newValue)
+				{
+					//System.out.println("Plugged IN>>>>");
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							connectedString.set("Connected: TRUE");
+						}
+					});
+					
+					//connected.set("Connected: " + Recording.isConnected());				
+				}
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							connectedString.set("Connected: FALSE");
+							// set the start time stamp of recroding when device is uplugged after the start button is pressed
+							if (Recording.isRecording()) {
+						        LocalDateTime timeSet = LocalDateTime.now();
+						        Recording.setRecordingStartTimeStamp(timeSet);
+						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
+						        String time = timeSet.format(formatTime);
+						        System.out.println("UNPLUGGED at " + time);
+							}
+
+						}				
+					});
+				}
+			}
+			});  
+		
+	statusBar.textProperty().bind(connectedString);
+	  
+	
+	 
+	 // Time label
+	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
+	 
+	 final Timeline timeline = new Timeline(
+	     new KeyFrame(
+	         Duration.millis( 500 ),
+	         event -> {
+	             final long time = System.currentTimeMillis();
+	             timeLabel.setText( timeFormat.format( time ) );
+	             }
+	         )
+	     );
+	 timeline.setCycleCount( Animation.INDEFINITE );
+	 timeline.play();
+	 
+	 //OK TO UNPLUG MESSAGE
+	 com.connectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				// TODO Auto-generated method stub
+				if (newValue)
+				{
+					System.out.println("Plug Alert Changed");
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {	
+							
+							Alert alert = new Alert(AlertType.INFORMATION, 
+				                      "OK TO UNPLUG", 
+				                      ButtonType.OK);
+				        	  alert.showAndWait();
+				        	  Recording.setRecordingState(true);
+				        	  //enable all grid controls
+				        	  for (Node node : childrens) {
+				  				if (node instanceof Control) {
+				  					node.setDisable(false);
+				  			    }
+				  			}
+							//connectedString.set("Ok to UNPLUG");
+						}
+					});
+					
+					//connected.set("Connected: " + Recording.isConnected());				
+				}						
+			}
+			});  
+ 	
+	 
+	 //start button
+     startTest.setOnAction((e) -> {
+    	Alert alert = new Alert(AlertType.WARNING, 
+                 "This will format the device", 
+                 ButtonType.OK);
+   	    alert.showAndWait();
+   	    Recording.setRecordingStart(System.currentTimeMillis());
+	   	com.makeConnection();
+	   	
+	   	connectedString.set("Gait Test in Progress ...");
+	      //new Thread(longRunningTask).start();
+	      //loginManager.logout();
+	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
+		startTest.setDisable(true);
+//		statusBar.textProperty().bind(recording);   	  
+		}); //end start button
+      
+      //stop button
+	  stopTest.setOnAction((e) -> {
+		   	//ComConnect.makeConnection();
+		  	
+		   	Recording.setRecordingState(false);
+		   	Recording.setMarkerList(markerList);
+		   	Alert alert = new Alert(AlertType.WARNING, 
+                    "Recording stopped, \n "
+                    + "Please plug in device to save", 
+                    ButtonType.OK);
+      	  alert.showAndWait();
+      	  
+      	  
+      	    // deactivate all in gridpane
+			
+			for (Node node : childrens) {
+				if (node instanceof Control) {
+					node.setDisable(true);
+			    }
+			}
+			stopTest.setDisable(true);
+		   
+			}); // end stop button
+	    
+	  //save button
+	  saveButton.setOnAction((e) -> {
+		   	//ComConnect.makeConnection();
+		   	Recording.setMarkerList(markerList);
+		    
+		    if(Recording.isConnected()) 
+		    {
+		    	System.out.println("Device is Connected. Can Dowmoad");
+			   	
+		    	//write out to csv
+			    WriteCSV writer = new WriteCSV();
+			    try {
+					writer.write();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}			      	
+		    	
+		    	
+		    	//run the serial connectiong, becuase recording=1 this should stop recording
+		    	com.stopRecording();
+		    	
+			   	Recording.setRecordingState(true);
+			   	
+			   	//TODO: SAVE OMX FILE
+			   	SaveOMX saveObj = Recording.getSaveObj();
+			   	//System.out.println("SAVE OBJECT: letter " + saveObj.getSaveDriveLetter());
+			   	//System.out.println("SAVE OBJECT: name " + saveObj.getSaveDriveName());
+			   	
+			   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
+			   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
+			   	
+			   	saveObj.saveFile(rawSaveFile);			   	        	 
+		        	
+		          } else {
+		        	  Alert alert = new Alert(AlertType.WARNING, 
+		                      "Device Not connected, \n "
+		                      + "Unplug and reconnect", 
+		                      ButtonType.OK);
+		        	  alert.showAndWait();
+		        	  System.out.println("Device not connected!!!");
+		          }
+		   
+			}); // end save button
+	  
+	  // perforamnce buttons
+	  perf_8ft1.setOnAction((e) -> {
+		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_stop, perf_8ft1_timeD, perf_8ft1_count);
+				});
+	  perf_8ft2.setOnAction((e) -> {
+		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_stop,perf_8ft2_timeD, perf_8ft2_count);
+				});
+	  perf_eo.setOnAction((e) -> {
+		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_stop, perf_eo_timeD, perf_eo_count);
+				});
+	  perf_3601.setOnAction((e) -> {
+		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_stop,perf_3601_timeD, perf_3601_count);
+				});
+	  perf_ll.setOnAction((e) -> {
+		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_stop,perf_ll_timeD, perf_ll_count);
+				});
+	  perf_3602.setOnAction((e) -> {
+		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_stop,perf_3602_timeD, perf_3602_count);
+				});
+	  perf_ec.setOnAction((e) -> {
+		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_stop, perf_ec_timeD, perf_ec_count);
+				});
+	  perf_tug1.setOnAction((e) -> {
+		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_stop,perf_tug1_timeD, perf_tug1_count);
+				});
+	  perf_rl.setOnAction((e) -> {
+		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_stop, perf_rl_timeD, perf_rl_count);
+				});
+	  perf_tug2.setOnAction((e) -> {
+		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_stop, perf_tug2_timeD, perf_tug2_count);
+				});
+	  perf_tan.setOnAction((e) -> {
+		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_stop,perf_tan_timeD, perf_tan_count);
+				});
+	  perf_32ft.setOnAction((e) -> {
+		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_stop, perf_32ft_timeD, perf_32ft_count);
+				});
+	  perf_toe.setOnAction((e) -> {
+		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_stop, perf_toe_timeD, perf_toe_count);
+				});
+	  perf_cog1.setOnAction((e) -> {
+		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_stop, perf_cog1_timeD, perf_cog1_count);
+				});
+	  perf_cog2.setOnAction((e) -> {
+		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_stop, perf_cog2_timeD, perf_cog2_count);
+				});
+  
+  }
+  
+  	private void perfButton(Button button, String label, Label startTime, Label stopTime, Label timeDLabel, Label countLabel) {
+		  	clickCount++;	
+		  	//perfCount++;
+		  	Marker marker = new Marker();
+		   	marker.setLabel(label);
+		   	long time = System.currentTimeMillis();
+		   	
+		   	//change color
+//		   	startTime.setStyle("-fx-background-color: #eeeeee;");
+//		   	stopTime.setStyle("-fx-background-color: #eeeeee;");
+		   	
+		   	//Start timer
+		  	if (clickCount % 2 != 0)
+		  	{
+		  		start = time;
+
+//			   	startTime.setStyle("-fx-background-color: #00FF00;");
+//			   	stopTime.setStyle("-fx-background-color: #00FF00;");
+			   	//button.setStyle("-fx-background-color: #00FF00;");
+			   	//final long time = System.currentTimeMillis();
+			   				   	
+		  		marker.setTimeStamp(time);
+		  		marker.setUnixTimeStamp(time);
+		  		marker.setMarkerType("Start");
+		  		StringProperty timeLabel = new SimpleStringProperty();
+		  		timeLabel.set(marker.getTimeStamp());
+			   	startTime.textProperty().bind(timeLabel);
+			   	
+			   	//diable buttons
+			   	for (Button b : buttonList)
+			   	{			   		
+			   		if (b.getId() != (button.getId()))
+			   		{
+			   			b.setDisable(true);
+			   		}
+			   	}
+			   	//stopTime.disableProperty();
+			   	stopTime.setVisible(false);
+			   	marker.setCount(clickCount);
+			   	
+			   	StringProperty count = new SimpleStringProperty();
+			   	count.set(Integer.toString((clickCount+1)/2));
+			   	countLabel.textProperty().bind(count);
+			   	
+			   	
+		  	}
+		  	
+		  	//stop timer
+		  	else {		  		
+		  		marker.setTimeStamp(time);
+		  		marker.setUnixTimeStamp(time);
+		  		marker.setMarkerType("Stop");
+		  		stop = time;
+		  		
+		  		Long timeDelta = stop - start;
+		  		System.out.println(timeDelta);
+		  		marker.setTimeDelta(timeDelta);
+		  		marker.setCount(clickCount);
+		  		
+		  		StringProperty timeLabel = new SimpleStringProperty();
+		  		timeLabel.set(marker.getTimeStamp());
+		  		stopTime.setVisible(true);
+			   	stopTime.textProperty().bind(timeLabel);
+			   	
+			   	StringProperty timeDString = new SimpleStringProperty();
+			   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
+			   	timeDLabel.textProperty().bind(timeDString);  
+			   				   	
+			   	for (Button b : buttonList)
+			   	{
+  			    	b.setDisable(false);
+			   	} 
+		  	}	
+		  	markerList.add(marker);
+		  	}
+}
