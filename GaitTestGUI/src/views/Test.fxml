@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import org.controlsfx.control.StatusBar?>
 
-<AnchorPane accessibleText="GAIT TEST" prefHeight="493.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainViewController">
+<AnchorPane accessibleText="GAIT TEST" prefHeight="665.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainViewController">
    <children>
       <Button id="startTest" fx:id="startTest" layoutX="497.0" layoutY="29.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="146.0" text="Start" AnchorPane.topAnchor="29.0" />
-      <ScrollPane layoutX="15.0" layoutY="80.0" prefHeight="315.0" prefWidth="628.0">
+      <ScrollPane layoutX="15.0" layoutY="80.0" prefHeight="501.0" prefWidth="628.0">
          <content>
             <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="495.0" prefWidth="613.0" style="-fx-background-color: #eeeeee;">
               <columnConstraints>

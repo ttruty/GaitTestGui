@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.controlsfx.control.StatusBar;
 
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -164,7 +165,12 @@ public class MainViewController {
   String driveLetter;
   String driveName;
   
-  public void initSessionID(final LoginManager loginManager, String sessionID) {	  
+  Input input;
+  boolean pageDownPressed;
+  boolean pageUpPressed;
+  boolean periodPressed;
+  
+  public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
 	  buttonList[0] = perf_8ft1;
 	  buttonList[1] = perf_8ft2;
 	  buttonList[2] = perf_eo;
@@ -198,7 +204,34 @@ public class MainViewController {
 	 //connectiong object
  	 ComConnect com = new ComConnect();
 
- 	
+ 	 //input for remote
+ 	 this.input = input;
+ 	 
+ 	AnimationTimer gameLoop = new AnimationTimer() {
+		@Override
+		public void handle(long now) {
+			// TODO Auto-generated method stub
+			 // vertical direction
+			//System.out.println(input.isPressed());
+		    if( input.isPageDownPressed()) {
+		       System.out.println("PAGE DOWN");
+		            pageDownPressed = true;
+		        } else if( input.isPageUpPressed()) {
+		        	System.out.println("PAGE UP");
+		        	pageUpPressed = true;
+		        } else if ( input.isPeriodPressed()){
+		        	System.out.println("PERIOD!!");
+		        	periodPressed=true;
+		        }
+		    input.setPageDownPressed(false);
+		    input.setPageUpPressed(false);
+		    input.setPeriodPressed(false);
+
+		}
+ 		
+ 	};
+    gameLoop.start();
+	  
  	 //all grid objects
  	 ObservableList<Node> childrens = gridPane.getChildren();
  	 
@@ -262,6 +295,7 @@ public class MainViewController {
 	         event -> {
 	             final long time = System.currentTimeMillis();
 	             timeLabel.setText( timeFormat.format( time ) );
+	         	
 	             }
 	         )
 	     );
