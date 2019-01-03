@@ -39,8 +39,7 @@ public class LoginController {
 	  
 	  Thread thread = new Thread(usb);
 	  thread.setDaemon(true);
-	  thread.start();
-	   
+	  thread.start(); 
 	  
 	//status bar	 
 	 StringProperty connectedString = new SimpleStringProperty();
@@ -52,7 +51,6 @@ public class LoginController {
 	usb.connectedProperty().addListener(new ChangeListener<Boolean>() {
 		@Override
 		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-			// TODO Auto-generated method stub
 			if (newValue)
 			{
 				//System.out.println("Plugged IN>>>>");
@@ -86,7 +84,7 @@ public class LoginController {
 	  
 	  startButton.setOnAction((e) -> {	    	      	  
           if(usb.getIsConnected()) 
-		  //if (1==1)
+		  //if (1==1) //debug. do not need device in to test
           {
         	  currComPort = usb.comPort;
         	  StringBuilder sessionText = authorize();

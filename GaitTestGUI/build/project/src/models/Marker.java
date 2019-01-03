@@ -12,6 +12,7 @@ public class Marker {
 	private String markerType;
 	private Long timeDelta;
 	private Long UnixTimeStamp;
+	private int randomDelay;
 	
 	 public String getLabel() {
 		return label;
@@ -73,10 +74,18 @@ public class Marker {
 		UnixTimeStamp = unixTimeStamp;
 	}
 
+	public int getRandomDelay() {
+		return randomDelay;
+	}
+
+	public void setRandomDelay(int randomDelay) {
+		this.randomDelay = randomDelay;
+	}
+
 	@Override
 	public String toString() {
 		return " [label=" + label + ", timeStamp=" + timeStamp + ", count=" + count + ", isComplete=" + isComplete
-				+ ", markerType=" + markerType + "]";
+				+ ", markerType=" + markerType + ", randomDelay=" + randomDelay + "]";
 	}
 
 	

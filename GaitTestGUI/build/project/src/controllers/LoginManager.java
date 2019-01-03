@@ -8,13 +8,21 @@ import javafx.scene.Scene;
 
 /** Manages control flow for logins */
 public class LoginManager{
-
+    
 	private Scene scene;
 	//private Stage stage;
+	// player input
+	Input input;
+	
+    
 	
 	public LoginManager(Scene scene) {
 		
 		this.scene = scene;
+		input = new Input(scene);
+
+	    // register input listeners
+	    input.addListeners(); // TODO: remove listeners on game over
 	}
 
 	/**
@@ -22,7 +30,7 @@ public class LoginManager{
 	 * show the main application screen.
 	 */
 	public void authenticated(String sessionText) {
-		showMainView(sessionText);
+		showMainView(sessionText, input);
 	}
 
 	/**
@@ -44,12 +52,12 @@ public class LoginManager{
 		}
 	}
 
-	private void showMainView(String sessionID) {
+	private void showMainView(String sessionID, Input input) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Test.fxml"));
 			scene.setRoot((Parent) loader.load());
 			MainViewController controller = loader.getController();
-			controller.initSessionID(this, sessionID);
+			controller.initSessionID(this, sessionID, input);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}		

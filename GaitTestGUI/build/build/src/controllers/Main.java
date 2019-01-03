@@ -4,6 +4,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -29,9 +30,9 @@ public class Main extends Application {
 
 	    stage.setScene(scene);
 	    stage.setTitle("Gait Test");
-	    stage.setHeight(600);
+	    stage.setFullScreen(true);
 	    stage.setWidth(700);
-	    stage.show();
+	    stage.show();	    
 	}
 
 	public static void main(String[] args) {

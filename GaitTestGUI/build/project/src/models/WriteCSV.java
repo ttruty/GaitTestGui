@@ -91,6 +91,8 @@ public class WriteCSV {
                 fileWriter.append(String.valueOf(marker.getCount()));
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(String.valueOf(marker.getMarkerType()));
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(String.valueOf(marker.getRandomDelay()));
                 fileWriter.append(NEW_LINE_SEPARATOR);
              }
 

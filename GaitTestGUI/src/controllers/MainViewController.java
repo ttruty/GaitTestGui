@@ -7,9 +7,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.controlsfx.control.StatusBar;
 
+import indicator.RingProgressIndicator;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -21,13 +28,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import models.Marker;
 import models.Recording;
@@ -43,6 +60,7 @@ public class MainViewController {
   @FXML private Button startTest;
   @FXML private Button stopTest;
   @FXML private Button saveButton;
+  @FXML private Button sampleSoundButton;
   
   @FXML private Label  sessionLabel;
   @FXML private Label  timeLabel;
@@ -52,6 +70,9 @@ public class MainViewController {
   @FXML private Label  comPortLabel;    
   @FXML private StatusBar  statusBar;
   @FXML private GridPane gridPane;
+  @FXML private AnchorPane basePane;
+  
+  Group indicators = new Group();
   //@FXML private GridPane pane_8ft1;
   
   // performance buttons
@@ -153,12 +174,14 @@ public class MainViewController {
   
   
   private int clickCount = 0;
+  private int remoteClick = 0;
   //private int perfCount = 0;
   long start;
   long stop;
-  
 
   Button[] buttonList = new Button[15];
+  Queue<Button> bQueue;
+  
   ArrayList<Marker> markerList = new ArrayList<Marker>();
   
   //Drive info
@@ -169,7 +192,7 @@ public class MainViewController {
   boolean pageDownPressed;
   boolean pageUpPressed;
   boolean periodPressed;
-  
+    
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
 	  buttonList[0] = perf_8ft1;
 	  buttonList[1] = perf_8ft2;
@@ -194,9 +217,11 @@ public class MainViewController {
 	 fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
 	 staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
 	 
-	
 	 //perf_8ft1_start.setText("00:00:00");
 	 //perf_8ft1_stop.setText("00:00:00");
+	 
+	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
+	 gridPane.prefWidthProperty().bind(basePane.widthProperty());
 	 
 	 //status bar
 	 //statusBar.setText("Starting, please wait");	 
@@ -206,6 +231,8 @@ public class MainViewController {
 
  	 //input for remote
  	 this.input = input;
+ 	 bQueue = new LinkedList<>(Arrays.asList(buttonList));
+ 	 //Button[] editButtonList = buttonList;
  	 
  	AnimationTimer gameLoop = new AnimationTimer() {
 		@Override
@@ -213,16 +240,22 @@ public class MainViewController {
 			// TODO Auto-generated method stub
 			 // vertical direction
 			//System.out.println(input.isPressed());
-		    if( input.isPageDownPressed()) {
-		       System.out.println("PAGE DOWN");
-		            pageDownPressed = true;
-		        } else if( input.isPageUpPressed()) {
-		        	System.out.println("PAGE UP");
-		        	pageUpPressed = true;
-		        } else if ( input.isPeriodPressed()){
-		        	System.out.println("PERIOD!!");
-		        	periodPressed=true;
-		        }
+			if (!bQueue.isEmpty()) {
+			    if( input.isPageDownPressed()) {
+			       System.out.println("PAGE DOWN");
+			       bQueue.element().fire();
+			            pageDownPressed = true;
+			            remoteClick++;
+			        } else if( input.isPageUpPressed()) {
+			        	System.out.println("PAGE UP");
+			        	pageUpPressed = true;
+			        } else if ( input.isPeriodPressed()){
+			        	System.out.println("PERIOD!!");
+			        	bQueue.element().setDisable(true);
+			        	bQueue.remove();
+			        	periodPressed=true;
+			        }
+			}
 		    input.setPageDownPressed(false);
 		    input.setPageUpPressed(false);
 		    input.setPeriodPressed(false);
@@ -284,8 +317,6 @@ public class MainViewController {
 		
 	statusBar.textProperty().bind(connectedString);
 	  
-	
-	 
 	 // Time label
 	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
 	 
@@ -317,6 +348,7 @@ public class MainViewController {
 							Alert alert = new Alert(AlertType.INFORMATION, 
 				                      "OK TO UNPLUG", 
 				                      ButtonType.OK);
+										basePane.getChildren().remove(indicators);
 				        	  alert.showAndWait();
 				        	  Recording.setRecordingState(true);
 				        	  //enable all grid controls
@@ -334,15 +366,50 @@ public class MainViewController {
 			}
 			});  
  	
+	 //Sound button
+	 sampleSoundButton.setOnAction((e) -> {
+		 // Sound varialbees
+		  String musicFile = "resources\\start.wav";     // For example
+
+		  Media sound = new Media(new File(musicFile).toURI().toString());
+		  MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		  
+		 new Timer().schedule( 
+	  		        new TimerTask() {
+	  		            @Override
+	  		            public void run() {
+	  		            	mediaPlayer.play();
+	  		                
+	  		            	this.cancel();
+	  		            }
+	  		        }, 
+	  		        1
+	  		);
+	 });
+	 //end sound button
 	 
 	 //start button
-     startTest.setOnAction((e) -> {
+     startTest.setOnAction((e) -> {    	
     	Alert alert = new Alert(AlertType.WARNING, 
                  "This will format the device", 
                  ButtonType.OK);
    	    alert.showAndWait();
    	    Recording.setRecordingStart(System.currentTimeMillis());
 	   	com.makeConnection();
+	   	
+	   	//ring progress bar
+	   	RingProgressIndicator ring = new RingProgressIndicator();
+	   	ring.setRingWidth(200);
+	   	ring.makeIndeterminate();
+	   	StackPane stackRing = new StackPane();
+	   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
+	   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
+	   	
+	   	stackRing.getChildren().add(ring);
+	   	StackPane.setAlignment(ring, Pos.CENTER);
+	   	indicators.getChildren().add(stackRing);
+	   	
+	   	basePane.getChildren().add(indicators);
 	   	
 	   	connectedString.set("Gait Test in Progress ...");
 	      //new Thread(longRunningTask).start();
@@ -473,6 +540,10 @@ public class MainViewController {
   	private void perfButton(Button button, String label, Label startTime, Label stopTime, Label timeDLabel, Label countLabel) {
 		  	clickCount++;	
 		  	//perfCount++;
+		  	//random delay generation
+		  	Random delay = new Random();
+	  		int low = 1;
+	  		int high = 3000; //1 ms to 3000 ms
 		  	Marker marker = new Marker();
 		   	marker.setLabel(label);
 		   	long time = System.currentTimeMillis();
@@ -484,15 +555,48 @@ public class MainViewController {
 		   	//Start timer
 		  	if (clickCount % 2 != 0)
 		  	{
+		  		gridPane.setStyle("-fx-background-color: #00FF00;");
 		  		start = time;
+		  		
+		  		
+		  		int randomDelay = delay.nextInt(high-low) + low;
 
-//			   	startTime.setStyle("-fx-background-color: #00FF00;");
+		  		
+//		  		try {
+//					Thread.sleep(randomDelay);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+		  		 // Sound varialbees
+		  	  String musicFile = "resources\\start.wav";     // For example
+
+		  	  Media sound = new Media(new File(musicFile).toURI().toString());
+		  	  MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		  		
+		  		new Timer().schedule( 
+		  				
+		  		        new TimerTask() {
+		  		            @Override
+		  		            public void run() {
+		  		            	mediaPlayer.play();
+		  		                
+		  		            	this.cancel();
+		  		            }
+		  		        }, 
+		  		        randomDelay 
+		  		);
+		  		System.out.println("Random Delay: " + randomDelay);
+		  		//mediaPlayer.play();
+		  		
+		  		marker.setRandomDelay(randomDelay);
+			   	
 //			   	stopTime.setStyle("-fx-background-color: #00FF00;");
 			   	//button.setStyle("-fx-background-color: #00FF00;");
 			   	//final long time = System.currentTimeMillis();
 			   				   	
-		  		marker.setTimeStamp(time);
-		  		marker.setUnixTimeStamp(time);
+		  		marker.setTimeStamp(time + randomDelay);
+		  		marker.setUnixTimeStamp(time + randomDelay);
 		  		marker.setMarkerType("Start");
 		  		StringProperty timeLabel = new SimpleStringProperty();
 		  		timeLabel.set(marker.getTimeStamp());
@@ -512,13 +616,14 @@ public class MainViewController {
 			   	
 			   	StringProperty count = new SimpleStringProperty();
 			   	count.set(Integer.toString((clickCount+1)/2));
-			   	countLabel.textProperty().bind(count);
-			   	
+			   	countLabel.textProperty().bind(count); 	
 			   	
 		  	}
 		  	
 		  	//stop timer
 		  	else {		  		
+		  		
+		  		gridPane.setStyle("-fx-background-color: #FFFFFF;");
 		  		marker.setTimeStamp(time);
 		  		marker.setUnixTimeStamp(time);
 		  		marker.setMarkerType("Stop");
@@ -536,9 +641,9 @@ public class MainViewController {
 			   	
 			   	StringProperty timeDString = new SimpleStringProperty();
 			   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
-			   	timeDLabel.textProperty().bind(timeDString);  
+			   	timeDLabel.textProperty().bind(timeDString);
 			   				   	
-			   	for (Button b : buttonList)
+			   	for (Button b : bQueue)
 			   	{
   			    	b.setDisable(false);
 			   	} 
