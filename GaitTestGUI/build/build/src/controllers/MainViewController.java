@@ -38,7 +38,10 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -175,6 +178,7 @@ public class MainViewController {
   //private int perfCount = 0;
   long start;
   long stop;
+  long delayTime;
 
   Button[] buttonList = new Button[15];
   Queue<Button> bQueue;
@@ -337,27 +341,53 @@ public class MainViewController {
 				// TODO Auto-generated method stub
 				if (newValue)
 				{
-					System.out.println("Plug Alert Changed");
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {	
-							
-							Alert alert = new Alert(AlertType.INFORMATION, 
-				                      "OK TO UNPLUG", 
-				                      ButtonType.OK);
-										basePane.getChildren().remove(indicators);
-				        	  alert.showAndWait();
-				        	  Recording.setRecordingState(true);
-				        	  //enable all grid controls
-				        	  for (Node node : childrens) {
-				  				if (node instanceof Control) {
-				  					node.setDisable(false);
-				  			    }
-				  			}
-							//connectedString.set("Ok to UNPLUG");
-						}
-					});
-					
+					if (!Recording.isSaved())
+					{
+						System.out.println("Plug Alert Changed");
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {								
+								Alert alert = new Alert(AlertType.INFORMATION, 
+					                      "OK TO UNPLUG", 
+					                      ButtonType.OK);
+											basePane.getChildren().remove(indicators);
+					        	  alert.showAndWait();
+					        	  Recording.setRecordingState(true);
+					        	  //enable all grid controls
+					        	  for (Node node : childrens) {
+					  				if (node instanceof Control) {
+					  					node.setDisable(false);
+					  			    }
+					  			}
+								//connectedString.set("Ok to UNPLUG");
+							}
+						});
+					}
+					else { //when the recoring is save close EVERYTING!
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {								
+								Alert alert = new Alert(AlertType.INFORMATION, 
+					                      "Gait Test Saved!", 
+					                      ButtonType.OK);
+											//basePane.getChildren().remove(indicators);
+					        	  alert.showAndWait();
+					        	  Recording.setRecordingState(true);
+					        	  //enable all grid controls
+					        	  for (Node node : childrens) {
+					  				node.setDisable(true);					  			    
+					  			}
+					        	basePane.getChildren().remove(indicators);
+					        	startTest.setDisable(true);
+					        	stopTest.setDisable(true);
+					        	saveButton.setDisable(true);
+					        	sampleSoundButton.setDisable(true);
+					        	
+					        	
+								//connectedString.set("Ok to UNPLUG");
+							}
+						});
+					}
 					//connected.set("Connected: " + Recording.isConnected());				
 				}						
 			}
@@ -447,6 +477,21 @@ public class MainViewController {
 		    
 		    if(Recording.isConnected()) 
 		    {
+		    	
+		    	//ring progress bar
+			   	RingProgressIndicator ring = new RingProgressIndicator();
+			   	ring.setRingWidth(200);
+			   	ring.makeIndeterminate();
+			   	StackPane stackRing = new StackPane();
+			   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
+			   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
+			   	
+			   	stackRing.getChildren().add(ring);
+			   	StackPane.setAlignment(ring, Pos.CENTER);
+			   	indicators.getChildren().add(stackRing);
+			   	
+			   	basePane.getChildren().add(indicators);
+		    	
 		    	System.out.println("Device is Connected. Can Dowmoad");
 			   	
 		    	//write out to csv
@@ -459,8 +504,7 @@ public class MainViewController {
 				}			      	
 		    	
 		    	
-		    	//run the serial connectiong, becuase recording=1 this should stop recording
-		    	com.stopRecording();
+		    	
 		    	
 			   	Recording.setRecordingState(true);
 			   	
@@ -473,7 +517,11 @@ public class MainViewController {
 			   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
 			   	
 			   	saveObj.saveFile(rawSaveFile);			   	        	 
-		        	
+		        
+			   	Recording.setSaved(true);
+			   	
+			   	com.stopRecording();
+			   	
 		          } else {
 		        	  Alert alert = new Alert(AlertType.WARNING, 
 		                      "Device Not connected, \n "
@@ -482,7 +530,7 @@ public class MainViewController {
 		        	  alert.showAndWait();
 		        	  System.out.println("Device not connected!!!");
 		          }
-		   
+		    
 			}); // end save button
 	  
 	  // perforamnce buttons
@@ -544,7 +592,6 @@ public class MainViewController {
 		  	Marker marker = new Marker();
 		   	marker.setLabel(label);
 		   	long time = System.currentTimeMillis();
-		   	
 		   	//change color
 //		   	startTime.setStyle("-fx-background-color: #eeeeee;");
 //		   	stopTime.setStyle("-fx-background-color: #eeeeee;");
@@ -557,6 +604,7 @@ public class MainViewController {
 		  		
 		  		
 		  		int randomDelay = delay.nextInt(high-low) + low;
+		  		delayTime = randomDelay;
 
 		  		
 //		  		try {
@@ -626,7 +674,7 @@ public class MainViewController {
 		  		marker.setMarkerType("Stop");
 		  		stop = time;
 		  		
-		  		Long timeDelta = stop - start;
+		  		Long timeDelta = (stop - start) - delayTime;
 		  		System.out.println(timeDelta);
 		  		marker.setTimeDelta(timeDelta);
 		  		marker.setCount(clickCount);

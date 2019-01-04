@@ -1,5 +1,9 @@
 package serialcoms;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import models.Recording;
 
 public class ProtocolImplStop implements Protocol {  
@@ -97,6 +101,5 @@ public class ProtocolImplStop implements Protocol {
         CommPortSender.send(getMessage("Commit")); 
         
         Recording.setRecordingState(false);
-        
     }
 }  

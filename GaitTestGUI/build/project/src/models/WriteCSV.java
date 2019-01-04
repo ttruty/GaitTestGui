@@ -37,7 +37,7 @@ public class WriteCSV {
         final String NEW_LINE_SEPARATOR = "\n";
 
         //CSV file header
-        final String FILE_HEADER = "Perf_Label, timeStamp, UnixTimeStamp, count, markerType";
+        final String FILE_HEADER = "Perf_Label, timeStamp, UnixTimeStamp, count, markerType, delay";
         System.out.println("Print to csv");
 
 

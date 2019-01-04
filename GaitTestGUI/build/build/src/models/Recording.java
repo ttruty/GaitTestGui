@@ -25,8 +25,7 @@ public class Recording {
 	
 	// saving the omx objects
 	private static SaveOMX saveObj;
-	
-	
+	protected static boolean isSaved;
 	
 	public static String getRecordingId() {
 		return recordingId;
@@ -36,6 +35,12 @@ public class Recording {
 	}
 	public static boolean isRecording() {
 		return recordingState;
+	}
+	public static boolean isSaved() {
+		return isSaved;
+	}
+	public static void setSaved(boolean isSaved) {
+		Recording.isSaved = isSaved;
 	}
 	public static void setRecordingState(boolean recordingState) {
 		Recording.recordingState = recordingState;

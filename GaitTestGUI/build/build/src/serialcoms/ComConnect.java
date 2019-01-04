@@ -8,6 +8,7 @@ import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;  
    
@@ -118,13 +119,11 @@ public class ComConnect {
    	 }  
     
 	public Runnable stopRecording() 
-    {  
-    	System.out.println("STOPING >>>>>>>>>>>>");
-//    	ComPort comList = new ComPort();
-//   	  	comList = com.getCom();
-    	
+    {      	
         new ComConnect().connect(this.getAccessComPort(), new ProtocolImplStop());
-    	CommPortSender.send(new ProtocolImplStop().getMessage("AT"));
+    	CommPortSender.send(new ProtocolImplStop().getMessage("AT"));    
+    	 plugAlert.set(false);
+		    
 		return null;
 
     }  
@@ -138,7 +137,7 @@ public class ComConnect {
 		    disconnect(serialPort);
 		    
 		    plugAlert.set(true);
-		    
+		   
 	    }
     }
     
