@@ -16,7 +16,7 @@ public class WriteCSV {
 	
     public void write() throws IOException {
 
-    	DateFormat saveCsvFormat = new SimpleDateFormat( "yyyyMMdd" );
+    	DateFormat saveCsvFormat = new SimpleDateFormat( "yyyyMMdd_HHmmss" );
     	final long CsvDate = System.currentTimeMillis();
     	setBaseFilename(Recording.getRecordingId() + "_"+ Recording.getFuYear() + "_"+ saveCsvFormat.format( CsvDate ));
     	

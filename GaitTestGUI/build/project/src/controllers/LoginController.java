@@ -13,6 +13,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import models.DetectUSB;
 import models.Recording;
 
@@ -26,6 +28,7 @@ public class LoginController {
   @FXML private Button clearButton;
   @FXML private Label connectionLbl;
   @FXML private StatusBar  statusBar;
+  @FXML private ImageView  statusImage;
   
   
   //session id counter
@@ -41,13 +44,15 @@ public class LoginController {
 	  thread.setDaemon(true);
 	  thread.start(); 
 	  
+	  Image image = new Image("file:resources/disconnect.png");
+	  statusImage.setImage(image);
+	  
 	//status bar	 
 	 StringProperty connectedString = new SimpleStringProperty();
 	 connectedString.set("Connect Device");
 	 //recording.addListener((observable, oldValue, newValue) -> {
 	 
 	 //connectBool.set(Recording.isConnected());
-	//
 	usb.connectedProperty().addListener(new ChangeListener<Boolean>() {
 		@Override
 		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -58,6 +63,9 @@ public class LoginController {
 					@Override
 					public void run() {						
 						connectedString.set("Connected: TRUE");
+						Image image = new Image("file:resources/connect.png");
+						statusImage.setImage(image);
+						
 						//Recording.setIsConnected(true);
 					}				
 				});
@@ -69,6 +77,8 @@ public class LoginController {
 					@Override
 					public void run() {						
 						connectedString.set("Connected: FALSE");
+						Image image = new Image("file:resources/disconnect.png");
+						statusImage.setImage(image);
 						//Recording.setIsConnected(false);
 					}				
 				});

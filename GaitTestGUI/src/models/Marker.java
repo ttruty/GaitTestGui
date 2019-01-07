@@ -78,8 +78,8 @@ public class Marker {
 		return randomDelay;
 	}
 
-	public void setRandomDelay(int randomDelay) {
-		this.randomDelay = randomDelay;
+	public void setRandomDelay(long delayTime) {
+		this.randomDelay = (int) delayTime;
 	}
 
 	@Override

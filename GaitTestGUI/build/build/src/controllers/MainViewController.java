@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Timer;
@@ -27,7 +29,10 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -37,6 +42,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -51,6 +57,8 @@ import models.Recording;
 import models.SaveOMX;
 import models.WriteCSV;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import serialcoms.ComConnect;
 import serialcoms.CommPortSender;
 
@@ -171,7 +179,9 @@ public class MainViewController {
   @FXML private Label perf_cog1_timeD;
   @FXML private Label perf_cog2_timeD;
   @FXML private Label perf_ec_timeD;
+
   
+  @FXML private ImageView statusImage; 
   
   private int clickCount = 0;
   private int remoteClick = 0;
@@ -184,6 +194,7 @@ public class MainViewController {
   Queue<Button> bQueue;
   
   ArrayList<Marker> markerList = new ArrayList<Marker>();
+  ArrayList<String> perfList = new ArrayList<String>(); 
   
   //Drive info
   String driveLetter;
@@ -193,6 +204,7 @@ public class MainViewController {
   boolean pageDownPressed;
   boolean pageUpPressed;
   boolean periodPressed;
+  boolean taskRunning = false;
     
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
 	  buttonList[0] = perf_8ft1;
@@ -211,6 +223,16 @@ public class MainViewController {
 	  buttonList[13]=perf_cog1;
 	  buttonList[14]=perf_cog2;
 	  
+	  Image image = new Image("file:resources/connect.png");
+	  statusImage.setImage(image);
+	  
+	  for (Button button : buttonList) {
+		 button.setMaxWidth(Double.MAX_VALUE);
+		 button.setMaxHeight(Double.MAX_VALUE);
+		  button.setStyle("-fx-font-size:32");
+		  button.setPadding(Insets.EMPTY);
+	  }
+	  
 	 System.out.println(sessionID);
 	 sessionLabel.setText("Session ID: " + sessionID);
 	 timeLabel.setText("00:00:00");
@@ -223,6 +245,7 @@ public class MainViewController {
 	 
 	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
 	 gridPane.prefWidthProperty().bind(basePane.widthProperty());
+	 
 	 
 	 //status bar
 	 //statusBar.setText("Starting, please wait");	 
@@ -243,15 +266,15 @@ public class MainViewController {
 			//System.out.println(input.isPressed());
 			if (!bQueue.isEmpty()) {
 			    if( input.isPageDownPressed()) {
-			       System.out.println("PAGE DOWN");
+			       //System.out.println("PAGE DOWN");
 			       bQueue.element().fire();
 			            pageDownPressed = true;
 			            remoteClick++;
 			        } else if( input.isPageUpPressed()) {
-			        	System.out.println("PAGE UP");
+			        	//System.out.println("PAGE UP");
 			        	pageUpPressed = true;
-			        } else if ( input.isPeriodPressed()){
-			        	System.out.println("PERIOD!!");
+			        } else if ( input.isPeriodPressed() && !taskRunning){
+			        	//System.out.println("PERIOD!!");
 			        	bQueue.element().setDisable(true);
 			        	bQueue.remove();
 			        	periodPressed=true;
@@ -291,6 +314,8 @@ public class MainViewController {
 						@Override
 						public void run() {						
 							connectedString.set("Connected: TRUE");
+							Image image = new Image("file:resources/connect.png");
+							statusImage.setImage(image);
 						}
 					});
 					
@@ -302,12 +327,17 @@ public class MainViewController {
 						public void run() {						
 							connectedString.set("Connected: FALSE");
 							// set the start time stamp of recroding when device is uplugged after the start button is pressed
+							Image image = new Image("file:resources/disconnect.png");
+							statusImage.setImage(image);
 							if (Recording.isRecording()) {
 						        LocalDateTime timeSet = LocalDateTime.now();
 						        Recording.setRecordingStartTimeStamp(timeSet);
 						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
 						        String time = timeSet.format(formatTime);
 						        System.out.println("UNPLUGGED at " + time);
+						        
+						        Image image1 = new Image("file:resources/walk_icon.png");
+								statusImage.setImage(image1);
 							}
 
 						}				
@@ -535,164 +565,226 @@ public class MainViewController {
 	  
 	  // perforamnce buttons
 	  perf_8ft1.setOnAction((e) -> {
-		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_stop, perf_8ft1_timeD, perf_8ft1_count);
+		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_stop, perf_8ft1_timeD, perf_8ft1_count, true);
 				});
 	  perf_8ft2.setOnAction((e) -> {
-		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_stop,perf_8ft2_timeD, perf_8ft2_count);
+		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_stop,perf_8ft2_timeD, perf_8ft2_count, true);
 				});
 	  perf_eo.setOnAction((e) -> {
-		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_stop, perf_eo_timeD, perf_eo_count);
+		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_stop, perf_eo_timeD, perf_eo_count, false);
 				});
 	  perf_3601.setOnAction((e) -> {
-		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_stop,perf_3601_timeD, perf_3601_count);
+		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_stop,perf_3601_timeD, perf_3601_count, true);
 				});
 	  perf_ll.setOnAction((e) -> {
-		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_stop,perf_ll_timeD, perf_ll_count);
+		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_stop,perf_ll_timeD, perf_ll_count, false);
 				});
 	  perf_3602.setOnAction((e) -> {
-		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_stop,perf_3602_timeD, perf_3602_count);
+		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_stop,perf_3602_timeD, perf_3602_count, true);
 				});
 	  perf_ec.setOnAction((e) -> {
-		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_stop, perf_ec_timeD, perf_ec_count);
+		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_stop, perf_ec_timeD, perf_ec_count, false);
 				});
 	  perf_tug1.setOnAction((e) -> {
-		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_stop,perf_tug1_timeD, perf_tug1_count);
+		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_stop,perf_tug1_timeD, perf_tug1_count, true);
 				});
 	  perf_rl.setOnAction((e) -> {
-		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_stop, perf_rl_timeD, perf_rl_count);
+		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_stop, perf_rl_timeD, perf_rl_count, false);
 				});
 	  perf_tug2.setOnAction((e) -> {
-		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_stop, perf_tug2_timeD, perf_tug2_count);
+		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_stop, perf_tug2_timeD, perf_tug2_count, true);
 				});
 	  perf_tan.setOnAction((e) -> {
-		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_stop,perf_tan_timeD, perf_tan_count);
+		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_stop,perf_tan_timeD, perf_tan_count, true);
 				});
 	  perf_32ft.setOnAction((e) -> {
-		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_stop, perf_32ft_timeD, perf_32ft_count);
+		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_stop, perf_32ft_timeD, perf_32ft_count, true);
 				});
 	  perf_toe.setOnAction((e) -> {
-		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_stop, perf_toe_timeD, perf_toe_count);
+		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_stop, perf_toe_timeD, perf_toe_count, false);
 				});
 	  perf_cog1.setOnAction((e) -> {
-		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_stop, perf_cog1_timeD, perf_cog1_count);
+		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_stop, perf_cog1_timeD, perf_cog1_count, true);
 				});
 	  perf_cog2.setOnAction((e) -> {
-		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_stop, perf_cog2_timeD, perf_cog2_count);
+		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_stop, perf_cog2_timeD, perf_cog2_count, true);
 				});
   
   }
   
-  	private void perfButton(Button button, String label, Label startTime, Label stopTime, Label timeDLabel, Label countLabel) {
-		  	clickCount++;	
-		  	//perfCount++;
-		  	//random delay generation
-		  	Random delay = new Random();
-	  		int low = 1;
-	  		int high = 3000; //1 ms to 3000 ms
-		  	Marker marker = new Marker();
-		   	marker.setLabel(label);
-		   	long time = System.currentTimeMillis();
-		   	//change color
+  	private void perfButton(Button button, String label, Label startTime, Label stopTime, Label timeDLabel, Label countLabel, boolean isDelay) 
+  	{
+	  	clickCount++;	
+	  	//perfCount++;
+	  	
+	  	startTime.setMaxWidth(Double.MAX_VALUE);
+	  	stopTime.setMaxWidth(Double.MAX_VALUE);
+		startTime.setMaxHeight(Double.MAX_VALUE);
+		stopTime.setMaxHeight(Double.MAX_VALUE);
+		
+	  	//random delay generation
+	  	Random delay = new Random();
+  		int low = 1;
+  		int high = 3000; //1 ms to 3000 ms
+	  	Marker marker = new Marker();
+	   	marker.setLabel(label);
+	   	
+	   	long time = System.currentTimeMillis();
+	   	//change color
 //		   	startTime.setStyle("-fx-background-color: #eeeeee;");
 //		   	stopTime.setStyle("-fx-background-color: #eeeeee;");
+	   	
+	   	//Start timer
+	  	if (clickCount % 2 != 0)
+	  	{
+	  		
+	  		taskRunning = true;
+	  		button.setStyle("-fx-background-color: green; -fx-font-size:32;");
+	  		start = time;
+	  		
+	  		
+	  		
+	  		if (isDelay) {
+	  			int randomDelay = delay.nextInt(high-low) + low;
+	  			delayTime = randomDelay;
+	  			
+	  		}
+	  		else {
+	  			int randomDelay = 0;
+	  			delayTime = randomDelay;
+	  		}
+	  		
+
+	  	  String musicFile = "resources\\start.wav";     // For example
+
+	  	  Media sound = new Media(new File(musicFile).toURI().toString());
+	  	  MediaPlayer mediaPlayer = new MediaPlayer(sound);
+	  		
+	  		new Timer().schedule( 
+	  				
+	  		        new TimerTask() {
+	  		            @Override
+	  		            public void run() {
+	  		            	mediaPlayer.play();
+	  		                
+	  		            	this.cancel();
+	  		            }
+	  		        }, 
+	  		        delayTime 
+	  		);
+	  		//System.out.println("Random Delay: " + randomDelay);
+	  		//mediaPlayer.play();
+	  		
+	  		marker.setRandomDelay(delayTime);
 		   	
-		   	//Start timer
-		  	if (clickCount % 2 != 0)
-		  	{
-		  		gridPane.setStyle("-fx-background-color: #00FF00;");
-		  		start = time;
-		  		
-		  		
-		  		int randomDelay = delay.nextInt(high-low) + low;
-		  		delayTime = randomDelay;
-
-		  		
-//		  		try {
-//					Thread.sleep(randomDelay);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-		  		 // Sound varialbees
-		  	  String musicFile = "resources\\start.wav";     // For example
-
-		  	  Media sound = new Media(new File(musicFile).toURI().toString());
-		  	  MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		  		
-		  		new Timer().schedule( 
-		  				
-		  		        new TimerTask() {
-		  		            @Override
-		  		            public void run() {
-		  		            	mediaPlayer.play();
-		  		                
-		  		            	this.cancel();
-		  		            }
-		  		        }, 
-		  		        randomDelay 
-		  		);
-		  		System.out.println("Random Delay: " + randomDelay);
-		  		//mediaPlayer.play();
-		  		
-		  		marker.setRandomDelay(randomDelay);
-			   	
 //			   	stopTime.setStyle("-fx-background-color: #00FF00;");
-			   	//button.setStyle("-fx-background-color: #00FF00;");
-			   	//final long time = System.currentTimeMillis();
-			   				   	
-		  		marker.setTimeStamp(time + randomDelay);
-		  		marker.setUnixTimeStamp(time + randomDelay);
-		  		marker.setMarkerType("Start");
-		  		StringProperty timeLabel = new SimpleStringProperty();
-		  		timeLabel.set(marker.getTimeStamp());
-			   	startTime.textProperty().bind(timeLabel);
-			   	
-			   	//diable buttons
-			   	for (Button b : buttonList)
-			   	{			   		
-			   		if (b.getId() != (button.getId()))
-			   		{
-			   			b.setDisable(true);
-			   		}
-			   	}
-			   	//stopTime.disableProperty();
-			   	stopTime.setVisible(false);
-			   	marker.setCount(clickCount);
-			   	
-			   	StringProperty count = new SimpleStringProperty();
-			   	count.set(Integer.toString((clickCount+1)/2));
-			   	countLabel.textProperty().bind(count); 	
-			   	
-		  	}
-		  	
-		  	//stop timer
-		  	else {		  		
-		  		
-		  		gridPane.setStyle("-fx-background-color: #FFFFFF;");
-		  		marker.setTimeStamp(time);
-		  		marker.setUnixTimeStamp(time);
-		  		marker.setMarkerType("Stop");
-		  		stop = time;
-		  		
-		  		Long timeDelta = (stop - start) - delayTime;
-		  		System.out.println(timeDelta);
-		  		marker.setTimeDelta(timeDelta);
-		  		marker.setCount(clickCount);
-		  		
-		  		StringProperty timeLabel = new SimpleStringProperty();
-		  		timeLabel.set(marker.getTimeStamp());
-		  		stopTime.setVisible(true);
-			   	stopTime.textProperty().bind(timeLabel);
-			   	
-			   	StringProperty timeDString = new SimpleStringProperty();
-			   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
-			   	timeDLabel.textProperty().bind(timeDString);
-			   				   	
-			   	for (Button b : bQueue)
-			   	{
-  			    	b.setDisable(false);
-			   	} 
-		  	}	
-		  	markerList.add(marker);
-		  	}
+		   	//button.setStyle("-fx-background-color: #00FF00;");
+		   	//final long time = System.currentTimeMillis();
+		   				   	
+	  		marker.setTimeStamp(time + delayTime);
+	  		marker.setUnixTimeStamp(time + delayTime);
+	  		marker.setMarkerType("Start");
+	  		StringProperty timeLabel = new SimpleStringProperty();
+	  		timeLabel.set(marker.getTimeStamp());
+		   	startTime.textProperty().bind(timeLabel);
+		   	
+		   	//diable buttons
+		   	for (Button b : buttonList)
+		   	{			   		
+		   		if (b.getId() != (button.getId()))
+		   		{
+		   			b.setDisable(true);
+		   		}
+		   	}
+		   	//stopTime.disableProperty();
+		   	stopTime.setVisible(false);
+		   	marker.setCount(clickCount);
+		   	
+//		   	StringProperty count = new SimpleStringProperty();
+//		   	count.set(Integer.toString((clickCount+1)/2));
+//		   	countLabel.textProperty().bind(count); 	
+		   	
+		   	perfList.add(label);
+		   	
+	  	}
+	  	
+	  	//stop timer
+	  	else {		  		
+	  		taskRunning = false;
+	  		
+	  		button.setStyle("-fx-background-color: gray; -fx-font-size:32;");
+
+	  		marker.setTimeStamp(time);
+	  		marker.setUnixTimeStamp(time);
+	  		marker.setMarkerType("Stop");
+	  		stop = time;
+	  		
+	  		Long timeDelta = (stop - start) - delayTime;
+	  		//System.out.println(timeDelta);
+	  		marker.setTimeDelta(timeDelta);
+	  		marker.setCount(clickCount);
+	  		
+	  		StringProperty timeLabel = new SimpleStringProperty();
+	  		timeLabel.set(marker.getTimeStamp());
+	  		stopTime.setVisible(true);
+		   	stopTime.textProperty().bind(timeLabel);
+		   	
+		   	StringProperty timeDString = new SimpleStringProperty();
+		   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
+		   	timeDLabel.textProperty().bind(timeDString);
+		   	
+		   	int repeats = 0;
+		   	Map<String, Integer> hm  = countFrequencies(perfList);
+		    for (Map.Entry<String, Integer> val : hm.entrySet()) {
+		    	if( val.getKey() == label)
+		    	{
+		    		repeats = val.getValue();
+		    		System.out.println(label + " REPEATES: " + val.getValue());
+		    	}
+//	            System.out.println("Element " + val.getKey() + " "
+//	                               + "occurs"
+//	                               + ": " + val.getValue() + " times"); 
+	        }
+		    
+		    StringProperty repeatCount = new SimpleStringProperty();
+		    repeatCount.set(Integer.toString(repeats));
+		   	countLabel.textProperty().bind(repeatCount); 	
+		   				   	
+		   	for (Button b : bQueue)
+		   	{
+		    	b.setDisable(false);
+		   	} 
+	  	}	
+	  	markerList.add(marker);
+  	}
+  	
+  	public static Map countFrequencies(ArrayList<String> list) 
+    { 
+        // hashmap to store the frequency of element 
+        Map<String, Integer> hm = new HashMap<String, Integer>(); 
+  
+        for (String i : list) { 
+            Integer j = hm.get(i); 
+            hm.put(i, (j == null) ? 1 : j + 1); 
+        } 
+  
+        // displaying the occurrence of elements in the arraylist 
+//        for (Map.Entry<String, Integer> val : hm.entrySet()) { 
+//            System.out.println("Element " + val.getKey() + " "
+//                               + "occurs"
+//                               + ": " + val.getValue() + " times"); 
+//        }
+		return hm; 
+    } 
+  	
+  	@FXML
+  	private void ReRunPerf(){
+  		System.out.println("RERUN PRESSES");
+  		for (Button b : buttonList)
+	   	{
+	    	b.setDisable(false);
+	   	} 
+  		
+  				    
+  	}
 }
