@@ -263,45 +263,21 @@ public class MainViewController {
 
 	//connectiong object
  	 ComConnect com = new ComConnect();
+ 	 
  	 //start recording when screen loads
- 	 StartDeviceRecording(com);
-
+ 	 if (!Recording.isDebugMode()) {
+ 		StartDeviceRecording(com);
+ 	 } else {
+ 		 DebugStartDeviceRecording();
+ 	 }
+ 	 
+ 	 
  	 //button queue
- 	bQueue = new LinkedList<>(Arrays.asList(buttonList));
+ 	 bQueue = new LinkedList<>(Arrays.asList(buttonList));
  	
  	 //input for remote
- 	 this.input = input; 	 
- 	 AnimationTimer gameLoop = new AnimationTimer() {
-		@Override
-		public void handle(long now) {
-			// TODO Auto-generated method stub
-			 // vertical direction
-			//System.out.println(input.isPressed());
-			if (!bQueue.isEmpty()) {
-			    if( input.isPageDownPressed()) {
-			       //System.out.println("PAGE DOWN");
-			       bQueue.element().fire();
-			            pageDownPressed = true;
-			            remoteClick++;
-			        } else if( input.isPageUpPressed()) {
-			        	//System.out.println("PAGE UP");
-			        	pageUpPressed = true;
-			        } else if ( input.isPeriodPressed() && !taskRunning){
-			        	//System.out.println("PERIOD!!");
-			        	bQueue.element().setDisable(true);
-			        	bQueue.remove();
-			        	periodPressed=true;
-			        }
-			}
-		    input.setPageDownPressed(false);
-		    input.setPageUpPressed(false);
-		    input.setPeriodPressed(false);
-
-		}
- 		
- 	};
-    gameLoop.start();
-    
+ 	 this.input = input;
+ 	 InputHelper(input);
 	  
  	 //all grid objects
  	 ObservableList<Node> childrens = gridPane.getChildren();
@@ -381,7 +357,6 @@ public class MainViewController {
 	         event -> {
 	             final long time = System.currentTimeMillis();
 	             timeLabel.setText( timeFormat.format( time ) );
-	         	
 	             }
 	         )
 	     );
@@ -424,13 +399,13 @@ public class MainViewController {
 					        	  for (Node node : childrens) {
 					  				node.setDisable(true);					  			    
 					  			}
+					        	  
 					        	basePane.getChildren().remove(indicators);
+					        	
 					        	startTest.setDisable(true);
 					        	stopTest.setDisable(true);
 					        	saveButton.setDisable(true);
 					        	sampleSoundButton.setDisable(true);
-					        	
-					        	
 								//connectedString.set("Ok to UNPLUG");
 							}
 						});
@@ -460,7 +435,8 @@ public class MainViewController {
 	 //end sound button
 	 
 	 //start button
-     startTest.setOnAction((e) -> {   
+     startTest.setOnAction((e) -> {
+    	 
       Recording.setRecordingState(true);
       Recording.setStartButtonPressed(System.currentTimeMillis());
    	  //enable all grid controls
@@ -505,24 +481,13 @@ public class MainViewController {
 		   	//ComConnect.makeConnection();
 		   	Recording.setMarkerList(markerList);
 		    
-		    if(Recording.isConnected()) 
+		    if(Recording.isConnected() || Recording.isDebugMode()) 
 		    {
 		    	
 		    	//ring progress bar
-			   	RingProgressIndicator ring = new RingProgressIndicator();
-			   	ring.setRingWidth(200);
-			   	ring.makeIndeterminate();
-			   	StackPane stackRing = new StackPane();
-			   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
-			   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
-			   	
-			   	stackRing.getChildren().add(ring);
-			   	StackPane.setAlignment(ring, Pos.CENTER);
-			   	indicators.getChildren().add(stackRing);
-			   	
-			   	basePane.getChildren().add(indicators);
+			   	RingProgress();
 		    	
-		    	System.out.println("Device is Connected. Can Dowmoad");
+		    	//System.out.println("Device is Connected. Can Dowmoad");
 			   	
 		    	//write out to csv
 			    WriteCSV writer = new WriteCSV();
@@ -532,36 +497,44 @@ public class MainViewController {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}			      	
-		    	
-		    	
-		    	
-		    	
+		    		    	
 			   	Recording.setRecordingState(true);
+			   				   	
 			   	
-			   	//TODO: SAVE OMX FILE
-			   	SaveOMX saveObj = Recording.getSaveObj();
-			   	//System.out.println("SAVE OBJECT: letter " + saveObj.getSaveDriveLetter());
-			   	//System.out.println("SAVE OBJECT: name " + saveObj.getSaveDriveName());
 			   	
-			   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
-			   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
-			   	
-			   	saveObj.saveFile(rawSaveFile);			   	        	 
-		        
-			   	Recording.setSaved(true);
-			   	
-			   	com.stopRecording();
-			   	
-		          } else {
-		        	  Alert alert = new Alert(AlertType.WARNING, 
-		                      "Device Not connected, \n "
-		                      + "Unplug and reconnect", 
+			   	if (!Recording.isDebugMode())
+			   	{
+			   		
+			   		SaveOMX saveObj = Recording.getSaveObj();
+				   	
+				   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
+				   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
+				   	
+				   	saveObj.saveFile(rawSaveFile);			   	        	 
+			        
+				   	Recording.setSaved(true);
+				   	
+			   		com.stopRecording();
+			   		
+			   	}
+			   	else {
+			   		Alert alert = new Alert(AlertType.WARNING, 
+		                      "Program is in DEBUG MODE, \n "
+		                      + "only saved CSV FILE", 
 		                      ButtonType.OK);
 		        	  alert.showAndWait();
-		        	  System.out.println("Device not connected!!!");
-		          }
-		    
-			}); // end save button
+		      	   	basePane.getChildren().remove(indicators);
+			   	}
+			   	
+		    } else {
+	        	  Alert alert = new Alert(AlertType.WARNING, 
+	                      "Device Not connected, \n "
+	                      + "Unplug and reconnect", 
+	                      ButtonType.OK);
+	        	  alert.showAndWait();
+	        	  //System.out.println("Device not connected!!!");
+	        	  }
+		    }); // end save button
 	  
 	  // perforamnce buttons
 	  perf_8ft1.setOnAction((e) -> {
@@ -677,13 +650,9 @@ public class MainViewController {
 		   			b.setDisable(true);
 		   		}
 		   	}
-		   	//stopTime.disableProperty();
-		   	marker.setCount(clickCount);
+
 		   	
-//		   	StringProperty count = new SimpleStringProperty();
-//		   	count.set(Integer.toString((clickCount+1)/2));
-//		   	countLabel.textProperty().bind(count); 	
-		   	
+		   	marker.setCount(clickCount);		   	
 		   	perfList.add(label);
 		   	
 	  	}
@@ -802,13 +771,61 @@ public class MainViewController {
   	}
   	
   	private void StartDeviceRecording(ComConnect com)
-  	{
-  		
+  	{  		
   		Recording.setRecordingStart(System.currentTimeMillis());
    	    com.makeConnection();
 	   	
 	   	//ring progress bar
-	   	RingProgressIndicator ring = new RingProgressIndicator();
+	   	RingProgress();
+	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
+  	}
+  	
+	private void DebugStartDeviceRecording()
+  	{
+  		
+  		Recording.setRecordingStart(System.currentTimeMillis());
+  		LocalDateTime timeSet = LocalDateTime.now();
+        Recording.setRecordingStartTimeStamp(timeSet);
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
+        String time = timeSet.format(formatTime);
+	   	comPortLabel.setText("PORT= DEBUG MODE");
+  	}
+	
+	private void InputHelper(Input input) {
+		AnimationTimer gameLoop = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				// TODO Auto-generated method stub
+				 // vertical direction
+				//System.out.println(input.isPressed());
+				if (!bQueue.isEmpty()) {
+				    if( input.isPageDownPressed()) {
+				       //System.out.println("PAGE DOWN");
+				       bQueue.element().fire();
+				            pageDownPressed = true;
+				            remoteClick++;
+				        } else if( input.isPageUpPressed()) {
+				        	//System.out.println("PAGE UP");
+				        	pageUpPressed = true;
+				        } else if ( input.isPeriodPressed() && !taskRunning){
+				        	//System.out.println("PERIOD!!");
+				        	bQueue.element().setDisable(true);
+				        	bQueue.remove();
+				        	periodPressed=true;
+				        }
+				}
+			    input.setPageDownPressed(false);
+			    input.setPageUpPressed(false);
+			    input.setPeriodPressed(false);
+
+			}
+	 		
+	 	};
+	    gameLoop.start();
+	}
+	
+	private void RingProgress() {
+		RingProgressIndicator ring = new RingProgressIndicator();
 	   	ring.setRingWidth(200);
 	   	ring.makeIndeterminate();
 	   	StackPane stackRing = new StackPane();
@@ -820,6 +837,7 @@ public class MainViewController {
 	   	indicators.getChildren().add(stackRing);
 	   	
 	   	basePane.getChildren().add(indicators);
-	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
-  	}
+	}
+  	
+  	
 }

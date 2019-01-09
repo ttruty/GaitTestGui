@@ -22,11 +22,15 @@ public class Input{
     private KeyCode pageUpKey = KeyCode.PAGE_UP;
     private KeyCode pageDownKey = KeyCode.PAGE_DOWN;
     private KeyCode periodKey = KeyCode.PERIOD;
+
+    
+    
     private boolean pageUpPressed;
     private boolean pageDownPressed;
     private boolean periodPressed;
+    private boolean slideShowPressed;
 
-    Scene scene;
+	Scene scene;
     
     boolean pressed;
     int count = 0;
@@ -62,7 +66,7 @@ public class Input{
         	pressed = true;
             
             count++;
-            //System.out.println("Pressed: " + (count));
+            System.out.println("Pressed: " + (event.getCode().ordinal()));
         }
     };
 
@@ -91,6 +95,12 @@ public class Input{
             	case 22:
             		//System.out.println("PERIOD!!!!!");
             		setPeriodPressed(true);
+            		break;
+            	case 10:
+            		setSlideShowPressed(true);
+            		break;
+            	case 88:
+            		setSlideShowPressed(true);
             		break;
             } 
             //setPageUpPressed(false);
@@ -149,5 +159,12 @@ public class Input{
 		this.periodPressed = periodPressed;
 	}
     
+	public boolean isSlideShowPressed() {
+		return slideShowPressed;
+	}
+
+	public void setSlideShowPressed(boolean slideShowPressed) {
+		this.slideShowPressed = slideShowPressed;
+	}
     
 }

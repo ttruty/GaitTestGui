@@ -44,6 +44,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -184,6 +185,8 @@ public class MainViewController {
   @FXML private Label perf_ec_timeD;
 
   @FXML private ImageView statusImage; 
+  @FXML private ProgressBar batteryLevel;
+  @FXML private Label batteryLabel;
   
   private int clickCount = 0;
   private int remoteClick = 0;
@@ -208,6 +211,7 @@ public class MainViewController {
   boolean pageDownPressed;
   boolean pageUpPressed;
   boolean periodPressed;
+  boolean slideShowPressed;
   boolean taskRunning = false;
   
   //sound
@@ -778,6 +782,9 @@ public class MainViewController {
 	   	//ring progress bar
 	   	RingProgress();
 	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
+	   	int battery = Recording.getBatteryStatus();
+	   	batteryLevel.setProgress(battery / 100);
+	   	batteryLabel.setText(String.valueOf((battery)) + "%");
   	}
   	
 	private void DebugStartDeviceRecording()
@@ -789,10 +796,15 @@ public class MainViewController {
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
         String time = timeSet.format(formatTime);
 	   	comPortLabel.setText("PORT= DEBUG MODE");
+	   	Double battery = 0.85;
+	   	batteryLevel.setProgress(battery);
+	   	batteryLabel.setText(String.valueOf((battery*100)) + "%");
+	   	
   	}
 	
 	private void InputHelper(Input input) {
 		AnimationTimer gameLoop = new AnimationTimer() {
+
 			@Override
 			public void handle(long now) {
 				// TODO Auto-generated method stub
@@ -812,11 +824,17 @@ public class MainViewController {
 				        	bQueue.element().setDisable(true);
 				        	bQueue.remove();
 				        	periodPressed=true;
+				        } else if (input.isSlideShowPressed() && !taskRunning)
+				        {
+				        	bQueue.element().setDisable(true);
+				        	bQueue.remove();
+				        	slideShowPressed=true;
 				        }
 				}
 			    input.setPageDownPressed(false);
 			    input.setPageUpPressed(false);
 			    input.setPeriodPressed(false);
+			    input.setSlideShowPressed(false);
 
 			}
 	 		

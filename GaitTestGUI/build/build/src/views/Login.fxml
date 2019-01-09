@@ -63,7 +63,7 @@
          <font>
             <Font size="24.0" />
          </font></Label>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="413.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="rushLogo" fitHeight="150.0" fitWidth="200.0" layoutX="413.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../Pictures/rushlog.jpg" />
          </image>
