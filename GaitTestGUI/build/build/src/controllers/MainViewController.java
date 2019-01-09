@@ -24,12 +24,15 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -180,7 +183,6 @@ public class MainViewController {
   @FXML private Label perf_cog2_timeD;
   @FXML private Label perf_ec_timeD;
 
-  
   @FXML private ImageView statusImage; 
   
   private int clickCount = 0;
@@ -189,6 +191,8 @@ public class MainViewController {
   long start;
   long stop;
   long delayTime;
+  Duration timeWatch = Duration.ZERO;
+  Timeline timeline = new Timeline();
 
   Button[] buttonList = new Button[15];
   Queue<Button> bQueue;
@@ -205,6 +209,11 @@ public class MainViewController {
   boolean pageUpPressed;
   boolean periodPressed;
   boolean taskRunning = false;
+  
+  //sound
+  String musicFile = "resources\\start.wav";     // For example
+  Media sound = new Media(new File(musicFile).toURI().toString());
+  MediaPlayer mediaPlayer = new MediaPlayer(sound);
     
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
 	  buttonList[0] = perf_8ft1;
@@ -233,6 +242,9 @@ public class MainViewController {
 		  button.setPadding(Insets.EMPTY);
 	  }
 	  
+	  saveButton.setDisable(true);
+	  stopTest.setDisable(true);
+	  
 	 System.out.println(sessionID);
 	 sessionLabel.setText("Session ID: " + sessionID);
 	 timeLabel.setText("00:00:00");
@@ -244,21 +256,22 @@ public class MainViewController {
 	 //perf_8ft1_stop.setText("00:00:00");
 	 
 	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
-	 gridPane.prefWidthProperty().bind(basePane.widthProperty());
-	 
+	 gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
 	 
 	 //status bar
 	 //statusBar.setText("Starting, please wait");	 
 
-	 //connectiong object
+	//connectiong object
  	 ComConnect com = new ComConnect();
+ 	 //start recording when screen loads
+ 	 StartDeviceRecording(com);
 
+ 	 //button queue
+ 	bQueue = new LinkedList<>(Arrays.asList(buttonList));
+ 	
  	 //input for remote
- 	 this.input = input;
- 	 bQueue = new LinkedList<>(Arrays.asList(buttonList));
- 	 //Button[] editButtonList = buttonList;
- 	 
- 	AnimationTimer gameLoop = new AnimationTimer() {
+ 	 this.input = input; 	 
+ 	 AnimationTimer gameLoop = new AnimationTimer() {
 		@Override
 		public void handle(long now) {
 			// TODO Auto-generated method stub
@@ -288,6 +301,7 @@ public class MainViewController {
  		
  	};
     gameLoop.start();
+    
 	  
  	 //all grid objects
  	 ObservableList<Node> childrens = gridPane.getChildren();
@@ -316,6 +330,16 @@ public class MainViewController {
 							connectedString.set("Connected: TRUE");
 							Image image = new Image("file:resources/connect.png");
 							statusImage.setImage(image);
+							
+							if (!Recording.isSaved() && !Recording.isRecording() && Recording.getStartButtonPressed() != null)
+							{
+								LocalDateTime timeSet = LocalDateTime.now();
+								DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
+						        String time = timeSet.format(formatTime);
+								System.out.println("RECONNECTED at  " + time);
+								
+								Recording.setReconnectTime(System.currentTimeMillis());
+							}
 						}
 					});
 					
@@ -382,13 +406,6 @@ public class MainViewController {
 					                      ButtonType.OK);
 											basePane.getChildren().remove(indicators);
 					        	  alert.showAndWait();
-					        	  Recording.setRecordingState(true);
-					        	  //enable all grid controls
-					        	  for (Node node : childrens) {
-					  				if (node instanceof Control) {
-					  					node.setDisable(false);
-					  			    }
-					  			}
 								//connectedString.set("Ok to UNPLUG");
 							}
 						});
@@ -425,16 +442,12 @@ public class MainViewController {
  	
 	 //Sound button
 	 sampleSoundButton.setOnAction((e) -> {
-		 // Sound varialbees
-		  String musicFile = "resources\\start.wav";     // For example
-
-		  Media sound = new Media(new File(musicFile).toURI().toString());
-		  MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		  
+		 // Sound varialbees		  
 		 new Timer().schedule( 
 	  		        new TimerTask() {
 	  		            @Override
 	  		            public void run() {
+	  		            	mediaPlayer.stop();
 	  		            	mediaPlayer.play();
 	  		                
 	  		            	this.cancel();
@@ -443,38 +456,24 @@ public class MainViewController {
 	  		        1
 	  		);
 	 });
+	 
 	 //end sound button
 	 
 	 //start button
-     startTest.setOnAction((e) -> {    	
-    	Alert alert = new Alert(AlertType.WARNING, 
-                 "This will format the device", 
-                 ButtonType.OK);
-   	    alert.showAndWait();
-   	    Recording.setRecordingStart(System.currentTimeMillis());
-	   	com.makeConnection();
-	   	
-	   	//ring progress bar
-	   	RingProgressIndicator ring = new RingProgressIndicator();
-	   	ring.setRingWidth(200);
-	   	ring.makeIndeterminate();
-	   	StackPane stackRing = new StackPane();
-	   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
-	   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
-	   	
-	   	stackRing.getChildren().add(ring);
-	   	StackPane.setAlignment(ring, Pos.CENTER);
-	   	indicators.getChildren().add(stackRing);
-	   	
-	   	basePane.getChildren().add(indicators);
-	   	
-	   	connectedString.set("Gait Test in Progress ...");
-	      //new Thread(longRunningTask).start();
-	      //loginManager.logout();
-	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
-		startTest.setDisable(true);
-//		statusBar.textProperty().bind(recording);   	  
-		}); //end start button
+     startTest.setOnAction((e) -> {   
+      Recording.setRecordingState(true);
+      Recording.setStartButtonPressed(System.currentTimeMillis());
+   	  //enable all grid controls
+   	  for (Node node : childrens) {
+				if (node instanceof Control) {
+					node.setDisable(false);
+			    }
+			}
+   	  saveButton.setDisable(false);
+	  stopTest.setDisable(false);
+	  startTest.setDisable(true);
+	  
+     	}); //end start button
       
       //stop button
 	  stopTest.setOnAction((e) -> {
@@ -497,6 +496,7 @@ public class MainViewController {
 			    }
 			}
 			stopTest.setDisable(true);
+			
 		   
 			}); // end stop button
 	    
@@ -565,62 +565,67 @@ public class MainViewController {
 	  
 	  // perforamnce buttons
 	  perf_8ft1.setOnAction((e) -> {
-		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_stop, perf_8ft1_timeD, perf_8ft1_count, true);
+		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_count, true);
 				});
 	  perf_8ft2.setOnAction((e) -> {
-		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_stop,perf_8ft2_timeD, perf_8ft2_count, true);
+		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_count, true);
 				});
 	  perf_eo.setOnAction((e) -> {
-		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_stop, perf_eo_timeD, perf_eo_count, false);
+		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_count, false);
 				});
 	  perf_3601.setOnAction((e) -> {
-		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_stop,perf_3601_timeD, perf_3601_count, true);
+		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_count, true);
 				});
 	  perf_ll.setOnAction((e) -> {
-		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_stop,perf_ll_timeD, perf_ll_count, false);
+		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_count, false);
 				});
 	  perf_3602.setOnAction((e) -> {
-		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_stop,perf_3602_timeD, perf_3602_count, true);
+		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_count, true);
 				});
 	  perf_ec.setOnAction((e) -> {
-		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_stop, perf_ec_timeD, perf_ec_count, false);
+		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_count, false);
 				});
 	  perf_tug1.setOnAction((e) -> {
-		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_stop,perf_tug1_timeD, perf_tug1_count, true);
+		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_count, true);
 				});
 	  perf_rl.setOnAction((e) -> {
-		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_stop, perf_rl_timeD, perf_rl_count, false);
+		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_count, false);
 				});
 	  perf_tug2.setOnAction((e) -> {
-		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_stop, perf_tug2_timeD, perf_tug2_count, true);
+		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_count, true);
 				});
 	  perf_tan.setOnAction((e) -> {
-		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_stop,perf_tan_timeD, perf_tan_count, true);
+		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_count, true);
 				});
 	  perf_32ft.setOnAction((e) -> {
-		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_stop, perf_32ft_timeD, perf_32ft_count, true);
+		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_count, true);
 				});
 	  perf_toe.setOnAction((e) -> {
-		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_stop, perf_toe_timeD, perf_toe_count, false);
+		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_count, false);
 				});
 	  perf_cog1.setOnAction((e) -> {
-		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_stop, perf_cog1_timeD, perf_cog1_count, true);
+		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_count, true);
 				});
 	  perf_cog2.setOnAction((e) -> {
-		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_stop, perf_cog2_timeD, perf_cog2_count, true);
+		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_count, true);
 				});
-  
   }
   
-  	private void perfButton(Button button, String label, Label startTime, Label stopTime, Label timeDLabel, Label countLabel, boolean isDelay) 
+  	@SuppressWarnings("unchecked")
+	private void perfButton(Button button, String label, Label startTime, Label countLabel, boolean isDelay) 
   	{
+  		long time = System.currentTimeMillis();
 	  	clickCount++;	
 	  	//perfCount++;
+	  	timeWatch = Duration.ZERO;
 	  	
 	  	startTime.setMaxWidth(Double.MAX_VALUE);
-	  	stopTime.setMaxWidth(Double.MAX_VALUE);
-		startTime.setMaxHeight(Double.MAX_VALUE);
-		stopTime.setMaxHeight(Double.MAX_VALUE);
+		startTime.setMaxHeight(Double.MAX_VALUE);		
+		
+		// Time label
+ 		DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
+ 		StringProperty timeLabel = new SimpleStringProperty();
+ 		timeLabel.set("0.00");
 		
 	  	//random delay generation
 	  	Random delay = new Random();
@@ -629,52 +634,28 @@ public class MainViewController {
 	  	Marker marker = new Marker();
 	   	marker.setLabel(label);
 	   	
-	   	long time = System.currentTimeMillis();
-	   	//change color
-//		   	startTime.setStyle("-fx-background-color: #eeeeee;");
-//		   	stopTime.setStyle("-fx-background-color: #eeeeee;");
-	   	
 	   	//Start timer
 	  	if (clickCount % 2 != 0)
 	  	{
+	  		button.setDisable(true);
 	  		
 	  		taskRunning = true;
-	  		button.setStyle("-fx-background-color: green; -fx-font-size:32;");
+	  		gridPane.setStyle("-fx-background-color: #BCED91");
 	  		start = time;
-	  		
-	  		
-	  		
+
 	  		if (isDelay) {
 	  			int randomDelay = delay.nextInt(high-low) + low;
 	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button);
 	  			
 	  		}
 	  		else {
 	  			int randomDelay = 0;
 	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button);
 	  		}
-	  		
-
-	  	  String musicFile = "resources\\start.wav";     // For example
-
-	  	  Media sound = new Media(new File(musicFile).toURI().toString());
-	  	  MediaPlayer mediaPlayer = new MediaPlayer(sound);
-	  		
-	  		new Timer().schedule( 
-	  				
-	  		        new TimerTask() {
-	  		            @Override
-	  		            public void run() {
-	  		            	mediaPlayer.play();
-	  		                
-	  		            	this.cancel();
-	  		            }
-	  		        }, 
-	  		        delayTime 
-	  		);
 	  		//System.out.println("Random Delay: " + randomDelay);
-	  		//mediaPlayer.play();
-	  		
+	  		//mediaPlayer.play()
 	  		marker.setRandomDelay(delayTime);
 		   	
 //			   	stopTime.setStyle("-fx-background-color: #00FF00;");
@@ -684,9 +665,9 @@ public class MainViewController {
 	  		marker.setTimeStamp(time + delayTime);
 	  		marker.setUnixTimeStamp(time + delayTime);
 	  		marker.setMarkerType("Start");
-	  		StringProperty timeLabel = new SimpleStringProperty();
-	  		timeLabel.set(marker.getTimeStamp());
-		   	startTime.textProperty().bind(timeLabel);
+	  		
+	  		//StringProperty timeLabel = new SimpleStringProperty();
+	  		
 		   	
 		   	//diable buttons
 		   	for (Button b : buttonList)
@@ -697,7 +678,6 @@ public class MainViewController {
 		   		}
 		   	}
 		   	//stopTime.disableProperty();
-		   	stopTime.setVisible(false);
 		   	marker.setCount(clickCount);
 		   	
 //		   	StringProperty count = new SimpleStringProperty();
@@ -710,9 +690,12 @@ public class MainViewController {
 	  	
 	  	//stop timer
 	  	else {		  		
-	  		taskRunning = false;
+	  		timeline.stop();
 	  		
-	  		button.setStyle("-fx-background-color: gray; -fx-font-size:32;");
+	  		taskRunning = false;
+	  			  		
+	  		button.setStyle("-fx-background-color: gray; -fx-font-size: 32");
+	  		gridPane.setStyle("-fx-background-color: #DCDCDC");
 
 	  		marker.setTimeStamp(time);
 	  		marker.setUnixTimeStamp(time);
@@ -724,14 +707,12 @@ public class MainViewController {
 	  		marker.setTimeDelta(timeDelta);
 	  		marker.setCount(clickCount);
 	  		
-	  		StringProperty timeLabel = new SimpleStringProperty();
-	  		timeLabel.set(marker.getTimeStamp());
-	  		stopTime.setVisible(true);
-		   	stopTime.textProperty().bind(timeLabel);
+	  		
+	  		//timeLabel.set(marker.getTimeStamp());
 		   	
-		   	StringProperty timeDString = new SimpleStringProperty();
-		   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
-		   	timeDLabel.textProperty().bind(timeDString);
+//		   	StringProperty timeDString = new SimpleStringProperty();
+//		   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
+//		   	timeDLabel.textProperty().bind(timeDString);
 		   	
 		   	int repeats = 0;
 		   	Map<String, Integer> hm  = countFrequencies(perfList);
@@ -739,11 +720,8 @@ public class MainViewController {
 		    	if( val.getKey() == label)
 		    	{
 		    		repeats = val.getValue();
-		    		System.out.println(label + " REPEATES: " + val.getValue());
+		    		//System.out.println(label + " REPEATES: " + val.getValue());
 		    	}
-//	            System.out.println("Element " + val.getKey() + " "
-//	                               + "occurs"
-//	                               + ": " + val.getValue() + " times"); 
 	        }
 		    
 		    StringProperty repeatCount = new SimpleStringProperty();
@@ -767,13 +745,6 @@ public class MainViewController {
             Integer j = hm.get(i); 
             hm.put(i, (j == null) ? 1 : j + 1); 
         } 
-  
-        // displaying the occurrence of elements in the arraylist 
-//        for (Map.Entry<String, Integer> val : hm.entrySet()) { 
-//            System.out.println("Element " + val.getKey() + " "
-//                               + "occurs"
-//                               + ": " + val.getValue() + " times"); 
-//        }
 		return hm; 
     } 
   	
@@ -786,5 +757,69 @@ public class MainViewController {
 	   	} 
   		
   				    
+  	}
+  	
+  	//play sound add stopwatch to node
+  	private void soundTimer(Long delay, Label label, Button button) {
+  		timeline.stop();
+  		DoubleProperty timeSeconds = new SimpleDoubleProperty();
+  		StringProperty timeLabel = new SimpleStringProperty();
+  		mediaPlayer.stop();
+  		
+  		new Timer().schedule( 	  				
+  		        new TimerTask() {
+  		            @Override
+  		            public void run() {
+  		            	
+  		            	mediaPlayer.play();
+  		                
+  		            	this.cancel();
+  		            	
+  		            	timeWatch = Duration.ZERO;
+  		            	timeline = new Timeline(
+  		     	  		     new KeyFrame(Duration.millis(10),
+  		     	  		    		 new EventHandler<ActionEvent>() {
+  		     	  		    	 @Override
+  		     	  		    	 public void handle (ActionEvent t) {
+  		     	  		    		 Duration duration = ((KeyFrame)t.getSource()).getTime();
+  		     	  		    		 timeWatch = timeWatch.add(duration);
+  		     	  		    		 timeSeconds.set(timeWatch.toSeconds());
+  		     	  		    		 timeLabel.set(Double.toString(timeWatch.toSeconds()));
+  		     	  		    		 button.setDisable(false);
+  		     	  		    	 }
+  		     	  		     })
+  		     	  		 );
+  		     	  		 timeline.setCycleCount( Animation.INDEFINITE );
+  		     	  		 timeline.play();
+  		     	  		 //this.cancel();
+  		     	  		 }
+  		        }, 
+  		        delay
+  		);
+  		
+  		timeLabel.set(Double.toString(timeWatch.toSeconds()));
+	   	label.textProperty().bind(timeLabel);
+  	}
+  	
+  	private void StartDeviceRecording(ComConnect com)
+  	{
+  		
+  		Recording.setRecordingStart(System.currentTimeMillis());
+   	    com.makeConnection();
+	   	
+	   	//ring progress bar
+	   	RingProgressIndicator ring = new RingProgressIndicator();
+	   	ring.setRingWidth(200);
+	   	ring.makeIndeterminate();
+	   	StackPane stackRing = new StackPane();
+	   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
+	   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
+	   	
+	   	stackRing.getChildren().add(ring);
+	   	StackPane.setAlignment(ring, Pos.CENTER);
+	   	indicators.getChildren().add(stackRing);
+	   	
+	   	basePane.getChildren().add(indicators);
+	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
   	}
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -9,10 +10,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.StatusBar?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
       
       <TextField id="projIdField" fx:id="projIdField" layoutX="172.0" layoutY="49.0" prefHeight="35.0" prefWidth="162.0" promptText="project id">
@@ -66,6 +68,11 @@
             <Image url="@../../../../../Pictures/rushlog.jpg" />
          </image>
       </ImageView>
-      <ImageView id="statusImage" fx:id="statusImage" fitHeight="174.0" fitWidth="200.0" layoutX="413.0" layoutY="413.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="413.0" AnchorPane.rightAnchor="266.0" />
+      <CheckBox fx:id="debugCheck" layoutX="30.0" layoutY="246.0" mnemonicParsing="false" text="Debug" />
+      <StackPane alignment="BOTTOM_CENTER" layoutX="313.0" layoutY="304.0" prefHeight="165.0" prefWidth="190.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="366.0">
+         <children>
+            <ImageView id="statusImage" fx:id="statusImage" fitHeight="174.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

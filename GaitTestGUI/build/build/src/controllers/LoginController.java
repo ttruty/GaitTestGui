@@ -6,15 +6,19 @@ import java.time.format.DateTimeFormatter;
 import org.controlsfx.control.StatusBar;
 
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import models.DetectUSB;
 import models.Recording;
 
@@ -29,6 +33,8 @@ public class LoginController {
   @FXML private Label connectionLbl;
   @FXML private StatusBar  statusBar;
   @FXML private ImageView  statusImage;
+  @FXML private CheckBox  debugCheck;
+  @FXML private AnchorPane  basePane;
   
   
   //session id counter
@@ -36,13 +42,17 @@ public class LoginController {
   private String currComPort = null;
  // BooleanProperty connectBool = new SimpleBooleanProperty();	 
   
+  
  // public void initialize() {}  
-  public void initManager(final LoginManager loginManager) {
+  public void initManager(final LoginManager loginManager) {	  
+	  
 	  DetectUSB usb = new DetectUSB();
 	  
 	  Thread thread = new Thread(usb);
 	  thread.setDaemon(true);
 	  thread.start(); 
+	  
+	  
 	  
 	  Image image = new Image("file:resources/disconnect.png");
 	  statusImage.setImage(image);
@@ -92,7 +102,12 @@ public class LoginController {
 	statusBar.textProperty().bind(connectedString);
 	  
 	  
-	  startButton.setOnAction((e) -> {	    	      	  
+	  startButton.setOnAction((e) -> {	   
+		  if(debugCheck.equals(true))
+		  {
+			  usb.setIsConnected(true);
+		  }
+		  
           if(usb.getIsConnected()) 
 		  //if (1==1) //debug. do not need device in to test
           {

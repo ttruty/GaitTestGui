@@ -16,7 +16,7 @@ public class WriteCSV {
 	
     public void write() throws IOException {
 
-    	DateFormat saveCsvFormat = new SimpleDateFormat( "yyyyMMdd" );
+    	DateFormat saveCsvFormat = new SimpleDateFormat( "yyyyMMdd_HHmmss" );
     	final long CsvDate = System.currentTimeMillis();
     	setBaseFilename(Recording.getRecordingId() + "_"+ Recording.getFuYear() + "_"+ saveCsvFormat.format( CsvDate ));
     	
@@ -54,19 +54,33 @@ public class WriteCSV {
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append("'" + Recording.getRecordingId()); // need ' to not trim out leading zeros
             fileWriter.append(NEW_LINE_SEPARATOR);
+            
             fileWriter.append("Filename");
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(filename);
             fileWriter.append(NEW_LINE_SEPARATOR);
+            
             fileWriter.append("Recording Started");
             fileWriter.append(COMMA_DELIMITER);
-            fileWriter.append(timeFormat.format(Recording.getRecordingStartTimeStamp()));
-            fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(String.valueOf(Recording.getUnixRecordingTimeStamp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(timeFormat.format(Recording.getRecordingStartTimeStamp()));
             fileWriter.append(NEW_LINE_SEPARATOR);
+            
+            fileWriter.append("Recording Stopped");
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(Recording.getReconnectTime()));
+            fileWriter.append(NEW_LINE_SEPARATOR);
+            
             fileWriter.append("CSV Save TIme");
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append( timeString );
+            fileWriter.append(NEW_LINE_SEPARATOR);
+            
+            fileWriter.append("Start Button Pressed");
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append( String.valueOf(Recording.getStartButtonPressed()));
+            
 
             fileWriter.append(NEW_LINE_SEPARATOR);
             fileWriter.append(NEW_LINE_SEPARATOR);

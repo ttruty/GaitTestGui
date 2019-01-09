@@ -15,6 +15,8 @@ public class Recording {
 	public volatile static BooleanProperty connectedBoolean = new SimpleBooleanProperty();
 	
 	private static Long recordingStart;
+	private static Long startButtonPressed;
+	private static Long reconnectTime;
 	private static LocalDateTime recordingStartTimeStamp;
 	private static Long unixRecordingTimeStamp;
 	private static boolean recordingState = false;
@@ -51,6 +53,19 @@ public class Recording {
 	}
 	public void setStartTimeStamp(Long startTimeStamp) {
 		this.startTimeStamp = startTimeStamp;
+	}
+	public static Long getStartButtonPressed() {
+		return startButtonPressed;
+	}
+	public static void setStartButtonPressed(Long startButtonPressed) {
+		Recording.startButtonPressed = startButtonPressed;
+	}
+	
+	public static Long getReconnectTime() {
+		return reconnectTime;
+	}
+	public static void setReconnectTime(Long reconnectTime) {
+		Recording.reconnectTime = reconnectTime;
 	}
 	public ArrayList<Long> getMarkers() {
 		return markers;

@@ -1,1 +1,0 @@
-java -jar C:\Users\KinectAcquisition2\eclipse-workspace\GaitTestGUI\build\dist\GaitTestGUI.jar
