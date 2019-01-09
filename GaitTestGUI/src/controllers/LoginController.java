@@ -52,8 +52,9 @@ public class LoginController {
 	  thread.setDaemon(true);
 	  thread.start(); 
 	  
-	  Image rushLogo - new Image("file:resources/rushLogo.jpg")
+	  Image logo = new Image("file:resources/rushLogo.jpg");
 	  Image image = new Image("file:resources/disconnect.png");
+	  rushLogo.setImage(logo);
 	  statusImage.setImage(image);
 	  
 	//status bar	 
