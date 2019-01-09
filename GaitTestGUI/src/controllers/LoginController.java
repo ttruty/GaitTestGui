@@ -33,9 +33,9 @@ public class LoginController {
   @FXML private Label connectionLbl;
   @FXML private StatusBar  statusBar;
   @FXML private ImageView  statusImage;
+  @FXML private ImageView  rushLogo;
   @FXML private CheckBox  debugCheck;
   @FXML private AnchorPane  basePane;
-  
   
   //session id counter
   private static int sessionID = 0;
@@ -52,8 +52,7 @@ public class LoginController {
 	  thread.setDaemon(true);
 	  thread.start(); 
 	  
-	  
-	  
+	  Image rushLogo - new Image("file:resources/rushLogo.jpg")
 	  Image image = new Image("file:resources/disconnect.png");
 	  statusImage.setImage(image);
 	  
@@ -103,9 +102,11 @@ public class LoginController {
 	  
 	  
 	  startButton.setOnAction((e) -> {	   
-		  if(debugCheck.equals(true))
+		  if(debugCheck.isSelected())
 		  {
 			  usb.setIsConnected(true);
+			  System.out.println("DEBUG MODE");
+			  Recording.setDebugMode(true);
 		  }
 		  
           if(usb.getIsConnected()) 

@@ -17,6 +17,7 @@ public class Recording {
 	private static Long recordingStart;
 	private static Long startButtonPressed;
 	private static Long reconnectTime;
+	private static boolean isDebugMode;
 	private static LocalDateTime recordingStartTimeStamp;
 	private static Long unixRecordingTimeStamp;
 	private static boolean recordingState = false;
@@ -81,6 +82,12 @@ public class Recording {
 		System.out.println("Recording isConnected changed to: " + connectionState);
 		connectedBoolean.set(connectionState);
 		Recording.isConnected = connectionState;
+	}
+	public static boolean isDebugMode() {
+		return isDebugMode;
+	}
+	public static void setDebugMode(boolean isDebugMode) {
+		Recording.isDebugMode = isDebugMode;
 	}
 	public static ArrayList<Marker> getMarkerList() {
 		return markerList;
