@@ -56,6 +56,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import models.Input;
 import models.Marker;
 import models.Recording;
 import models.SaveOMX;

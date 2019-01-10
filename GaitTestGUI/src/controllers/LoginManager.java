@@ -1,3 +1,10 @@
+/**
+ * Manager to entry screen
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import java.io.IOException;
@@ -5,6 +12,7 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import models.Input;
 
 /** Manages control flow for logins */
 public class LoginManager{

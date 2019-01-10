@@ -1,3 +1,10 @@
+/**
+ * Controller for the start screen of the test
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import java.time.LocalDateTime;
@@ -40,10 +47,8 @@ public class LoginController {
   //session id counter
   private static int sessionID = 0;
   private String currComPort = null;
- // BooleanProperty connectBool = new SimpleBooleanProperty();	 
+
   
-  
- // public void initialize() {}  
   public void initManager(final LoginManager loginManager) {	  
 	  
 	  DetectUSB usb = new DetectUSB();
@@ -96,10 +101,7 @@ public class LoginController {
 		}
 		});  
 	
-	//usb.setIsConnected(true);
-
-	
-	statusBar.textProperty().bind(connectedString);
+	  statusBar.textProperty().bind(connectedString);
 	  
 	  
 	  startButton.setOnAction((e) -> {	   
