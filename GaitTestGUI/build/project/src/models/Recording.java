@@ -1,3 +1,9 @@
+/**
+ * Data model for Recording object
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 
 import java.time.LocalDateTime;
@@ -25,6 +31,8 @@ public class Recording {
 	private Long startTimeStamp;
 	private ArrayList<Long>  markers;
 	private static ArrayList<Marker> markerList;
+	private static int batteryStatus;
+	private static String batteryString;
 	
 	// saving the omx objects
 	private static SaveOMX saveObj;
@@ -114,6 +122,21 @@ public class Recording {
 		Recording.fuYear = fuYear;
 	}
 	
+	public static int getBatteryStatus() {
+		return batteryStatus;
+	}
+	public static void setBatteryStatus(int batteryStatus) {
+		Recording.batteryStatus = batteryStatus;
+	}
+	public static String getBatteryString() {
+		return batteryString;
+	}
+	public static void setBatteryString(String batteryString) {
+		Recording.batteryString = batteryString;
+		String[] splitString =  getBatteryString().split(",");
+		System.out.println("BATTERY= " + splitString[3]);
+		setBatteryStatus(Integer.parseInt(splitString[3]));
+	}
 	public static BooleanProperty connectedProperty() {
 		return connectedBoolean;
 	}

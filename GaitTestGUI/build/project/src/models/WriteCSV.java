@@ -1,3 +1,9 @@
+/**
+ * Model for writing the output file
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 
 

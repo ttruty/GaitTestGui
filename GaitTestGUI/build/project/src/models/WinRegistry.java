@@ -1,3 +1,10 @@
+/**
+ * Basis for reading regestry to check device connections
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package models;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

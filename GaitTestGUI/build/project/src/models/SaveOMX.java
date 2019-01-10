@@ -1,3 +1,9 @@
+/**
+ * Data model for saved file object
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 
 import java.io.File;

@@ -1,3 +1,10 @@
+/**
+ * Controller for the main testing screen
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import java.io.File;
@@ -44,6 +51,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -55,6 +63,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import models.Input;
 import models.Marker;
 import models.Recording;
 import models.SaveOMX;
@@ -184,6 +193,8 @@ public class MainViewController {
   @FXML private Label perf_ec_timeD;
 
   @FXML private ImageView statusImage; 
+  @FXML private ProgressBar batteryLevel;
+  @FXML private Label batteryLabel;
   
   private int clickCount = 0;
   private int remoteClick = 0;
@@ -208,6 +219,7 @@ public class MainViewController {
   boolean pageDownPressed;
   boolean pageUpPressed;
   boolean periodPressed;
+  boolean slideShowPressed;
   boolean taskRunning = false;
   
   //sound
@@ -254,7 +266,7 @@ public class MainViewController {
 	 
 	 //perf_8ft1_start.setText("00:00:00");
 	 //perf_8ft1_stop.setText("00:00:00");
-	 
+	 batteryLevel.getStylesheets().add(getClass().getResource("/views/progress.css").toExternalForm());
 	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
 	 gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
 	 
@@ -778,6 +790,12 @@ public class MainViewController {
 	   	//ring progress bar
 	   	RingProgress();
 	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
+	   	int battery = Recording.getBatteryStatus();
+	   	double batteryDbl = ( (double) Recording.getBatteryStatus() / 100.0);
+	   	batteryLevel.setProgress(batteryDbl);
+	   	BatteryBar(batteryLevel);
+	   	batteryLabel.setText(String.valueOf((battery)) + "%");
+	   	
   	}
   	
 	private void DebugStartDeviceRecording()
@@ -789,10 +807,16 @@ public class MainViewController {
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
         String time = timeSet.format(formatTime);
 	   	comPortLabel.setText("PORT= DEBUG MODE");
+	   	Double battery = 0.45;	
+	   	batteryLevel.setProgress(battery);
+	   	BatteryBar(batteryLevel);
+	   	batteryLabel.setText(String.valueOf((battery*100)) + "%");
+	   	
   	}
 	
 	private void InputHelper(Input input) {
 		AnimationTimer gameLoop = new AnimationTimer() {
+
 			@Override
 			public void handle(long now) {
 				// TODO Auto-generated method stub
@@ -812,11 +836,17 @@ public class MainViewController {
 				        	bQueue.element().setDisable(true);
 				        	bQueue.remove();
 				        	periodPressed=true;
+				        } else if (input.isSlideShowPressed() && !taskRunning)
+				        {
+				        	bQueue.element().setDisable(true);
+				        	bQueue.remove();
+				        	slideShowPressed=true;
 				        }
 				}
 			    input.setPageDownPressed(false);
 			    input.setPageUpPressed(false);
 			    input.setPeriodPressed(false);
+			    input.setSlideShowPressed(false);
 
 			}
 	 		
@@ -838,6 +868,26 @@ public class MainViewController {
 	   	
 	   	basePane.getChildren().add(indicators);
 	}
-  	
-  	
+	
+	private void BatteryBar(ProgressBar bar) {		
+		final String RED_BAR    = "red-bar";
+		final String YELLOW_BAR = "yellow-bar";
+		final String ORANGE_BAR = "orange-bar";
+		final String GREEN_BAR  = "green-bar";
+		final String[] barColorStyleClasses = { RED_BAR, ORANGE_BAR, YELLOW_BAR, GREEN_BAR };
+		
+		double progress = bar.progressProperty().doubleValue();
+		System.out.println(progress);
+		bar.getStyleClass().removeAll(barColorStyleClasses);
+		
+        if (progress < 0.2) {
+        	bar.getStyleClass().add(RED_BAR);
+        } else if (progress < 0.4) {
+        	bar.getStyleClass().add(ORANGE_BAR);
+        } else if (progress < 0.6) {
+        	bar.getStyleClass().add(YELLOW_BAR);
+        } else {
+        	bar.getStyleClass().add(GREEN_BAR);
+        }     
+	}
 }

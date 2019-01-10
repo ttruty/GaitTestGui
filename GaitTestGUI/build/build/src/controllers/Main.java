@@ -1,25 +1,25 @@
+/**
+ * Main scene setuo
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	@Override
 	public void start(Stage stage) {
-//		try {
-//			//load the rxtx libraries from the system path
-//			// need to place ddl in Docs/GaitFiles/libs
-//			String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
-//			String libSerialDir = docDir.concat("/GaitFiles/libs/rxtxSerial.dll");
-//			String libParallelDir = docDir.concat("/GaitFiles/libs/rxtxParallel.dll");
-//			System.load( libSerialDir);
-//			//System.load( libParallelDir);			
-//    	} catch (UnsatisfiedLinkError e) {
-//    		System.err.println("Native code library failed to load.\n" + e);
-//    	}
 		
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
 		Scene scene = new Scene(new StackPane());
 	    
 	    LoginManager loginManager = new LoginManager(scene);
@@ -27,8 +27,9 @@ public class Main extends Application {
 
 	    stage.setScene(scene);
 	    stage.setTitle("Gait Test");
-	    stage.setFullScreen(true);
-	    stage.setWidth(700);
+	    //stage.setFullScreen(true);
+	    stage.setWidth(1000);
+	    stage.setHeight(bounds.getHeight());
 	    stage.show();	    
 	}
 

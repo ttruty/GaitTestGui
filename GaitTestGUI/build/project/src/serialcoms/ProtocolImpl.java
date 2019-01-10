@@ -39,6 +39,11 @@ public class ProtocolImpl implements Protocol {
             
             //uncomment to see received messages
             System.out.println("RECEIVED MESSAGE: " + message);  
+            
+            if (message.startsWith("$BATT"))
+            {
+            	Recording.setBatteryString(message);
+            }
               
             // this logic should be placed in some kind of   
             // message interpreter class not here  
@@ -132,7 +137,8 @@ public class ProtocolImpl implements Protocol {
         CommPortSender.send(getMessage("ANNOTATE04=")); 
         buffWait(50);
         CommPortSender.send(getMessage("ANNOTATE05=")); 
-        buffWait(50);
+        buffWait(50);        
+        
         // commit save setting on deive
         CommPortSender.send(getMessage("COMMIT")); 
         buffWait(5000);

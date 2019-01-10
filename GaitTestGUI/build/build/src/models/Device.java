@@ -1,3 +1,10 @@
+/**
+ * Check what device is connected to usb
+ * Ensure it is a target device
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 import java.util.regex.Pattern;
 import java.lang.reflect.InvocationTargetException;

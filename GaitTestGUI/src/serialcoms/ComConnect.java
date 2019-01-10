@@ -19,7 +19,7 @@ public class ComConnect {
 	public boolean running = true;
 	public volatile static BooleanProperty plugAlert = new SimpleBooleanProperty(false);
 	private String accessComPort;
-
+	
 	public void connect(String portName, Protocol protocol) {  
     	setRunning(true);
     	
@@ -30,12 +30,12 @@ public class ComConnect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-   
+		
         if (portIdentifier.isCurrentlyOwned()) {  
             System.out.println("Port in use!");  
         } else {  
             // points who owns the port and connection timeout  
-           
+            
 			try {
 				serialPort = (SerialPort) portIdentifier.open("ComConnect", 2000);
 			} catch (PortInUseException e) {
@@ -51,7 +51,7 @@ public class ComConnect {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}  
-   
+            
             // setup serial port writer  
             try {
 				CommPortSender.setWriterStream(serialPort.getOutputStream());
@@ -60,7 +60,7 @@ public class ComConnect {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}  
-              
+            
             // setup serial port reader  
             
         }  
@@ -125,10 +125,9 @@ public class ComConnect {
     {      	
         new ComConnect().connect(this.getAccessComPort(), new ProtocolImplStop());
     	CommPortSender.send(new ProtocolImplStop().getMessage("AT"));    
-    	 plugAlert.set(false);
+    	plugAlert.set(false);
 		    
 		return null;
-
     }  
     
     
@@ -159,7 +158,6 @@ public class ComConnect {
 
 	public void setPlugAlert(boolean value) {
 		plugAlert.set(value);
-
 	}
 	
 	public BooleanProperty connectedProperty() {
