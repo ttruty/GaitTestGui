@@ -19,7 +19,7 @@
       <Button id="startTest" fx:id="startTest" layoutX="497.0" layoutY="29.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="146.0" text="Start" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="29.0" />
       <ScrollPane fx:id="scrollPane" layoutX="15.0" layoutY="80.0" prefHeight="501.0" prefWidth="628.0" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="100.0">
          <content>
-            <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="475.0" prefWidth="625.0" style="-fx-background-color: #eeeeee;">
+            <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="472.0" prefWidth="590.0" style="-fx-background-color: #eeeeee;">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" percentWidth="30.0" prefWidth="135.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" percentWidth="30.0" prefWidth="114.0" />
@@ -60,123 +60,123 @@
                   <Button fx:id="perf_cog1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 1" GridPane.rowIndex="14" />
                   <Button fx:id="perf_cog2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 2" GridPane.rowIndex="15" />
                   <Button fx:id="perf_8ft1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="8Ft Trial 1" GridPane.rowIndex="1" />
-                  <Label fx:id="perf_8ft1_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label fx:id="perf_8ft1_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_8ft2_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Label fx:id="perf_8ft2_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_eo_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <Label fx:id="perf_eo_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_3601_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <Label fx:id="perf_3601_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_ll_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <Label fx:id="perf_ll_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_3602_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <Label fx:id="perf_3602_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <font>
                         <Font size="24.0" />
                      </font></Label>  
-                  <Label fx:id="perf_ec_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                  <Label fx:id="perf_ec_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <font>
                         <Font size="24.0" />
                      </font></Label>  
-                  <Label fx:id="perf_tug1_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                  <Label fx:id="perf_tug1_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_rl_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                  <Label fx:id="perf_rl_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_tug2_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                  <Label fx:id="perf_tug2_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                      <font>
                         <Font size="24.0" />
                      </font></Label>   
-                  <Label fx:id="perf_tan_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                  <Label fx:id="perf_tan_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_32ft_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
+                  <Label fx:id="perf_32ft_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
                      <font>
                         <Font size="24.0" />
                      </font></Label>  
-                  <Label fx:id="perf_toe_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+                  <Label fx:id="perf_toe_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_cog1_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="14">
+                  <Label fx:id="perf_cog1_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="14">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_cog2_start" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="15">
+                  <Label fx:id="perf_cog2_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="15">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_8ft1_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                  <Label fx:id="perf_8ft1_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_8ft2_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                  <Label fx:id="perf_8ft2_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <font>
                         <Font size="24.0" />
                      </font></Label>     
-                  <Label fx:id="perf_eo_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                  <Label fx:id="perf_eo_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_3601_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                  <Label fx:id="perf_3601_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_ll_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                  <Label fx:id="perf_ll_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_3602_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                  <Label fx:id="perf_3602_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_ec_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                  <Label fx:id="perf_ec_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="7">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_tug1_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="8">
+                  <Label fx:id="perf_tug1_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="8">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_rl_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                  <Label fx:id="perf_rl_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="9">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_tug2_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="10">
+                  <Label fx:id="perf_tug2_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="10">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_tan_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="11">
+                  <Label fx:id="perf_tan_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="11">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_32ft_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="12">
+                  <Label fx:id="perf_32ft_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="12">
                      <font>
                         <Font size="24.0" />
                      </font></Label>
-                  <Label fx:id="perf_toe_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="13">
+                  <Label fx:id="perf_toe_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="13">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_cog1_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="14">
+                  <Label fx:id="perf_cog1_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="14">
                      <font>
                         <Font size="24.0" />
                      </font></Label> 
-                  <Label fx:id="perf_cog2_count" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="15">
+                  <Label fx:id="perf_cog2_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="15">
                      <font>
                         <Font size="24.0" />
                      </font></Label>

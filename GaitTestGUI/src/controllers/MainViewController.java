@@ -258,7 +258,7 @@ public class MainViewController {
 	 
 	 //perf_8ft1_start.setText("00:00:00");
 	 //perf_8ft1_stop.setText("00:00:00");
-	 
+	 batteryLevel.getStylesheets().add(getClass().getResource("/views/progress.css").toExternalForm());
 	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
 	 gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
 	 
@@ -783,8 +783,11 @@ public class MainViewController {
 	   	RingProgress();
 	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
 	   	int battery = Recording.getBatteryStatus();
-	   	batteryLevel.setProgress(battery / 100);
+	   	double batteryDbl = ( (double) Recording.getBatteryStatus() / 100.0);
+	   	batteryLevel.setProgress(batteryDbl);
+	   	BatteryBar(batteryLevel);
 	   	batteryLabel.setText(String.valueOf((battery)) + "%");
+	   	
   	}
   	
 	private void DebugStartDeviceRecording()
@@ -796,8 +799,9 @@ public class MainViewController {
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
         String time = timeSet.format(formatTime);
 	   	comPortLabel.setText("PORT= DEBUG MODE");
-	   	Double battery = 0.85;
+	   	Double battery = 0.45;	
 	   	batteryLevel.setProgress(battery);
+	   	BatteryBar(batteryLevel);
 	   	batteryLabel.setText(String.valueOf((battery*100)) + "%");
 	   	
   	}
@@ -856,6 +860,26 @@ public class MainViewController {
 	   	
 	   	basePane.getChildren().add(indicators);
 	}
-  	
-  	
+	
+	private void BatteryBar(ProgressBar bar) {		
+		final String RED_BAR    = "red-bar";
+		final String YELLOW_BAR = "yellow-bar";
+		final String ORANGE_BAR = "orange-bar";
+		final String GREEN_BAR  = "green-bar";
+		final String[] barColorStyleClasses = { RED_BAR, ORANGE_BAR, YELLOW_BAR, GREEN_BAR };
+		
+		double progress = bar.progressProperty().doubleValue();
+		System.out.println(progress);
+		bar.getStyleClass().removeAll(barColorStyleClasses);
+		
+        if (progress < 0.2) {
+        	bar.getStyleClass().add(RED_BAR);
+        } else if (progress < 0.4) {
+        	bar.getStyleClass().add(ORANGE_BAR);
+        } else if (progress < 0.6) {
+        	bar.getStyleClass().add(YELLOW_BAR);
+        } else {
+        	bar.getStyleClass().add(GREEN_BAR);
+        }     
+	}
 }
