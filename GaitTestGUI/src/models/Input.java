@@ -1,3 +1,10 @@
+/**
+ * Input for remote use
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package models;
 
 import java.util.BitSet;

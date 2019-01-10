@@ -1,3 +1,10 @@
+/**
+ * Data model for every time a usb is connected
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package models;
 import java.io.*;
 import javax.swing.filechooser.FileSystemView;

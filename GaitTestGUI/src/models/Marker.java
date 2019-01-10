@@ -1,3 +1,9 @@
+/**
+ * Data model for markers object
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 
 import java.text.DateFormat;

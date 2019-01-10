@@ -1,3 +1,10 @@
+/**
+ * Main scene setuo
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import javafx.application.Application;

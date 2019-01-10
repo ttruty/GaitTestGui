@@ -18,8 +18,6 @@ import models.Input;
 public class LoginManager{
     
 	private Scene scene;
-	//private Stage stage;
-	// player input
 	Input input;
 	
     
@@ -30,7 +28,7 @@ public class LoginManager{
 		input = new Input(scene);
 
 	    // register input listeners
-	    input.addListeners(); // TODO: remove listeners on game over
+	    input.addListeners();
 	}
 
 	/**
@@ -44,6 +42,7 @@ public class LoginManager{
 	/**
 	 * Callback method invoked to notify that a user has logged out of the main
 	 * application. Will show the login application screen.
+	 * Can implement on testing screen if need to edit metadata
 	 */
 	public void logout() {
 		showLoginScreen();

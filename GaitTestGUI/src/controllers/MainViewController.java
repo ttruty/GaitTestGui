@@ -1,3 +1,10 @@
+/**
+ * Controller for the main testing screen
+ * 
+ * @author Tim Truty
+ *
+ */
+
 package controllers;
 
 import java.io.File;

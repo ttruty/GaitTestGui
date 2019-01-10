@@ -1,3 +1,9 @@
+/**
+ * Data model for Recording object
+ * 
+ * @author Tim Truty
+ *
+ */
 package models;
 
 import java.time.LocalDateTime;
