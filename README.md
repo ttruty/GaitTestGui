@@ -76,5 +76,12 @@ Version 1.0 of the Gait Test GUI implements all current aims.
 
 5. User must close the application and restart in order to complete another test.
 
+## Remote Controls
+
+![remote](images/remote1.png "Remote")
+
+## Sample Output
+
+![output](images/output1.png "output")
 
 
