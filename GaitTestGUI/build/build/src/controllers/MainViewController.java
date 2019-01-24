@@ -8,11 +8,9 @@
 package controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,54 +23,38 @@ import java.util.TimerTask;
 
 import org.controlsfx.control.StatusBar;
 
-import indicator.RingProgressIndicator;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import models.ConnectionStatus;
+import models.ControlButton;
 import models.Input;
 import models.Marker;
 import models.Recording;
-import models.SaveOMX;
-import models.WriteCSV;
-import javafx.scene.control.Alert.AlertType;
+import models.RingIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import serialcoms.ComConnect;
-import serialcoms.CommPortSender;
 
 /** Controls the main application screen */
 public class MainViewController {
@@ -88,12 +70,9 @@ public class MainViewController {
   @FXML private Label  fuYearLabel;  
   @FXML private Label  staffIdLabel;    
   @FXML private Label  comPortLabel;    
-  @FXML private StatusBar  statusBar;
+  @FXML private StatusBar statusBar;
   @FXML private GridPane gridPane;
   @FXML private AnchorPane basePane;
-  
-  Group indicators = new Group();
-  //@FXML private GridPane pane_8ft1;
   
   // performance buttons
   @FXML private Button perf_8ft1;
@@ -111,54 +90,22 @@ public class MainViewController {
   @FXML private Button perf_toe;
   @FXML private Button perf_cog1;
   @FXML private Button perf_cog2;
-  
-//performance complete buttons
- @FXML private Button perf_8ft1_complete;
- @FXML private Button perf_8ft2_complete;
- @FXML private Button perf_eo_complete;
- @FXML private Button perf_3601_complete;
- @FXML private Button perf_ll_complete;
- @FXML private Button perf_3602_complete;
- @FXML private Button perf_ec_complete;
- @FXML private Button perf_tug1_complete;
- @FXML private Button perf_rl_complete;
- @FXML private Button perf_tug2_complete;
- @FXML private Button perf_tan_complete;
- @FXML private Button perf_32ft_complete;
- @FXML private Button perf_toe_complete;
- @FXML private Button perf_cog1_complete;
- @FXML private Button perf_cog2_complete;
  
   @FXML private Label perf_8ft1_start;
-  @FXML private Label perf_8ft1_stop;
   @FXML private Label perf_8ft2_start;
-  @FXML private Label perf_8ft2_stop;
   @FXML private Label perf_eo_start;
-  @FXML private Label perf_eo_stop;
   @FXML private Label perf_3601_start;
-  @FXML private Label perf_3601_stop;
   @FXML private Label perf_ll_start;
-  @FXML private Label perf_ll_stop;
   @FXML private Label perf_3602_start;
-  @FXML private Label perf_3602_stop;
   @FXML private Label perf_ec_start;
-  @FXML private Label perf_ec_stop;
   @FXML private Label perf_tug1_start;
-  @FXML private Label perf_tug1_stop;
   @FXML private Label perf_rl_start;
-  @FXML private Label perf_rl_stop;
   @FXML private Label perf_tug2_start;
-  @FXML private Label perf_tug2_stop;
   @FXML private Label perf_tan_start;
-  @FXML private Label perf_tan_stop;
   @FXML private Label perf_32ft_start;
-  @FXML private Label perf_32ft_stop;
   @FXML private Label perf_toe_start;
-  @FXML private Label perf_toe_stop;
   @FXML private Label perf_cog1_start;
-  @FXML private Label perf_cog1_stop;
   @FXML private Label perf_cog2_start;
-  @FXML private Label perf_cog2_stop;
   
   @FXML private Label perf_8ft1_count;
   @FXML private Label perf_8ft2_count;
@@ -176,28 +123,13 @@ public class MainViewController {
   @FXML private Label perf_cog2_count;
   @FXML private Label perf_ec_count;
   
-  @FXML private Label perf_8ft1_timeD;
-  @FXML private Label perf_8ft2_timeD;
-  @FXML private Label perf_eo_timeD;
-  @FXML private Label perf_3601_timeD;
-  @FXML private Label perf_ll_timeD;
-  @FXML private Label perf_3602_timeD;
-  @FXML private Label perf_tug1_timeD;
-  @FXML private Label perf_rl_timeD;
-  @FXML private Label perf_tug2_timeD;
-  @FXML private Label perf_32ft_timeD;
-  @FXML private Label perf_tan_timeD;
-  @FXML private Label perf_toe_timeD;
-  @FXML private Label perf_cog1_timeD;
-  @FXML private Label perf_cog2_timeD;
-  @FXML private Label perf_ec_timeD;
+  //Group indicators = new Group();
 
   @FXML private ImageView statusImage; 
   @FXML private ProgressBar batteryLevel;
   @FXML private Label batteryLabel;
   
   private int clickCount = 0;
-  private int remoteClick = 0;
   //private int perfCount = 0;
   long start;
   long stop;
@@ -206,10 +138,11 @@ public class MainViewController {
   Timeline timeline = new Timeline();
 
   Button[] buttonList = new Button[15];
+  Button[] controlsList = new Button[4];
   Queue<Button> bQueue;
   
-  ArrayList<Marker> markerList = new ArrayList<Marker>();
   ArrayList<String> perfList = new ArrayList<String>(); 
+  ArrayList<Marker> markerList = new ArrayList<Marker>();
   
   //Drive info
   String driveLetter;
@@ -231,28 +164,33 @@ public class MainViewController {
 	  buttonList[0] = perf_8ft1;
 	  buttonList[1] = perf_8ft2;
 	  buttonList[2] = perf_eo;
-	  buttonList[3]= perf_3601;
-	  buttonList[4]= perf_ll;
-	  buttonList[5]=perf_3602;
-	  buttonList[6]=perf_ec;
-	  buttonList[7]=perf_tug1;
-	  buttonList[8]=perf_rl;
-	  buttonList[9]=perf_tug2;
-	  buttonList[10]=perf_tan;
-	  buttonList[11]=perf_32ft;
-	  buttonList[12]=perf_toe;
-	  buttonList[13]=perf_cog1;
-	  buttonList[14]=perf_cog2;
+	  buttonList[3] = perf_3601;
+	  buttonList[4] = perf_ll;
+	  buttonList[5] = perf_3602;
+	  buttonList[6] = perf_ec;
+	  buttonList[7] = perf_tug1;
+	  buttonList[8] = perf_rl;
+	  buttonList[9] = perf_tug2;
+	  buttonList[10] = perf_tan;
+	  buttonList[11] = perf_32ft;
+	  buttonList[12] = perf_toe;
+	  buttonList[13] = perf_cog1;
+	  buttonList[14] = perf_cog2;
 	  
-	  Image image = new Image("file:resources/connect.png");
-	  statusImage.setImage(image);
+	  controlsList[0] = startTest;
+	  controlsList[1] = stopTest;
+	  controlsList[2] = sampleSoundButton;
+	  controlsList[3] = saveButton;
 	  
 	  for (Button button : buttonList) {
-		 button.setMaxWidth(Double.MAX_VALUE);
-		 button.setMaxHeight(Double.MAX_VALUE);
+		  button.setMaxWidth(Double.MAX_VALUE);
+		  button.setMaxHeight(Double.MAX_VALUE);
 		  button.setStyle("-fx-font-size:32");
 		  button.setPadding(Insets.EMPTY);
 	  }
+	  
+	//button queue
+	  bQueue = new LinkedList<>(Arrays.asList(buttonList));
 	  
 	  saveButton.setDisable(true);
 	  stopTest.setDisable(true);
@@ -267,13 +205,14 @@ public class MainViewController {
 	 //perf_8ft1_start.setText("00:00:00");
 	 //perf_8ft1_stop.setText("00:00:00");
 	 batteryLevel.getStylesheets().add(getClass().getResource("/views/progress.css").toExternalForm());
+	 
 	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
 	 gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
 	 
-	 //status bar
-	 //statusBar.setText("Starting, please wait");	 
+	 Image image = new Image("file:resources/connect.png");
+	 statusImage.setImage(image);
 
-	//connectiong object
+	//connecting object
  	 ComConnect com = new ComConnect();
  	 
  	 //start recording when screen loads
@@ -283,83 +222,26 @@ public class MainViewController {
  		 DebugStartDeviceRecording();
  	 }
  	 
+ 	 //Connection Status images and status bar update
+ 	 ConnectionStatus connStatus = new ConnectionStatus();
+ 	 connStatus.ShowStatus(statusImage, statusBar);
  	 
- 	 //button queue
- 	 bQueue = new LinkedList<>(Arrays.asList(buttonList));
- 	
+ 	 
  	 //input for remote
  	 this.input = input;
  	 InputHelper(input);
 	  
- 	 //all grid objects
+ 	//all grid objects
  	 ObservableList<Node> childrens = gridPane.getChildren();
  	 
  	 // set all objects as disabled until start of test
- 	for (Node node : childrens) {
+	for (Node node : childrens) {
 		if (node instanceof Control) {
 			node.setDisable(true);
 	    }
 	}
 	 
-	 //status bar	 
-	 StringProperty connectedString = new SimpleStringProperty();
-	 connectedString.set("Gait Test in Progress...");
 	 
-	 Recording.connectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				// TODO Auto-generated method stub
-				if (newValue)
-				{
-					//System.out.println("Plugged IN>>>>");
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {						
-							connectedString.set("Connected: TRUE");
-							Image image = new Image("file:resources/connect.png");
-							statusImage.setImage(image);
-							
-							if (!Recording.isSaved() && !Recording.isRecording() && Recording.getStartButtonPressed() != null)
-							{
-								LocalDateTime timeSet = LocalDateTime.now();
-								DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
-						        String time = timeSet.format(formatTime);
-								System.out.println("RECONNECTED at  " + time);
-								
-								Recording.setReconnectTime(System.currentTimeMillis());
-							}
-						}
-					});
-					
-					//connected.set("Connected: " + Recording.isConnected());				
-				}
-				else {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {						
-							connectedString.set("Connected: FALSE");
-							// set the start time stamp of recroding when device is uplugged after the start button is pressed
-							Image image = new Image("file:resources/disconnect.png");
-							statusImage.setImage(image);
-							if (Recording.isRecording()) {
-						        LocalDateTime timeSet = LocalDateTime.now();
-						        Recording.setRecordingStartTimeStamp(timeSet);
-						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
-						        String time = timeSet.format(formatTime);
-						        System.out.println("UNPLUGGED at " + time);
-						        
-						        Image image1 = new Image("file:resources/walk_icon.png");
-								statusImage.setImage(image1);
-							}
-
-						}				
-					});
-				}
-			}
-			});  
-		
-	statusBar.textProperty().bind(connectedString);
-	  
 	 // Time label
 	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
 	 
@@ -374,58 +256,7 @@ public class MainViewController {
 	     );
 	 timeline.setCycleCount( Animation.INDEFINITE );
 	 timeline.play();
-	 
-	 //OK TO UNPLUG MESSAGE
-	 com.connectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				// TODO Auto-generated method stub
-				if (newValue)
-				{
-					if (!Recording.isSaved())
-					{
-						System.out.println("Plug Alert Changed");
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {								
-								Alert alert = new Alert(AlertType.INFORMATION, 
-					                      "OK TO UNPLUG", 
-					                      ButtonType.OK);
-											basePane.getChildren().remove(indicators);
-					        	  alert.showAndWait();
-								//connectedString.set("Ok to UNPLUG");
-							}
-						});
-					}
-					else { //when the recoring is save close EVERYTING!
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {								
-								Alert alert = new Alert(AlertType.INFORMATION, 
-					                      "Gait Test Saved!", 
-					                      ButtonType.OK);
-											//basePane.getChildren().remove(indicators);
-					        	  alert.showAndWait();
-					        	  Recording.setRecordingState(true);
-					        	  //enable all grid controls
-					        	  for (Node node : childrens) {
-					  				node.setDisable(true);					  			    
-					  			}
-					        	  
-					        	basePane.getChildren().remove(indicators);
-					        	
-					        	startTest.setDisable(true);
-					        	stopTest.setDisable(true);
-					        	saveButton.setDisable(true);
-					        	sampleSoundButton.setDisable(true);
-								//connectedString.set("Ok to UNPLUG");
-							}
-						});
-					}
-					//connected.set("Connected: " + Recording.isConnected());				
-				}						
-			}
-			});  
+	  
  	
 	 //Sound button
 	 sampleSoundButton.setOnAction((e) -> {
@@ -443,7 +274,6 @@ public class MainViewController {
 	  		        1
 	  		);
 	 });
-	 
 	 //end sound button
 	 
 	 //start button
@@ -451,6 +281,7 @@ public class MainViewController {
     	 
       Recording.setRecordingState(true);
       Recording.setStartButtonPressed(System.currentTimeMillis());
+      
    	  //enable all grid controls
    	  for (Node node : childrens) {
 				if (node instanceof Control) {
@@ -465,88 +296,25 @@ public class MainViewController {
       
       //stop button
 	  stopTest.setOnAction((e) -> {
-		   	//ComConnect.makeConnection();
 		  	
-		   	Recording.setRecordingState(false);
-		   	Recording.setMarkerList(markerList);
-		   	Alert alert = new Alert(AlertType.WARNING, 
-                    "Recording stopped, \n "
-                    + "Please plug in device to save", 
-                    ButtonType.OK);
-      	  alert.showAndWait();
-      	  
-      	  
-      	    // deactivate all in gridpane
-			
+		  Recording.setMarkerList(markerList);
+		  ControlButton.Stop();
+      	    // deactivate all in grid pane
 			for (Node node : childrens) {
 				if (node instanceof Control) {
 					node.setDisable(true);
 			    }
 			}
 			stopTest.setDisable(true);
-			
-		   
 			}); // end stop button
 	    
 	  //save button
 	  saveButton.setOnAction((e) -> {
-		   	//ComConnect.makeConnection();
-		   	Recording.setMarkerList(markerList);
-		    
-		    if(Recording.isConnected() || Recording.isDebugMode()) 
-		    {
-		    	
-		    	//ring progress bar
-			   	RingProgress();
-		    	
-		    	//System.out.println("Device is Connected. Can Dowmoad");
-			   	
-		    	//write out to csv
-			    WriteCSV writer = new WriteCSV();
-			    try {
-					writer.write();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}			      	
-		    		    	
-			   	Recording.setRecordingState(true);
-			   				   	
-			   	
-			   	
-			   	if (!Recording.isDebugMode())
-			   	{
-			   		
-			   		SaveOMX saveObj = Recording.getSaveObj();
-				   	
-				   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
-				   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
-				   	
-				   	saveObj.saveFile(rawSaveFile);			   	        	 
-			        
-				   	Recording.setSaved(true);
-				   	
-			   		com.stopRecording();
-			   		
-			   	}
-			   	else {
-			   		Alert alert = new Alert(AlertType.WARNING, 
-		                      "Program is in DEBUG MODE, \n "
-		                      + "only saved CSV FILE", 
-		                      ButtonType.OK);
-		        	  alert.showAndWait();
-		      	   	basePane.getChildren().remove(indicators);
-			   	}
-			   	
-		    } else {
-	        	  Alert alert = new Alert(AlertType.WARNING, 
-	                      "Device Not connected, \n "
-	                      + "Unplug and reconnect", 
-	                      ButtonType.OK);
-	        	  alert.showAndWait();
-	        	  //System.out.println("Device not connected!!!");
-	        	  }
+		  Recording.setMarkerList(markerList);
+		  ControlButton.Save(com, basePane);	  
 		    }); // end save button
+	  
+	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
 	  
 	  // perforamnce buttons
 	  perf_8ft1.setOnAction((e) -> {
@@ -596,7 +364,6 @@ public class MainViewController {
 				});
   }
   
-  	@SuppressWarnings("unchecked")
 	private void perfButton(Button button, String label, Label startTime, Label countLabel, boolean isDelay) 
   	{
   		long time = System.currentTimeMillis();
@@ -608,7 +375,7 @@ public class MainViewController {
 		startTime.setMaxHeight(Double.MAX_VALUE);		
 		
 		// Time label
- 		DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
+ 		//DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
  		StringProperty timeLabel = new SimpleStringProperty();
  		timeLabel.set("0.00");
 		
@@ -687,13 +454,6 @@ public class MainViewController {
 	  		//System.out.println(timeDelta);
 	  		marker.setTimeDelta(timeDelta);
 	  		marker.setCount(clickCount);
-	  		
-	  		
-	  		//timeLabel.set(marker.getTimeStamp());
-		   	
-//		   	StringProperty timeDString = new SimpleStringProperty();
-//		   	timeDString.set(Double.toString(timeDelta.doubleValue()/1000));
-//		   	timeDLabel.textProperty().bind(timeDString);
 		   	
 		   	int repeats = 0;
 		   	Map<String, Integer> hm  = countFrequencies(perfList);
@@ -717,9 +477,9 @@ public class MainViewController {
 	  	markerList.add(marker);
   	}
   	
-  	public static Map countFrequencies(ArrayList<String> list) 
+  	public static Map<String, Integer> countFrequencies(ArrayList<String> list) 
     { 
-        // hashmap to store the frequency of element 
+        // hash map to store the frequency of element 
         Map<String, Integer> hm = new HashMap<String, Integer>(); 
   
         for (String i : list) { 
@@ -788,7 +548,8 @@ public class MainViewController {
    	    com.makeConnection();
 	   	
 	   	//ring progress bar
-	   	RingProgress();
+   	    RingIndicator.RingProgress(basePane);
+   	    
 	   	comPortLabel.setText("PORT= " + com.getAccessComPort());
 	   	int battery = Recording.getBatteryStatus();
 	   	double batteryDbl = ( (double) Recording.getBatteryStatus() / 100.0);
@@ -804,8 +565,8 @@ public class MainViewController {
   		Recording.setRecordingStart(System.currentTimeMillis());
   		LocalDateTime timeSet = LocalDateTime.now();
         Recording.setRecordingStartTimeStamp(timeSet);
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
-        String time = timeSet.format(formatTime);
+        //DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
+        //String time = timeSet.format(formatTime);
 	   	comPortLabel.setText("PORT= DEBUG MODE");
 	   	Double battery = 0.45;	
 	   	batteryLevel.setProgress(battery);
@@ -819,7 +580,6 @@ public class MainViewController {
 
 			@Override
 			public void handle(long now) {
-				// TODO Auto-generated method stub
 				 // vertical direction
 				//System.out.println(input.isPressed());
 				if (!bQueue.isEmpty()) {
@@ -827,7 +587,6 @@ public class MainViewController {
 				       //System.out.println("PAGE DOWN");
 				       bQueue.element().fire();
 				            pageDownPressed = true;
-				            remoteClick++;
 				        } else if( input.isPageUpPressed()) {
 				        	//System.out.println("PAGE UP");
 				        	pageUpPressed = true;
@@ -852,21 +611,6 @@ public class MainViewController {
 	 		
 	 	};
 	    gameLoop.start();
-	}
-	
-	private void RingProgress() {
-		RingProgressIndicator ring = new RingProgressIndicator();
-	   	ring.setRingWidth(200);
-	   	ring.makeIndeterminate();
-	   	StackPane stackRing = new StackPane();
-	   	stackRing.prefHeightProperty().bind(basePane.heightProperty());
-	   	stackRing.prefWidthProperty().bind(basePane.widthProperty());
-	   	
-	   	stackRing.getChildren().add(ring);
-	   	StackPane.setAlignment(ring, Pos.CENTER);
-	   	indicators.getChildren().add(stackRing);
-	   	
-	   	basePane.getChildren().add(indicators);
 	}
 	
 	private void BatteryBar(ProgressBar bar) {		

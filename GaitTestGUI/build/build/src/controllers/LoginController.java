@@ -26,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import models.ConnectionStatus;
 import models.DetectUSB;
 import models.Recording;
 
@@ -67,43 +68,11 @@ public class LoginController {
 	 connectedString.set("Connect Device");
 	 //recording.addListener((observable, oldValue, newValue) -> {
 	 
-	 //connectBool.set(Recording.isConnected());
-	usb.connectedProperty().addListener(new ChangeListener<Boolean>() {
-		@Override
-		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-			if (newValue)
-			{
-				//System.out.println("Plugged IN>>>>");
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {						
-						connectedString.set("Connected: TRUE");
-						Image image = new Image("file:resources/connect.png");
-						statusImage.setImage(image);
-						
-						//Recording.setIsConnected(true);
-					}				
-				});
-				
-				//connected.set("Connected: " + Recording.isConnected());				
-			}
-			else {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {						
-						connectedString.set("Connected: FALSE");
-						Image image = new Image("file:resources/disconnect.png");
-						statusImage.setImage(image);
-						//Recording.setIsConnected(false);
-					}				
-				});
-			}
-		}
-		});  
-	
-	  statusBar.textProperty().bind(connectedString);
-	  
-	  
+	 
+	//Connection
+ 	 ConnectionStatus connStatus = new ConnectionStatus();
+ 	 connStatus.ShowStatus(statusImage, statusBar);
+
 	  startButton.setOnAction((e) -> {	   
 		  if(debugCheck.isSelected())
 		  {
@@ -135,14 +104,14 @@ public class LoginController {
           
 		});
    
-	   clearButton.setOnAction((e) -> {
-    	  System.out.print("cleared fields");
+		clearButton.setOnAction((e) -> {
+		System.out.print("cleared fields");
     	  
-    	  //clear text fields
-    	  staffIdField.clear();
-    	  projIdField.clear();
-    	  fuField.clear();
-    	  sessionID = 0;
+	  //clear text fields
+	  staffIdField.clear();
+	  projIdField.clear();
+	  fuField.clear();
+	  sessionID = 0;
 	});
 	 
   }

@@ -18,18 +18,7 @@ public class SaveOMX {
 	private String saveFileName;
 	private String rawOMXFileName;
 	private String saveDriveLetter;
-
-//	public String getDrive() {
-//		
-//		String DriveName = usb.get
-//    // if it found a drive (null or empty string says no)
-//	    if(drive != null && !drive.isEmpty()) {
-//	        // look for a file in that drive
-//	        FileSearch fileSearch = new FileSearch();
-//	        fileSearch.find(new File(drive+":"));
-//	    }
-//	}
-//	
+	
 	public String find(File dir) 
     {
         String pattern = ".OMX";

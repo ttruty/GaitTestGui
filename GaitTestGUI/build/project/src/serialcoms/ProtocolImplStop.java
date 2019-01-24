@@ -1,5 +1,8 @@
 package serialcoms;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -87,6 +90,9 @@ public class ProtocolImplStop implements Protocol {
     
     public void stopRecording() {
     	
+    	LocalDateTime timeSet = LocalDateTime.now();
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss");
+        String time = timeSet.format(formatTime);
         
         System.out.println("STOPPING RECORDING");     
         // recording command
@@ -94,7 +100,7 @@ public class ProtocolImplStop implements Protocol {
         buffWait(1000);
         CommPortSender.send(getMessage("Start=-1"));
         buffWait(1000);
-        CommPortSender.send(getMessage("STOP=0"));
+        CommPortSender.send(getMessage("STOP " + time));
         buffWait(1000);
         CommPortSender.send(getMessage("LED=7")); 
         buffWait(1000);
