@@ -73,7 +73,7 @@ public class Input{
         	pressed = true;
             
             count++;
-            System.out.println("Pressed: " + (event.getCode().ordinal()));
+            //System.out.println("Pressed: " + (event.getCode().ordinal()));
         }
     };
 

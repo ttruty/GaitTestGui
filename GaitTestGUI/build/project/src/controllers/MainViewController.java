@@ -136,6 +136,7 @@ public class MainViewController {
   long delayTime;
   Duration timeWatch = Duration.ZERO;
   Timeline timeline = new Timeline();
+  long unixTimeStampInSound; // set this in when the sound is played
 
   Button[] buttonList = new Button[15];
   Button[] controlsList = new Button[4];
@@ -266,8 +267,7 @@ public class MainViewController {
 	  		            @Override
 	  		            public void run() {
 	  		            	mediaPlayer.stop();
-	  		            	mediaPlayer.play();
-	  		                
+	  		            	mediaPlayer.play();	  		                
 	  		            	this.cancel();
 	  		            }
 	  		        }, 
@@ -366,7 +366,13 @@ public class MainViewController {
   
 	private void perfButton(Button button, String label, Label startTime, Label countLabel, boolean isDelay) 
   	{
-  		long time = System.currentTimeMillis();
+		
+		long time = System.currentTimeMillis();
+		
+		Marker marker = new Marker();
+	   	marker.setLabel(label);
+	   	marker.setUnixTimeStampNoDelay(time);
+	   	
 	  	clickCount++;	
 	  	//perfCount++;
 	  	timeWatch = Duration.ZERO;
@@ -383,8 +389,7 @@ public class MainViewController {
 	  	Random delay = new Random();
   		int low = 1;
   		int high = 3000; //1 ms to 3000 ms
-	  	Marker marker = new Marker();
-	   	marker.setLabel(label);
+	  	
 	   	
 	   	//Start timer
 	  	if (clickCount % 2 != 0)
@@ -433,15 +438,16 @@ public class MainViewController {
 		   	
 		   	marker.setCount(clickCount);		   	
 		   	perfList.add(label);
-		   	
 	  	}
 	  	
 	  	//stop timer
-	  	else {		  		
+	  	else {
+	  		marker.setUnixTimeStampInSound(unixTimeStampInSound); // set sound timestamp when stopped to make sure the task is finished
+		  	
 	  		timeline.stop();
 	  		
 	  		taskRunning = false;
-	  			  		
+	  		
 	  		button.setStyle("-fx-background-color: gray; -fx-font-size: 32");
 	  		gridPane.setStyle("-fx-background-color: #DCDCDC");
 
@@ -473,8 +479,9 @@ public class MainViewController {
 		   	{
 		    	b.setDisable(false);
 		   	} 
-	  	}	
-	  	markerList.add(marker);
+	  	}
+	  	
+  		markerList.add(marker);
   	}
   	
   	public static Map<String, Integer> countFrequencies(ArrayList<String> list) 
@@ -502,6 +509,8 @@ public class MainViewController {
   	
   	//play sound add stopwatch to node
   	private void soundTimer(Long delay, Label label, Button button) {
+  		 	
+  		long soundTimeStamp;
   		timeline.stop();
   		DoubleProperty timeSeconds = new SimpleDoubleProperty();
   		StringProperty timeLabel = new SimpleStringProperty();
@@ -511,6 +520,10 @@ public class MainViewController {
   		        new TimerTask() {
   		            @Override
   		            public void run() {
+  		            	
+  		            	long time = System.currentTimeMillis();
+  		            	
+  		            	unixTimeStampInSound = time;
   		            	
   		            	mediaPlayer.play();
   		                

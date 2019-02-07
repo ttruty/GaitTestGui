@@ -43,7 +43,7 @@ public class WriteCSV {
         final String NEW_LINE_SEPARATOR = "\n";
 
         //CSV file header
-        final String FILE_HEADER = "Perf_Label, timeStamp, UnixTimeStamp, count, markerType, delay";
+        final String FILE_HEADER = "Perf_Label, timeStamp, UnixTimeStamp, count, markerType, delay, NoDelayTimeStamp, InSoundCodeTimeStamp";
         System.out.println("Print to csv");
 
 
@@ -113,6 +113,10 @@ public class WriteCSV {
                 fileWriter.append(String.valueOf(marker.getMarkerType()));
                 fileWriter.append(COMMA_DELIMITER);
                 fileWriter.append(String.valueOf(marker.getRandomDelay()));
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(String.valueOf(marker.getUnixTimeStampNoDelay()));
+                fileWriter.append(COMMA_DELIMITER);
+                fileWriter.append(String.valueOf(marker.getUnixTimeStampInSound()));
                 fileWriter.append(NEW_LINE_SEPARATOR);
              }
 

@@ -18,6 +18,8 @@ public class Marker {
 	private String markerType;
 	private Long timeDelta;
 	private Long UnixTimeStamp;
+	private Long UnixTimeStampNoDelay;
+	private Long UnixTimeStampInSound;
 	private int randomDelay;
 	
 	 public String getLabel() {
@@ -78,6 +80,22 @@ public class Marker {
 
 	public void setUnixTimeStamp(Long unixTimeStamp) {
 		UnixTimeStamp = unixTimeStamp;
+	}
+	
+	public Long getUnixTimeStampNoDelay() {
+		return UnixTimeStampNoDelay;
+	}
+
+	public void setUnixTimeStampNoDelay(Long unixTimeStampNoDelay) {
+		UnixTimeStampNoDelay = unixTimeStampNoDelay;
+	}
+	
+	public Long getUnixTimeStampInSound() {
+		return UnixTimeStampInSound;
+	}
+
+	public void setUnixTimeStampInSound(Long unixTimeStampInSound) {
+		UnixTimeStampInSound = unixTimeStampInSound;
 	}
 
 	public int getRandomDelay() {
