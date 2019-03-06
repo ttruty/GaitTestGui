@@ -162,6 +162,10 @@ public class MainViewController {
   MediaPlayer mediaPlayer = new MediaPlayer(sound);
     
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
+	  
+	  // play sound first on load to avoid lag later
+	  mediaPlayer.play();
+	  
 	  buttonList[0] = perf_8ft1;
 	  buttonList[1] = perf_8ft2;
 	  buttonList[2] = perf_eo;
