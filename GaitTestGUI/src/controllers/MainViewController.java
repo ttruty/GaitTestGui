@@ -407,13 +407,13 @@ public class MainViewController {
 	  		if (isDelay) {
 	  			int randomDelay = delay.nextInt(high-low) + low;
 	  			delayTime = randomDelay;
-	  			soundTimer(delayTime, startTime, button);
+	  			soundTimer(delayTime, startTime, button, true);
 	  			
 	  		}
 	  		else {
 	  			int randomDelay = 0;
 	  			delayTime = randomDelay;
-	  			soundTimer(delayTime, startTime, button);
+	  			soundTimer(delayTime, startTime, button, false);
 	  		}
 	  		//System.out.println("Random Delay: " + randomDelay);
 	  		//mediaPlayer.play()
@@ -512,7 +512,7 @@ public class MainViewController {
   	}
   	
   	//play sound add stopwatch to node
-  	private void soundTimer(Long delay, Label label, Button button) {
+  	private void soundTimer(Long delay, Label label, Button button, boolean isSound) {
   		 	
   		long soundTimeStamp;
   		timeline.stop();
@@ -529,9 +529,12 @@ public class MainViewController {
   		            	
   		            	unixTimeStampInSound = time;
   		            	
-  		            	mediaPlayer.play();
-  		                
-  		            	this.cancel();
+  		            	//play the sound
+  		            	if(isSound) {
+	  		            	mediaPlayer.play();
+	  		                
+	  		            	this.cancel();
+  		            	}
   		            	
   		            	timeWatch = Duration.ZERO;
   		            	timeline = new Timeline(
