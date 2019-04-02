@@ -75,6 +75,7 @@ public class MainViewController {
   @FXML private AnchorPane basePane;
   
   // performance buttons
+  @FXML private Button perf_calib;
   @FXML private Button perf_8ft1;
   @FXML private Button perf_8ft2;
   @FXML private Button perf_eo;
@@ -91,6 +92,7 @@ public class MainViewController {
   @FXML private Button perf_cog1;
   @FXML private Button perf_cog2;
  
+  @FXML private Label perf_calib_start;
   @FXML private Label perf_8ft1_start;
   @FXML private Label perf_8ft2_start;
   @FXML private Label perf_eo_start;
@@ -107,6 +109,7 @@ public class MainViewController {
   @FXML private Label perf_cog1_start;
   @FXML private Label perf_cog2_start;
   
+  @FXML private Label perf_calib_count;
   @FXML private Label perf_8ft1_count;
   @FXML private Label perf_8ft2_count;
   @FXML private Label perf_eo_count;
@@ -138,7 +141,7 @@ public class MainViewController {
   Timeline timeline = new Timeline();
   long unixTimeStampInSound; // set this in when the sound is played
 
-  Button[] buttonList = new Button[15];
+  Button[] buttonList = new Button[16];
   Button[] controlsList = new Button[4];
   Queue<Button> bQueue;
   
@@ -166,21 +169,22 @@ public class MainViewController {
 	  // play sound first on load to avoid lag later
 	  mediaPlayer.play();
 	  
-	  buttonList[0] = perf_8ft1;
-	  buttonList[1] = perf_8ft2;
-	  buttonList[2] = perf_eo;
-	  buttonList[3] = perf_3601;
-	  buttonList[4] = perf_ll;
-	  buttonList[5] = perf_3602;
-	  buttonList[6] = perf_ec;
-	  buttonList[7] = perf_tug1;
-	  buttonList[8] = perf_rl;
-	  buttonList[9] = perf_tug2;
-	  buttonList[10] = perf_tan;
-	  buttonList[11] = perf_32ft;
-	  buttonList[12] = perf_toe;
-	  buttonList[13] = perf_cog1;
-	  buttonList[14] = perf_cog2;
+	  buttonList[0] = perf_calib;
+	  buttonList[1] = perf_8ft1;
+	  buttonList[2] = perf_8ft2;
+	  buttonList[3] = perf_eo;
+	  buttonList[4] = perf_3601;
+	  buttonList[5] = perf_ll;
+	  buttonList[6] = perf_3602;
+	  buttonList[7] = perf_ec;
+	  buttonList[8] = perf_tug1;
+	  buttonList[9] = perf_rl;
+	  buttonList[10] = perf_tug2;
+	  buttonList[11] = perf_tan;
+	  buttonList[12] = perf_32ft;
+	  buttonList[13] = perf_toe;
+	  buttonList[14] = perf_cog1;
+	  buttonList[15] = perf_cog2;
 	  
 	  controlsList[0] = startTest;
 	  controlsList[1] = stopTest;
@@ -321,6 +325,9 @@ public class MainViewController {
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
 	  
 	  // perforamnce buttons
+	  perf_calib.setOnAction((e) -> {
+		  	perfButton(perf_calib, "calibrate", perf_calib_start, perf_calib_count, false);
+				});
 	  perf_8ft1.setOnAction((e) -> {
 		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_count, true);
 				});
@@ -391,7 +398,7 @@ public class MainViewController {
 		
 	  	//random delay generation
 	  	Random delay = new Random();
-  		int low = 1;
+  		int low = 1000;
   		int high = 3000; //1 ms to 3000 ms
 	  	
 	   	
@@ -409,6 +416,13 @@ public class MainViewController {
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  			
+	  		}
+	  		
+	  		else if (!isDelay & label.equals("calibrate"))
+	  		{
+	  			int randomDelay = 0;
+	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button, true);
 	  		}
 	  		else {
 	  			int randomDelay = 0;
