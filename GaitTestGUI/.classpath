@@ -5,14 +5,10 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GaitTestGUI/libs"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/KinectAcquisition2/Downloads/mfz-rxtx-2.2-20081207-win-x64/RXTXcomm.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GaitTestGUI/libs"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/KinectAcquisition2/Downloads/controlsfx-8.40.14.jar"/>
-	<classpathentry kind="lib" path="C:/Users/KinectAcquisition2/Downloads/commons-io-2.6/commons-io-2.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/controlsfx-8.40.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -18,6 +18,7 @@ public class Recording {
 	private static String recordingId;
 	private static String fuYear;
 	private static String staffId;
+	private static boolean hearingImpaired;
 	public volatile static BooleanProperty connectedBoolean = new SimpleBooleanProperty();
 	
 	private static Long recordingStart;
@@ -159,6 +160,13 @@ public class Recording {
 	}
 	public static void setUnixRecordingTimeStamp(Long unixRecordingTimeStamp) {
 		Recording.unixRecordingTimeStamp = unixRecordingTimeStamp;
+	}
+	
+	public static boolean isHearingImpaired() {
+		return hearingImpaired;
+	}
+	public static void setHearingImpaired(boolean hearingImpaired) {
+		Recording.hearingImpaired = hearingImpaired;
 	}
 	
 	
