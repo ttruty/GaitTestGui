@@ -38,6 +38,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -63,6 +64,7 @@ public class MainViewController {
   @FXML private Button stopTest;
   @FXML private Button saveButton;
   @FXML private Button sampleSoundButton;
+  @FXML private CheckBox  hearingCheck;
   
   @FXML private Label  sessionLabel;
   @FXML private Label  timeLabel;
@@ -319,7 +321,8 @@ public class MainViewController {
 	  //save button
 	  saveButton.setOnAction((e) -> {
 		  Recording.setMarkerList(markerList);
-		  ControlButton.Save(com, basePane);	  
+		  ControlButton.Save(com, basePane);	
+		  Recording.setHearingImpaired(hearingCheck.isSelected());
 		    }); // end save button
 	  
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);

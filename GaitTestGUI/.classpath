@@ -7,8 +7,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/RXTXcomm.jar"/>
-	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/build/externalLibs/controlsfx-8.40.14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/resources/requiredLibs/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/resources/requiredLibs/controlsfx-8.40.14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/KinectProcessing/Documents/GitHub/GaitTestGui/GaitTestGUI/resources/requiredLibs/RXTXcomm.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

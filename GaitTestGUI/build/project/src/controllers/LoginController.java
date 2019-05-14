@@ -7,6 +7,7 @@
 
 package controllers;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -26,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import models.CheckProjId;
 import models.ConnectionStatus;
 import models.DetectUSB;
 import models.Recording;
@@ -73,62 +75,69 @@ public class LoginController {
  	 ConnectionStatus connStatus = new ConnectionStatus();
  	 connStatus.ShowStatus(statusImage, statusBar);
 
-	  startButton.setOnAction((e) -> {	   
-		  if(debugCheck.isSelected())
-		  {
-			  usb.setIsConnected(true);
-			  System.out.println("DEBUG MODE");
-			  Recording.setDebugMode(true);
-		  }
-		  
-          if(usb.getIsConnected()) 
-		  //if (1==1) //debug. do not need device in to test
-          {
-        	  currComPort = usb.comPort;
-        	  StringBuilder sessionText = authorize();
-        	  System.out.print(sessionText);
-        	  loginManager.authenticated(Integer.toString(sessionID));
-        	  Recording.setRecordingStart(System.currentTimeMillis());
-        	 
-        	
-          } else {
-        	  Alert alert = new Alert(AlertType.WARNING, 
-                      "Device Not connected, \n "
-                      + "Unplug and reconnect", 
+	  startButton.setOnAction((e) -> {	
+		  if (validityCheck(projIdField.getText())) {
+			  if(debugCheck.isSelected())
+			  {
+				  usb.setIsConnected(true);
+				  System.out.println("DEBUG MODE");
+				  Recording.setDebugMode(true);
+				  StringBuilder sessionText = null;
+				  sessionText = authorize();					
+			  }
+			  
+	          if(usb.getIsConnected()) 
+			  //if (1==1) //debug. do not need device in to test
+	          {
+	        	  currComPort = usb.comPort;
+	        	  StringBuilder sessionText = null;
+	        	  sessionText = authorize();
+	        	  System.out.print(sessionText);
+	        	  loginManager.authenticated(Integer.toString(sessionID));
+	        	  Recording.setRecordingStart(System.currentTimeMillis());
+	          } else {
+	        	  Alert alert = new Alert(AlertType.WARNING, 
+	                      "Device Not connected, \n "
+	                      + "Unplug and reconnect", 
+	                      ButtonType.OK);
+	        	  alert.showAndWait();
+	        	  System.out.println("Device not connected!!!");
+	          }
+		  } else {
+        	  Alert alert = new Alert(AlertType.ERROR, 
+                      "Project ID is not valid, \n "
+                      + "Please re-enter a correct project ID", 
                       ButtonType.OK);
         	  alert.showAndWait();
-        	  System.out.println("Device not connected!!!");
+        	  System.out.println("Project ID error");
           }
-        	// validate text fields before continue
-	    	  //TODO: validate inputs
-          
-		});
+	});
    
-		clearButton.setOnAction((e) -> {
-		System.out.print("cleared fields");
-    	  
-	  //clear text fields
-	  staffIdField.clear();
-	  projIdField.clear();
-	  fuField.clear();
-	  sessionID = 0;
+	clearButton.setOnAction((e) -> {
+		System.out.print("cleared fields");    	  
+		  //clear text fields
+		  staffIdField.clear();
+		  projIdField.clear();
+		  fuField.clear();
+		  sessionID = 0;
 	});
 	 
   }
 
-  /**
+/**
    * Check authorization credentials.
    * 
    * If accepted, return a sessionID for the authorized session
    * otherwise, return null.
+ * @throws Exception 
+ * @throws SQLException 
    */   
   private StringBuilder authorize() {
-	  
+
 	  setProjIdField(projIdField);
 	  setFuField(fuField);
 	  setStaffIdField(staffIdField);
-	  
-	  
+	  	  
 	  // set time on device
       LocalDateTime timeSet = LocalDateTime.now();
       DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
@@ -167,7 +176,8 @@ public class LoginController {
 		return projIdField;
 	}
 	
-	public void setProjIdField(TextField projIdField) {
+	public void setProjIdField(TextField projIdField){
+		//initailize proj id checker
 		Recording.setRecordingId(projIdField.getText());
 		this.projIdField = projIdField;
 	}
@@ -179,5 +189,10 @@ public class LoginController {
 	public void setFuField(TextField fuField) {
 		Recording.setFuYear(fuField.getText());
 		this.fuField = fuField;
+	}
+	
+	private boolean validityCheck(String Id) {
+		CheckProjId checker = new CheckProjId();
+		return checker.isLegal(Id);
 	}
 }

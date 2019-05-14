@@ -86,6 +86,11 @@ public class WriteCSV {
             fileWriter.append("Start Button Pressed");
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append( String.valueOf(Recording.getStartButtonPressed()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append("Hearing Impaired");
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(Recording.isHearingImpaired()));
             
 
             fileWriter.append(NEW_LINE_SEPARATOR);
