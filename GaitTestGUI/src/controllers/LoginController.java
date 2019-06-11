@@ -26,11 +26,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import models.CheckProjId;
 import models.ConnectionStatus;
 import models.DetectUSB;
 import models.Recording;
+import serialcoms.ComConnect;
 
 /** Controls the login screen */ 
 public class LoginController {
@@ -46,6 +48,9 @@ public class LoginController {
   @FXML private ImageView  rushLogo;
   @FXML private CheckBox  debugCheck;
   @FXML private AnchorPane  basePane;
+
+  @FXML private GridPane gridPane;
+  Button[] controlsList = new Button[4];
   
   //session id counter
   private static int sessionID = 0;
@@ -55,6 +60,9 @@ public class LoginController {
   public void initManager(final LoginManager loginManager) {	  
 	  
 	  DetectUSB usb = new DetectUSB();
+	 
+	  //connecting object
+	  ComConnect com = new ComConnect();
 	  
 	  Thread thread = new Thread(usb);
 	  thread.setDaemon(true);
@@ -73,7 +81,7 @@ public class LoginController {
 	 
 	//Connection
  	 ConnectionStatus connStatus = new ConnectionStatus();
- 	 connStatus.ShowStatus(statusImage, statusBar);
+ 	 connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
 
 	  startButton.setOnAction((e) -> {	
 		  if (validityCheck(projIdField.getText())) {
