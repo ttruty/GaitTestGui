@@ -233,9 +233,7 @@ public class MainViewController {
  		 DebugStartDeviceRecording();
  	 }
  	 
- 	 //Connection Status images and status bar update
- 	 ConnectionStatus connStatus = new ConnectionStatus();
- 	 connStatus.ShowStatus(statusImage, statusBar);
+ 	 
  	 
  	 
  	 //input for remote
@@ -325,6 +323,10 @@ public class MainViewController {
 		  Recording.setHearingImpaired(hearingCheck.isSelected());
 		    }); // end save button
 	  
+	  
+	  //Connection Status images and status bar update
+	  ConnectionStatus connStatus = new ConnectionStatus();
+	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
 	  
 	  // perforamnce buttons
@@ -332,49 +334,49 @@ public class MainViewController {
 		  	perfButton(perf_calib, "calibrate", perf_calib_start, perf_calib_count, false);
 				});
 	  perf_8ft1.setOnAction((e) -> {
-		  	perfButton(perf_8ft1, "8ft1", perf_8ft1_start, perf_8ft1_count, true);
+		  	perfButton(perf_8ft1, "walk_8ft_1", perf_8ft1_start, perf_8ft1_count, true);
 				});
 	  perf_8ft2.setOnAction((e) -> {
-		  	perfButton(perf_8ft2, "8ft2", perf_8ft2_start, perf_8ft2_count, true);
+		  	perfButton(perf_8ft2, "walk_8ft_2", perf_8ft2_start, perf_8ft2_count, true);
 				});
 	  perf_eo.setOnAction((e) -> {
 		  	perfButton(perf_eo, "eo", perf_eo_start, perf_eo_count, false);
 				});
 	  perf_3601.setOnAction((e) -> {
-		  	perfButton(perf_3601, "3601", perf_3601_start, perf_3601_count, true);
+		  	perfButton(perf_3601, "turn_360_1", perf_3601_start, perf_3601_count, true);
 				});
 	  perf_ll.setOnAction((e) -> {
 		  	perfButton(perf_ll, "ll", perf_ll_start, perf_ll_count, false);
 				});
 	  perf_3602.setOnAction((e) -> {
-		  	perfButton( perf_3602, "3602", perf_3602_start, perf_3602_count, true);
+		  	perfButton( perf_3602, "turn_360_2", perf_3602_start, perf_3602_count, true);
 				});
 	  perf_ec.setOnAction((e) -> {
 		  	perfButton(perf_ec, "ec", perf_ec_start, perf_ec_count, false);
 				});
 	  perf_tug1.setOnAction((e) -> {
-		  	perfButton(perf_tug1,"tug1", perf_tug1_start, perf_tug1_count, true);
+		  	perfButton(perf_tug1,"tug_1", perf_tug1_start, perf_tug1_count, true);
 				});
 	  perf_rl.setOnAction((e) -> {
 		  	perfButton(perf_rl, "rl", perf_rl_start, perf_rl_count, false);
 				});
 	  perf_tug2.setOnAction((e) -> {
-		  	perfButton(perf_tug2, "tug2", perf_tug2_start, perf_tug2_count, true);
+		  	perfButton(perf_tug2, "tug_2", perf_tug2_start, perf_tug2_count, true);
 				});
 	  perf_tan.setOnAction((e) -> {
 		  	perfButton(perf_tan, "tan", perf_tan_start, perf_tan_count, true);
 				});
 	  perf_32ft.setOnAction((e) -> {
-		  	perfButton(perf_32ft, "32ft", perf_32ft_start, perf_32ft_count, true);
+		  	perfButton(perf_32ft, "walk_32ft", perf_32ft_start, perf_32ft_count, true);
 				});
 	  perf_toe.setOnAction((e) -> {
 		  	perfButton(perf_toe, "toe", perf_toe_start, perf_toe_count, false);
 				});
 	  perf_cog1.setOnAction((e) -> {
-		  	perfButton(perf_cog1, "cog1", perf_cog1_start, perf_cog1_count, true);
+		  	perfButton(perf_cog1, "cog_1", perf_cog1_start, perf_cog1_count, true);
 				});
 	  perf_cog2.setOnAction((e) -> {
-		  	perfButton(perf_cog2, "cog2", perf_cog2_start, perf_cog2_count, true);
+		  	perfButton(perf_cog2, "cog_2", perf_cog2_start, perf_cog2_count, true);
 				});
   }
   

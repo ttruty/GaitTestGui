@@ -80,7 +80,8 @@ public class ComConnect {
             System.out.println("Port in use!"); 
             port.close();
             
-		}  
+		} 
+		plugAlert.set(!plugAlert.get());
     }    
       
 	public Runnable makeConnection() 
@@ -125,7 +126,7 @@ public class ComConnect {
     {      	
         new ComConnect().connect(this.getAccessComPort(), new ProtocolImplStop());
     	CommPortSender.send(new ProtocolImplStop().getMessage("AT"));    
-    	plugAlert.set(false);
+    	plugAlert.set(!plugAlert.get());
 		    
 		return null;
     }  
@@ -138,7 +139,7 @@ public class ComConnect {
 		    System.out.println("DISCONNECTING");
 		    disconnect(serialPort);
 		    
-		    plugAlert.set(true);
+		    plugAlert.set(!plugAlert.get());
 		   
 	    }
     }
