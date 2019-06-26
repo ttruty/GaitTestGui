@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.StatusBar?>
 
-<AnchorPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
       
       <TextField id="projIdField" fx:id="projIdField" layoutX="172.0" layoutY="49.0" prefHeight="35.0" prefWidth="162.0" promptText="project id">
@@ -31,11 +31,11 @@
          </font></TextField>
       <Button id="startButton" fx:id="startButton" layoutX="123.0" layoutY="304.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="152.0" text="Start" />
       <Button id="clearButton" fx:id="clearButton" layoutX="321.0" layoutY="304.0" mnemonicParsing="false" text="Clear" />
-      <MenuBar prefHeight="22.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="fileMenuBar" prefHeight="22.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -43,7 +43,7 @@
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" onAction="#aboutHelp" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
             </items>

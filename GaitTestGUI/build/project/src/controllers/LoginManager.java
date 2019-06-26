@@ -21,7 +21,11 @@ public class LoginManager{
 	Input input;
 	
     
-	
+	/**
+	 * Entry point for this project.
+	 *
+	 * @author TTruty
+	 */
 	public LoginManager(Scene scene) {
 		
 		this.scene = scene;
@@ -48,6 +52,7 @@ public class LoginManager{
 		showLoginScreen();
 	}
 
+	
 	public void showLoginScreen() {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));

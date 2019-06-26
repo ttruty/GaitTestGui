@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -28,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import models.CheckProjId;
 import models.ConnectionStatus;
 import models.DetectUSB;
@@ -48,6 +50,7 @@ public class LoginController {
   @FXML private ImageView  rushLogo;
   @FXML private CheckBox  debugCheck;
   @FXML private AnchorPane  basePane;
+  @FXML private MenuBar fileMenuBar;
 
   @FXML private GridPane gridPane;
   Button[] controlsList = new Button[4];
@@ -56,24 +59,31 @@ public class LoginController {
   private static int sessionID = 0;
   private String currComPort = null;
 
-  
+  /**
+   * Initializes usb threads and connection in project
+   *
+   * 
+   */
   public void initManager(final LoginManager loginManager) {	  
-	  
+	  	  
+	  // threaded usb object to persistantly poll if usb device conneted
 	  DetectUSB usb = new DetectUSB();
 	 
-	  //connecting object
+	  //connecting object open the connection to talk to the object
 	  ComConnect com = new ComConnect();
 	  
+	  // start usb connection thread
 	  Thread thread = new Thread(usb);
 	  thread.setDaemon(true);
 	  thread.start(); 
 	  
+	  //images on GUI
 	  Image logo = new Image("file:resources/rushLogo.jpg");
 	  Image image = new Image("file:resources/disconnect.png");
 	  rushLogo.setImage(logo);
 	  statusImage.setImage(image);
 	  
-	//status bar	 
+	 //status bar	 
 	 StringProperty connectedString = new SimpleStringProperty();
 	 connectedString.set("Connect Device");
 	 //recording.addListener((observable, oldValue, newValue) -> {
@@ -82,7 +92,8 @@ public class LoginController {
 	//Connection
  	 ConnectionStatus connStatus = new ConnectionStatus();
  	 connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
-
+ 	 
+ 	 // pressing the start button will alert if errors or start main view
 	  startButton.setOnAction((e) -> {	
 		  if (validityCheck(projIdField.getText())) {
 			  if(debugCheck.isSelected())
@@ -101,7 +112,7 @@ public class LoginController {
 	        	  StringBuilder sessionText = null;
 	        	  sessionText = authorize();
 	        	  System.out.print(sessionText);
-	        	  loginManager.authenticated(Integer.toString(sessionID));
+	        	  loginManager.authenticated(Integer.toString(sessionID)); // switches screen to main view
 	        	  Recording.setRecordingStart(System.currentTimeMillis());
 	          } else {
 	        	  Alert alert = new Alert(AlertType.WARNING, 
@@ -203,4 +214,34 @@ public class LoginController {
 		CheckProjId checker = new CheckProjId();
 		return checker.isLegal(Id);
 	}
+	
+	  //About menu item on menu bar
+	  @FXML
+	  public void aboutHelp(ActionEvent event) {
+		  // select file from the menu bar
+		  Stage stage = (Stage) fileMenuBar.getScene().getWindow();
+		  Alert alert = new Alert(AlertType.INFORMATION,
+	 	           "Gait Initiation GUI\n\n\n"
+	 	         + "- Used to signal the start of gait activities with sound\n "
+	 	         + "- Make the device to be connected without the use of bluetooth\n"
+	 	         + "- Provide a java program framework for connecting devices and collecting data\n"
+	 	         + "- Output is currently in a directory in the Documents folder of the user under GaitFiles\n\n\n"
+	 	         + " CREATED BY TIM TRUTY\n"
+	 	         + " ttruty@gmail.com\n"
+	 	         + " RADC Winter 2018\n"
+	 	         + " RUSH ALZHEIMER'S DISEASE CENTER\n"
+	 	         + " CHICAGO IL\n");
+
+
+	 	 alert.setTitle("About info");
+	 	 alert.showAndWait();
+	  } //end aboutmenu
+	  
+	  @FXML
+	  public void closeApp(ActionEvent event) {
+		  //select close on the menu bar
+		  Platform.exit();
+		  System.exit(0);
+		  } //end closeApp
+
 }

@@ -7,6 +7,7 @@
 
 package controllers;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Timer;
@@ -27,6 +29,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,17 +38,26 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.ConnectionStatus;
 import models.ControlButton;
@@ -53,6 +65,7 @@ import models.Input;
 import models.Marker;
 import models.Recording;
 import models.RingIndicator;
+import models.ScriptPrompts;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import serialcoms.ComConnect;
@@ -75,6 +88,8 @@ public class MainViewController {
   @FXML private StatusBar statusBar;
   @FXML private GridPane gridPane;
   @FXML private AnchorPane basePane;
+  @FXML private MenuBar fileMenuBar;
+  @FXML private CheckMenuItem assistedMode;
   
   // performance buttons
   @FXML private Button perf_calib;
@@ -130,12 +145,13 @@ public class MainViewController {
   
   //Group indicators = new Group();
 
+  // status indicators
   @FXML private ImageView statusImage; 
   @FXML private ProgressBar batteryLevel;
   @FXML private Label batteryLabel;
   
+  // gui timing info
   private int clickCount = 0;
-  //private int perfCount = 0;
   long start;
   long stop;
   long delayTime;
@@ -143,10 +159,12 @@ public class MainViewController {
   Timeline timeline = new Timeline();
   long unixTimeStampInSound; // set this in when the sound is played
 
+  //arrays of buttons on gui
   Button[] buttonList = new Button[16];
   Button[] controlsList = new Button[4];
   Queue<Button> bQueue;
   
+  // perfomance and marker lists
   ArrayList<String> perfList = new ArrayList<String>(); 
   ArrayList<Marker> markerList = new ArrayList<Marker>();
   
@@ -154,6 +172,7 @@ public class MainViewController {
   String driveLetter;
   String driveName;
   
+  // input info
   Input input;
   boolean pageDownPressed;
   boolean pageUpPressed;
@@ -165,12 +184,23 @@ public class MainViewController {
   String musicFile = "resources\\start.wav";     // For example
   Media sound = new Media(new File(musicFile).toURI().toString());
   MediaPlayer mediaPlayer = new MediaPlayer(sound);
+  
+  // prompt vars
+  Map<String, Text> prompts = new HashMap<String, Text>();
     
+  /**
+   * Initialize the main running project
+   * Main initialization of objects and button controls happen here
+   *
+   * @param loginManager	the LoginManager object
+   * @param sessionID		the number of starts of the current main view
+   * @param input			the input object
+   */
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
-	  
 	  // play sound first on load to avoid lag later
 	  mediaPlayer.play();
 	  
+	  // setting button array
 	  buttonList[0] = perf_calib;
 	  buttonList[1] = perf_8ft1;
 	  buttonList[2] = perf_8ft2;
@@ -188,43 +218,56 @@ public class MainViewController {
 	  buttonList[14] = perf_cog1;
 	  buttonList[15] = perf_cog2;
 	  
+	  // setting control button array
 	  controlsList[0] = startTest;
 	  controlsList[1] = stopTest;
 	  controlsList[2] = sampleSoundButton;
 	  controlsList[3] = saveButton;
+	  	  
+	  // button style and spacing
+	  //for (Button button : buttonList) {
+		  //button.setMaxWidth(Double.MAX_VALUE);
+		  //button.setMaxHeight(Double.MAX_VALUE);
+		  //button.setStyle("-fx-font-size:32");
+		  //button.setPadding(Insets.EMPTY);
+	  //}
 	  
-	  for (Button button : buttonList) {
-		  button.setMaxWidth(Double.MAX_VALUE);
-		  button.setMaxHeight(Double.MAX_VALUE);
-		  button.setStyle("-fx-font-size:32");
-		  button.setPadding(Insets.EMPTY);
-	  }
+	  //Assisted Mode debugging
+	  assistedMode.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		        System.out.println("assistedMode Enabled!");
+		        System.out.println(assistedMode.isSelected());
+		    }
+		});
+	  ScriptPrompts scriptPrompts = new ScriptPrompts();
+	  prompts = scriptPrompts.generate();
 	  
-	//button queue
+	  // button queue
 	  bQueue = new LinkedList<>(Arrays.asList(buttonList));
 	  
+	  //disable buttons
 	  saveButton.setDisable(true);
 	  stopTest.setDisable(true);
 	  
-	 System.out.println(sessionID);
-	 sessionLabel.setText("Session ID: " + sessionID);
-	 timeLabel.setText("00:00:00");
-	 projIdLabel.setText("ProjID: " + Recording.getRecordingId());
-	 fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
-	 staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
+	  //Set text and indicators on gui
+	  System.out.println(sessionID);
+	  sessionLabel.setText("Session ID: " + sessionID);
+	  timeLabel.setText("00:00:00");
+	  projIdLabel.setText("ProjID: " + Recording.getRecordingId());
+	  fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
+	  staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
+	  batteryLevel.getStylesheets().add(getClass().getResource("/views/progress.css").toExternalForm());
 	 
-	 //perf_8ft1_start.setText("00:00:00");
-	 //perf_8ft1_stop.setText("00:00:00");
-	 batteryLevel.getStylesheets().add(getClass().getResource("/views/progress.css").toExternalForm());
+	  // grid pane spacing
+	  gridPane.prefHeightProperty().bind(basePane.heightProperty());
+	  gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
 	 
-	 gridPane.prefHeightProperty().bind(basePane.heightProperty());
-	 gridPane.prefWidthProperty().bind(basePane.widthProperty());	 
-	 
-	 Image image = new Image("file:resources/connect.png");
-	 statusImage.setImage(image);
+	  // Set connection image
+	  Image image = new Image("file:resources/connect.png");
+	  statusImage.setImage(image);
 
-	//connecting object
- 	 ComConnect com = new ComConnect();
+	  // Instantiate connecting object
+	  ComConnect com = new ComConnect();
  	 
  	 //start recording when screen loads
  	 if (!Recording.isDebugMode()) {
@@ -232,10 +275,7 @@ public class MainViewController {
  	 } else {
  		 DebugStartDeviceRecording();
  	 }
- 	 
- 	 
- 	 
- 	 
+ 	  	 
  	 //input for remote
  	 this.input = input;
  	 InputHelper(input);
@@ -244,15 +284,15 @@ public class MainViewController {
  	 ObservableList<Node> childrens = gridPane.getChildren();
  	 
  	 // set all objects as disabled until start of test
-	for (Node node : childrens) {
-		if (node instanceof Control) {
+ 	 for (Node node : childrens) {
+ 		 if (node instanceof Control) {
 			node.setDisable(true);
 	    }
-	}
+ 	 }
 	 
 	 
-	 // Time label
-	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
+ 	 // Time label
+ 	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
 	 
 	 final Timeline timeline = new Timeline(
 	     new KeyFrame(
@@ -265,6 +305,7 @@ public class MainViewController {
 	     );
 	 timeline.setCycleCount( Animation.INDEFINITE );
 	 timeline.play();
+	 // end Time label
 	  
  	
 	 //Sound button
@@ -287,20 +328,47 @@ public class MainViewController {
 	 //start button
      startTest.setOnAction((e) -> {
     	 
-      Recording.setRecordingState(true);
-      Recording.setStartButtonPressed(System.currentTimeMillis());
-      
-   	  //enable all grid controls
-   	  for (Node node : childrens) {
-				if (node instanceof Control) {
-					node.setDisable(false);
-			    }
-			}
-   	  saveButton.setDisable(false);
-	  stopTest.setDisable(false);
-	  startTest.setDisable(true);
-	  
-     	}); //end start button
+    	 Text text = new Text("I am going to place this belt around your waist. "
+    	 		+ "The belt contains a recording device that will track your "
+    	 		+ "movements. I’m going to press a button on a remote before "
+    	 		+ "and after each task. Before starting each task I want you "
+    	 		+ "to look straight ahead and stay as still as possible.  ");
+    	 text.setWrappingWidth(600);
+    	 text.setFont(Font.font ("Verdana", 24));
+    	 
+    	 if (assistedMode.isSelected())
+    	 {
+    		 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//    		 alert.getButtonTypes().set(0, ButtonType.NO);
+//    		 alert.getButtonTypes().set(1, ButtonType.YES);
+    		 alert.getDialogPane().getStylesheets().add("/styles/style.css");
+    		 //alert.setGraphic(new ImageView(getIcon(icon)));
+    		 Label lb = (Label) alert.getDialogPane().getChildren().get(1);
+    		 lb.setWrapText(true); //Attempt to set wrapText option
+    		 alert.setTitle("GAIT SCRIPT");
+    		 alert.setHeaderText("Prompt");
+    		 alert.getDialogPane().setContent(text);
+    		 //alert.setContentText(content);
+    		 
+    		 alert.showAndWait();
+    	 }
+    	 
+    	 
+    	 Recording.setRecordingState(true);
+	     Recording.setStartButtonPressed(System.currentTimeMillis());
+	      
+	   	 //enable all grid controls
+	   	 for (Node node : childrens) {
+					if (node instanceof Control) {
+						node.setDisable(false);
+				    }
+				}
+	   	  saveButton.setDisable(false);
+		  stopTest.setDisable(false);
+		  startTest.setDisable(true);
+		  
+		  }); 
+      //end start button
       
       //stop button
 	  stopTest.setOnAction((e) -> {
@@ -314,22 +382,24 @@ public class MainViewController {
 			    }
 			}
 			stopTest.setDisable(true);
-			}); // end stop button
+			}); 
+	  // end stop button
 	    
 	  //save button
 	  saveButton.setOnAction((e) -> {
 		  Recording.setMarkerList(markerList);
 		  ControlButton.Save(com, basePane);	
 		  Recording.setHearingImpaired(hearingCheck.isSelected());
-		    }); // end save button
+		    }); 
+	  // end save button
 	  
 	  
-	  //Connection Status images and status bar update
+	  // Connection Status images and status bar update
 	  ConnectionStatus connStatus = new ConnectionStatus();
 	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
 	  
-	  // perforamnce buttons
+	  // Performance buttons
 	  perf_calib.setOnAction((e) -> {
 		  	perfButton(perf_calib, "calibrate", perf_calib_start, perf_calib_count, false);
 				});
@@ -378,8 +448,18 @@ public class MainViewController {
 	  perf_cog2.setOnAction((e) -> {
 		  	perfButton(perf_cog2, "cog_2", perf_cog2_start, perf_cog2_count, true);
 				});
-  }
+  	}
   
+  /**
+   * Button controls of the performance buttons
+   *
+   * @param button		the button object on gui
+   * @param label		the string object of performance label
+   * @param startTime	the label object of starting time of performance
+   * @param countLabel 	The label object for times the performance ran
+   * @param isDelay		boolean object for if the performance requires a random delay (moving tasks)
+   * 
+  **/
 	private void perfButton(Button button, String label, Label startTime, Label countLabel, boolean isDelay) 
   	{
 		
@@ -406,10 +486,44 @@ public class MainViewController {
   		int low = 1000;
   		int high = 3000; //1 ms to 3000 ms
 	  	
+  		
 	   	
 	   	//Start timer
 	  	if (clickCount % 2 != 0)
 	  	{
+	  		
+	  		//Assisted mode
+	  		if (assistedMode.isSelected())
+	  		{
+	  			
+	  			Text text = prompts.get(label);
+	  			
+	  			ButtonType start = new ButtonType("Start", ButtonData.OK_DONE);
+	  			ButtonType skip = new ButtonType("Skip", ButtonData.CANCEL_CLOSE);
+	  			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	  			alert.getButtonTypes().set(0, start);
+	  			alert.getButtonTypes().set(1, skip);
+	  			//alert.getDialogPane().getStylesheets().add("/styles/style.css");
+	  			//alert.setGraphic(new ImageView(getIcon(icon)));
+	  			Label lb = (Label) alert.getDialogPane().getChildren().get(1);
+	  			lb.setWrapText(true); //Attempt to set wrapText option
+	  			alert.setTitle("GAIT SCRIPT");
+	  			alert.setHeaderText(label);
+	  			alert.getDialogPane().setContent(text);
+	  			//alert.setContentText(content);
+	  			//Platform.runLater(alert::showAndWait);
+	  			Optional<ButtonType> result = alert.showAndWait();
+	  			if (result.orElse(skip) == start) {
+	  			    System.out.println("Continue");
+	  			} 
+	  			if (result.orElse(start) == skip) {
+	  				button.setStyle("-fx-background-color: gray");
+	  		  		gridPane.setStyle("-fx-background-color: #DCDCDC");
+	  				return;
+	  			}
+	  			
+	  		}
+	  		
 	  		button.setDisable(true);
 	  		
 	  		taskRunning = true;
@@ -438,7 +552,7 @@ public class MainViewController {
 	  		//mediaPlayer.play()
 	  		marker.setRandomDelay(delayTime);
 		   	
-//			   	stopTime.setStyle("-fx-background-color: #00FF00;");
+	  		//stopTime.setStyle("-fx-background-color: #00FF00;");
 		   	//button.setStyle("-fx-background-color: #00FF00;");
 		   	//final long time = System.currentTimeMillis();
 		   				   	
@@ -447,8 +561,7 @@ public class MainViewController {
 	  		marker.setMarkerType("Start");
 	  		
 	  		//StringProperty timeLabel = new SimpleStringProperty();
-	  		
-		   	
+	  	
 		   	//diable buttons
 		   	for (Button b : buttonList)
 		   	{			   		
@@ -461,9 +574,9 @@ public class MainViewController {
 		   	
 		   	marker.setCount(clickCount);		   	
 		   	perfList.add(label);
-	  	}
-	  	
+	  	}	  	
 	  	//stop timer
+	  	
 	  	else {
 	  		marker.setUnixTimeStampInSound(unixTimeStampInSound); // set sound timestamp when stopped to make sure the task is finished
 		  	
@@ -471,7 +584,7 @@ public class MainViewController {
 	  		
 	  		taskRunning = false;
 	  		
-	  		button.setStyle("-fx-background-color: gray; -fx-font-size: 32");
+	  		button.setStyle("-fx-background-color: gray");
 	  		gridPane.setStyle("-fx-background-color: #DCDCDC");
 
 	  		marker.setTimeStamp(time);
@@ -530,7 +643,14 @@ public class MainViewController {
   				    
   	}
   	
-  	//play sound add stopwatch to node
+  	/**
+     * Controls the sound and timer object of playing sound 
+     *
+     * @param delay		long num that is the amount of ms to delay sound
+     * @param label		label object of timer
+     * @param button	button object of perf
+     * @param button	boolean for if sound is played
+     */
   	private void soundTimer(Long delay, Label label, Button button, boolean isSound) {
   		 	
   		long soundTimeStamp;
@@ -581,6 +701,11 @@ public class MainViewController {
 	   	label.textProperty().bind(timeLabel);
   	}
   	
+  	/**
+     * Make connection to serial port for project
+     *
+     * @param com	the Comconnect object that controls the serial connection of project
+     */
   	private void StartDeviceRecording(ComConnect com)
   	{  		
   		Recording.setRecordingStart(System.currentTimeMillis());
@@ -598,6 +723,11 @@ public class MainViewController {
 	   	
   	}
   	
+  	/**
+     * 	Sets the mode to debug so a device does not need to be connected
+     * 	in order to test the gui
+     * 
+     */
 	private void DebugStartDeviceRecording()
   	{
   		
@@ -614,9 +744,13 @@ public class MainViewController {
 	   	
   	}
 	
+	/**
+	   * helper for using the Logitec r200 presenter with gui project
+	   * 
+	   * @param input	Input object to use with project
+	   */
 	private void InputHelper(Input input) {
 		AnimationTimer gameLoop = new AnimationTimer() {
-
 			@Override
 			public void handle(long now) {
 				 // vertical direction
@@ -624,21 +758,25 @@ public class MainViewController {
 				if (!bQueue.isEmpty()) {
 				    if( input.isPageDownPressed()) {
 				       //System.out.println("PAGE DOWN");
-				       bQueue.element().fire();
-				            pageDownPressed = true;
-				        } else if( input.isPageUpPressed()) {
+				        bQueue.element().fire();
+				        pageDownPressed = true;
+				        } 
+				    else if( input.isPageUpPressed()) {
 				        	//System.out.println("PAGE UP");
-				        	pageUpPressed = true;
-				        } else if ( input.isPeriodPressed() && !taskRunning){
+				    	sampleSoundButton.fire();
+				        pageUpPressed = true;
+				        } 
+				    else if (input.isPeriodPressed() && !taskRunning){
 				        	//System.out.println("PERIOD!!");
-				        	bQueue.element().setDisable(true);
-				        	bQueue.remove();
-				        	periodPressed=true;
-				        } else if (input.isSlideShowPressed() && !taskRunning)
+				        bQueue.element().setDisable(true);
+				        bQueue.remove();
+				        periodPressed=true;				        	
+				        } 
+				    else if (input.isSlideShowPressed() && !taskRunning)
 				        {
-				        	bQueue.element().setDisable(true);
-				        	bQueue.remove();
-				        	slideShowPressed=true;
+				        bQueue.element().setDisable(true);
+				        bQueue.remove();
+				        slideShowPressed=true;
 				        }
 				}
 			    input.setPageDownPressed(false);
@@ -652,6 +790,11 @@ public class MainViewController {
 	    gameLoop.start();
 	}
 	
+	/**
+	   * Sets the battery bar on gui
+	   *
+	   * @param bar		the progress bar object to update
+	   */
 	private void BatteryBar(ProgressBar bar) {		
 		final String RED_BAR    = "red-bar";
 		final String YELLOW_BAR = "yellow-bar";
@@ -673,4 +816,33 @@ public class MainViewController {
         	bar.getStyleClass().add(GREEN_BAR);
         }     
 	}
+	
+	//About menu item on menu bar
+	  @FXML
+	  public void aboutHelp(ActionEvent event) {
+		  // select file from the menu bar
+		  Stage stage = (Stage) fileMenuBar.getScene().getWindow();
+		  Alert alert = new Alert(AlertType.INFORMATION,
+	 	           "Gait Initiation GUI\n\n\n"
+	 	         + "- Used to signal the start of gait activities with sound\n "
+	 	         + "- Make the device to be connected without the use of bluetooth\n"
+	 	         + "- Provide a java program framework for connecting devices and collecting data\n"
+	 	         + "- Output is currently in a directory in the Documents folder of the user under GaitFiles\n\n\n"
+	 	         + " CREATED BY TIM TRUTY\n"
+	 	         + " ttruty@gmail.com\n"
+	 	         + " RADC Winter 2018\n"
+	 	         + " RUSH ALZHEIMER'S DISEASE CENTER\n"
+	 	         + " CHICAGO IL\n");
+
+
+	 	 alert.setTitle("About info");
+	 	 alert.showAndWait();
+	  } //end aboutmenu
+	  
+	  @FXML
+	  public void closeApp(ActionEvent event) {
+		  //select close on the menu bar
+		  Platform.exit();
+		  System.exit(0);
+		  } //end closeApp
 }

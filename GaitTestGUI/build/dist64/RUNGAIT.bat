@@ -1,1 +1,1 @@
-java -jar -Djava.library.path=libs GaitTestGUI.jar
+start javaw -Xmx1024m -jar -Djava.library.path=libs GaitTestGUI.jar

@@ -28,8 +28,9 @@ public class Main extends Application {
 	    stage.setScene(scene);
 	    stage.setTitle("Gait Test");
 	    //stage.setFullScreen(true);
-	    stage.setWidth(1000);
-	    stage.setHeight(bounds.getHeight());
+	    stage.setWidth(690);
+	    stage.setHeight(780);
+	    //stage.setHeight(bounds.getHeight());
 	    stage.show();	    
 	}
 

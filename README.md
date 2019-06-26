@@ -76,6 +76,22 @@ Version 1.0 of the Gait Test GUI implements all current aims.
 
 5. User must close the application and restart in order to complete another test.
 
+### Assisted Mode
+This is a check button in the file menu bar under help. If the button is checked the program will run in assistem mode, meaning the prompt from the script will be shown to the user before each task.
+
+![Test 9](images/test9.png "Test screen 9")
+
+![Test 10](images/test10.png "Test screen 10")
+
+![Test 11](images/test11.png "Test screen 11")
+
+
+- Once the task is selected from the main screen, an alert will show with the prompt. The user then can select to "START" or "SKIP". 
+- If the user selects "START" that is when the tasks start, so either the delay will begin for the movement tasks, or the task will start if balance.
+- Currenly this mode does not work with the remote
+
+![Test 12](images/test12.png "Test screen 12")
+
 ## Remote Controls
 
 ![remote](images/remote1.png "Remote")
