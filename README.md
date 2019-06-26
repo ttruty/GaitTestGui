@@ -10,6 +10,15 @@ Project aims:
 Version 1.0 of the Gait Test GUI implements all current aims.
 - The runnable java code must include a reference to the correct serial communication dll (rxSerial.dll) for the correct version of windows, these will be included in the "libs: directory of the zip file. (If you are unable to run, first check that you are using the correct version for your windows type)
 
+- To test program download the zip file for your system build (32 or 64 bit)
+- 32bit : https://github.com/ttruty/GaitTestGui/blob/master/GaitTestGUI/build/dist32.zip
+- 64bit : https://github.com/ttruty/GaitTestGui/blob/master/GaitTestGUI/build/dist64.zip
+- Unzip and run the batch file "RUNGAIT.bat"
+- if you do not have a device you can check the "Debug" box
+- Sample project ID is 00000136, 
+- visit year can be any 2 digits,
+- Staff id can be any 3 digits.
+- Then you will be able to enter the main test screen
 
 ## UI overview
 ### Device connection
