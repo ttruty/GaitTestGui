@@ -12,8 +12,11 @@ public class ScriptPrompts {
 	public Map<String,Text> generate() {
 		
 		//Calibrate
-		Text calibrateText = new Text(" Place the Dynaport device on the speakers before starting the test")
-				;
+		Text calibrateText = new Text("Before unplugging the DynaPort, make sure the device "
+				+ "is placed directly on the laptop’s speaker; make sure the belt is facing "
+				+ "up and is NOT between the speaker and the DynaPort.  After unplugging the "
+				+ "device, make sure it is completely still and run the calibration test.  "
+				+ "Once the calibration test is complete, the device can be removed from the laptop.");
 		calibrateText.setWrappingWidth(600);
 		calibrateText.setFont(Font.font ("Verdana", 24));
 		

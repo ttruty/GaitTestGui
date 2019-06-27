@@ -328,11 +328,12 @@ public class MainViewController {
 	 //start button
      startTest.setOnAction((e) -> {
     	 
-    	 Text text = new Text("I am going to place this belt around your waist. "
-    	 		+ "The belt contains a recording device that will track your "
-    	 		+ "movements. I’m going to press a button on a remote before "
-    	 		+ "and after each task. Before starting each task I want you "
-    	 		+ "to look straight ahead and stay as still as possible.  ");
+    	 Text text = new Text("Before unplugging the DynaPort, make sure the device "
+    	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
+    	 		+ "is facing up and is NOT between the speaker and the DynaPort.  "
+    	 		+ "After unplugging the device, make sure it is completely still "
+    	 		+ "and run the calibration test.  Once the calibration test is "
+    	 		+ "complete, the device can be removed from the laptop.");
     	 text.setWrappingWidth(600);
     	 text.setFont(Font.font ("Verdana", 24));
     	 
