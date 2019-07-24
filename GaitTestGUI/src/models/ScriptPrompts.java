@@ -276,7 +276,16 @@ public class ScriptPrompts {
 		cog_2Text.setWrappingWidth(600);
 		cog_2Text.setFont(Font.font ("Verdana", 24));
 
-		prompt.put("cog_2", cog_2Text);		
+		prompt.put("cog_2", cog_2Text);	
+		
+		// Finished Test
+		Text finishedText = new Text("If testing is complete Press the STOP Button and "
+				+ "Remeber to plug the device in and follow promts on screen");
+		cog_2Text.setWrappingWidth(600);
+		cog_2Text.setFont(Font.font ("Verdana", 24));
+
+		prompt.put("finish", finishedText);		
+		
 		
 		return prompt;
 	}
