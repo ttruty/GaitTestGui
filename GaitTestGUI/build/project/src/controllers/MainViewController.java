@@ -55,8 +55,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.ConnectionStatus;
@@ -149,6 +151,7 @@ public class MainViewController {
   @FXML private ImageView statusImage; 
   @FXML private ProgressBar batteryLevel;
   @FXML private Label batteryLabel;
+  @FXML private TextFlow promptTextFlow;
   
   // gui timing info
   private int clickCount = 0;
@@ -328,13 +331,16 @@ public class MainViewController {
 	 //start button
      startTest.setOnAction((e) -> {
     	 
-    	 Text text = new Text("I am going to place this belt around your waist. "
-    	 		+ "The belt contains a recording device that will track your "
-    	 		+ "movements. I’m going to press a button on a remote before "
-    	 		+ "and after each task. Before starting each task I want you "
-    	 		+ "to look straight ahead and stay as still as possible.  ");
+    	 Text text = new Text("Before unplugging the DynaPort, make sure the device "
+    	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
+    	 		+ "is facing up and is NOT between the speaker and the DynaPort.  "
+    	 		+ "After unplugging the device, make sure it is completely still "
+    	 		+ "and run the calibration test.  Once the calibration test is "
+    	 		+ "complete, the device can be removed from the laptop.");
     	 text.setWrappingWidth(600);
     	 text.setFont(Font.font ("Verdana", 24));
+    	 text.setFill(Color.RED);
+    	 promptTextFlow.getChildren().add(text); 
     	 
     	 if (assistedMode.isSelected())
     	 {
@@ -462,6 +468,23 @@ public class MainViewController {
   **/
 	private void perfButton(Button button, String label, Label startTime, Label countLabel, boolean isDelay) 
   	{
+		ArrayList<String> labelList = new ArrayList<String>();
+			labelList.add("calibrate");
+			labelList.add("walk_8ft_1");
+			labelList.add("walk_8ft_2");
+			labelList.add("eo");
+			labelList.add("turn_360_1");
+			labelList.add("ll");
+			labelList.add("turn_360_2");
+			labelList.add("ec"); 
+			labelList.add("tug_1");
+			labelList.add("rl");
+			labelList.add("tug_2");
+			labelList.add("tan");
+			labelList.add("walk_32ft");
+			labelList.add("toe");
+			labelList.add("cog_1");
+			labelList.add("cog_2");
 		
 		long time = System.currentTimeMillis();
 		
@@ -492,12 +515,10 @@ public class MainViewController {
 	  	if (clickCount % 2 != 0)
 	  	{
 	  		
+	  		
 	  		//Assisted mode
-	  		if (assistedMode.isSelected())
-	  		{
-	  			
+	  		if (assistedMode.isSelected())	  		{  				  			
 	  			Text text = prompts.get(label);
-	  			
 	  			ButtonType start = new ButtonType("Start", ButtonData.OK_DONE);
 	  			ButtonType skip = new ButtonType("Skip", ButtonData.CANCEL_CLOSE);
 	  			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -578,6 +599,29 @@ public class MainViewController {
 	  	//stop timer
 	  	
 	  	else {
+	  		
+	  		promptTextFlow.getChildren().clear(); //clear out textflow
+	  		
+	  		// prompt side bar
+	  		if (labelList.indexOf(label) < 15)
+	  		{		
+		  		
+		  		
+		  		String promtLabel = labelList.get(labelList.indexOf(label) + 1);
+		  		Text text = prompts.get(promtLabel);
+		  		text.setWrappingWidth(600);
+		    	text.setFont(Font.font ("Verdana", 24));
+		    	text.setFill(Color.RED);
+		    	promptTextFlow.getChildren().add(text); 
+	  		}
+	  		else {
+	  			Text text = prompts.get("finish");
+		  		text.setWrappingWidth(600);
+		    	text.setFont(Font.font ("Verdana", 24));
+		    	text.setFill(Color.RED);
+		    	promptTextFlow.getChildren().add(text); 
+	  		}
+	  		
 	  		marker.setUnixTimeStampInSound(unixTimeStampInSound); // set sound timestamp when stopped to make sure the task is finished
 		  	
 	  		timeline.stop();
