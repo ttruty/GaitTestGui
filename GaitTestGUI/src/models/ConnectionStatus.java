@@ -179,8 +179,8 @@ public class ConnectionStatus {
 	public void unplugStatus(ComConnect com, AnchorPane basePane, Button[] buttons, GridPane gridPane) {
 		//all grid objects		
 	 	 ObservableList<Node> childrens = gridPane.getChildren();
-		 //OK TO UNPLUG MESSAGE
-	 	
+		 
+	 	 //OK TO UNPLUG MESSAGE
 		 com.connectedProperty().addListener(new ChangeListener<Boolean>() {
 				@Override
 				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -211,7 +211,7 @@ public class ConnectionStatus {
 								}
 							});
 						}					
-						else { //when the recoring is save close EVERYTING!
+						else { //when the recording is save close EVERYTING!
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
