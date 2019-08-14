@@ -348,7 +348,7 @@ public class MainViewController {
 //    		 alert.getButtonTypes().set(0, ButtonType.NO);
 //    		 alert.getButtonTypes().set(1, ButtonType.YES);
     		 alert.getDialogPane().getStylesheets().add("/styles/style.css");
-    		 //alert.setGraphic(new ImageView(getIcon(icon)));
+//			 alert.setGraphic(new ImageView(getIcon(icon)));
     		 Label lb = (Label) alert.getDialogPane().getChildren().get(1);
     		 lb.setWrapText(true); //Attempt to set wrapText option
     		 alert.setTitle("GAIT SCRIPT");
@@ -507,7 +507,7 @@ public class MainViewController {
 	  	//random delay generation
 	  	Random delay = new Random();
   		int low = 1000;
-  		int high = 3000; //1 ms to 3000 ms
+  		int high = 3000; // 1000ms to 3000ms
 	  	
   		
 	   	
@@ -560,14 +560,14 @@ public class MainViewController {
 	  		
 	  		else if (!isDelay & label.equals("calibrate"))
 	  		{
-	  			int randomDelay = 0;
+	  			int randomDelay = 2; // 2 ms delay for calibrate
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}
 	  		else {
-	  			int randomDelay = 0;
-	  			delayTime = randomDelay;
-	  			soundTimer(delayTime, startTime, button, false);
+	  			int randomDelay = 2; // 2 ms delay for calibrate
+	  			delayTime = randomDelay; 
+	  			soundTimer(delayTime, startTime, button, true);
 	  		}
 	  		//System.out.println("Random Delay: " + randomDelay);
 	  		//mediaPlayer.play()
@@ -689,7 +689,6 @@ public class MainViewController {
   	
   	/**
      * Controls the sound and timer object of playing sound 
-     *
      * @param delay		long num that is the amount of ms to delay sound
      * @param label		label object of timer
      * @param button	button object of perf
@@ -770,11 +769,9 @@ public class MainViewController {
   	/**
      * 	Sets the mode to debug so a device does not need to be connected
      * 	in order to test the gui
-     * 
      */
 	private void DebugStartDeviceRecording()
-  	{
-  		
+  	{ 		
   		Recording.setRecordingStart(System.currentTimeMillis());
   		LocalDateTime timeSet = LocalDateTime.now();
         Recording.setRecordingStartTimeStamp(timeSet);
@@ -785,7 +782,6 @@ public class MainViewController {
 	   	batteryLevel.setProgress(battery);
 	   	BatteryBar(batteryLevel);
 	   	batteryLabel.setText(String.valueOf((battery*100)) + "%");
-	   	
   	}
 	
 	/**
