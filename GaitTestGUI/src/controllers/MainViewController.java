@@ -9,6 +9,8 @@ package controllers;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -328,19 +330,31 @@ public class MainViewController {
 	 });
 	 //end sound button
 	 
+	 Text text = new Text("Before unplugging the DynaPort, make sure the device "
+ 	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
+ 	 		+ "is facing DOWN and IS between the speaker and the DynaPort.  "
+ 	 		+ "After unplugging the device, make sure it is completely still "
+ 	 		+ "and run the calibration test.  Once the calibration test is "
+ 	 		+ "complete, the device can be removed from the laptop.");
+ 	 text.setWrappingWidth(600);
+ 	 text.setFont(Font.font ("Verdana", 24));
+ 	 text.setFill(Color.RED);
+ 	 promptTextFlow.getChildren().add(text); 
+	 
 	 //start button
      startTest.setOnAction((e) -> {
     	 
-    	 Text text = new Text("Before unplugging the DynaPort, make sure the device "
-    	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
-    	 		+ "is facing up and is NOT between the speaker and the DynaPort.  "
-    	 		+ "After unplugging the device, make sure it is completely still "
-    	 		+ "and run the calibration test.  Once the calibration test is "
-    	 		+ "complete, the device can be removed from the laptop.");
-    	 text.setWrappingWidth(600);
-    	 text.setFont(Font.font ("Verdana", 24));
-    	 text.setFill(Color.RED);
-    	 promptTextFlow.getChildren().add(text); 
+    	 promptTextFlow.getChildren().clear();
+    	 Text textCal = new Text("MAKE SURE DEVICE IS ON SPEAKER BEFORE UNPLUGGING FOR CALIBRATION");
+    	 textCal.setWrappingWidth(600);
+    	 textCal.setFont(Font.font ("Verdana", 24));
+    	 textCal.setFill(Color.RED);
+    	 promptTextFlow.getChildren().add(textCal); 
+    	 
+    	 Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION, 
+    			 "PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n", 
+                 ButtonType.OK);
+    	 alert1.showAndWait();
     	 
     	 if (assistedMode.isSelected())
     	 {
@@ -378,6 +392,13 @@ public class MainViewController {
       
       //stop button
 	  stopTest.setOnAction((e) -> {
+		  
+		  promptTextFlow.getChildren().clear();
+	      Text textStop = new Text("Connect Device to Save Measures");
+	      textStop.setWrappingWidth(600);
+	      textStop.setFont(Font.font ("Verdana", 24));
+	      textStop.setFill(Color.RED);
+	      promptTextFlow.getChildren().add(textStop); 
 		  	
 		  Recording.setMarkerList(markerList);
 		  ControlButton.Stop();
@@ -389,21 +410,37 @@ public class MainViewController {
 			}
 			stopTest.setDisable(true);
 			}); 
-	  // end stop button
-	    
-	  //save button
-	  saveButton.setOnAction((e) -> {
-		  Recording.setMarkerList(markerList);
-		  ControlButton.Save(com, basePane);	
-		  Recording.setHearingImpaired(hearingCheck.isSelected());
-		    }); 
-	  // end save button
-	  
+	  // end stop button	  
 	  
 	  // Connection Status images and status bar update
 	  ConnectionStatus connStatus = new ConnectionStatus();
 	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
+	  
+	//save button
+	  saveButton.setOnAction((e) -> {
+		  
+		  promptTextFlow.getChildren().clear();
+	      Text textSave = new Text("Connect Device to Save Measures");
+	      textSave.setWrappingWidth(600);
+	      textSave.setFont(Font.font ("Verdana", 24));
+	      textSave.setFill(Color.RED);
+	      promptTextFlow.getChildren().add(textSave); 
+		  
+		  
+		  Recording.setMarkerList(markerList);
+		  try {
+			ControlButton.Save(com, basePane);
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		  Recording.setHearingImpaired(hearingCheck.isSelected());
+		    }); 
+	  // end save button
 	  
 	  // Performance buttons
 	  perf_calib.setOnAction((e) -> {
@@ -560,12 +597,12 @@ public class MainViewController {
 	  		
 	  		else if (!isDelay & label.equals("calibrate"))
 	  		{
-	  			int randomDelay = 2; // 2 ms delay for calibrate
+	  			int randomDelay = 500; // 2 ms delay for calibrate
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}
 	  		else {
-	  			int randomDelay = 2; // 2 ms delay for calibrate
+	  			int randomDelay = 0; // 0 ms delay balance
 	  			delayTime = randomDelay; 
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}

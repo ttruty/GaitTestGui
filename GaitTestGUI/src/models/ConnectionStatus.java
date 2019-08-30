@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.controlsfx.control.StatusBar;
 
+import controllers.LoginManager;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
@@ -89,7 +91,8 @@ public class ConnectionStatus {
 									public void run() {								
 										Alert alert = new Alert(AlertType.INFORMATION,
 												"Please wait while device is set\n"
-												+ "PLACE ON THE SPEAKER NOW\n", 
+												+ "DEVICE SHOULD BE ON SPEAKER NOW\n"
+												+ "IF IT IS NOT RESTART TEST", 
 							                      ButtonType.OK);
 												  //basePane.getChildren().remove(indicators);
 											RingIndicator.removeRing(basePane);
@@ -194,13 +197,13 @@ public class ConnectionStatus {
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
-									Alert alert = new Alert(AlertType.INFORMATION,
-											"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
-						                      + "...   OK TO UNPLUG  ...", 
-						                      ButtonType.OK);
+//									Alert alert = new Alert(AlertType.INFORMATION,
+//											"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
+//						                      + "...   OK TO UNPLUG  ...", 
+//						                      ButtonType.OK);
 											  //basePane.getChildren().remove(indicators);
 										RingIndicator.removeRing(basePane);								
-							            alert.showAndWait();
+//							            alert.showAndWait();
 							            waiting = true;
 							            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 							            //    task.cancel();
@@ -210,23 +213,49 @@ public class ConnectionStatus {
 									//connectedString.set("Ok to UNPLUG");
 								}
 							});
-						}					
-						else { //when the recording is save close EVERYTING!
+						}
+						
+						else if (Recording.isFinished()){ //when the recording is save close EVERYTING!
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
 									Alert alert = new Alert(AlertType.INFORMATION, 
-						                      "Gait Test Saved!", 
+						                      "Gait Test Finished \n"
+											+ " Hit OK to CLOSE Program", 
 						                      ButtonType.OK);
 												//basePane.getChildren().remove(indicators);
 						        	  alert.showAndWait();
-						        	  Recording.setRecordingState(true);
+						        	  
+									RingIndicator.removeRing(basePane);
+									Platform.exit();
+						        	//basePane.getChildren().remove(indicators);
+									
+//						        	startTest.setDisable(true);
+//						        	stopTest.setDisable(true);
+//						        	saveButton.setDisable(true);
+//						        	sampleSoundButton.setDisable(true);
+								}
+							});
+						}
+						
+						else if (Recording.isSaved()){ //when the recording is save close EVERYTING!
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {								
+									Alert alert = new Alert(AlertType.NONE, 
+						                      "Saving Gait Test \n"
+											+ "Please Wait");
+												//basePane.getChildren().remove(indicators);
+									  Recording.setFinished(true);
+						        	  alert.showAndWait();
+						        	  
 						        	  
 						        	  //disable all grid controls
 						        	  for (Node node : childrens) {
 						  				node.setDisable(true);					  			    
 						  			}
 									RingIndicator.removeRing(basePane);
+									
 
 						        	//basePane.getChildren().remove(indicators);
 						        	
@@ -240,7 +269,6 @@ public class ConnectionStatus {
 								}
 							});
 						}
-				
 					}						
 				}
 				});

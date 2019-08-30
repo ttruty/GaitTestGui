@@ -2,6 +2,7 @@ package models;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
@@ -24,7 +25,7 @@ public class ControlButton {
   	  
 	}
 	
-	public static void Save(ComConnect com, AnchorPane basePane) {
+	public static void Save(ComConnect com, AnchorPane basePane) throws NoSuchAlgorithmException, IOException {
 		
 		if(Recording.isConnected() || Recording.isDebugMode()) 
 	    {
@@ -39,9 +40,13 @@ public class ControlButton {
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}			      	
-	    		    	
-		   	Recording.setRecordingState(true);
+			}
+		    
+		    if (Recording.isDebugMode())
+		    {
+		    	Recording.setRecordingState(true);
+		    }    	    	
+		   	
 		   				   	
 		   	if (!Recording.isDebugMode())
 		   	{
@@ -53,7 +58,7 @@ public class ControlButton {
 			   	
 			   	saveObj.saveFile(rawSaveFile);			   	        	 
 		        
-			   	Recording.setSaved(true);
+			   	
 			   	
 		   		com.stopRecording();
 		   		

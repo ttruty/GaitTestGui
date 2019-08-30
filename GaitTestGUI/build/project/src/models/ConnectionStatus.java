@@ -89,7 +89,8 @@ public class ConnectionStatus {
 									public void run() {								
 										Alert alert = new Alert(AlertType.INFORMATION,
 												"Please wait while device is set\n"
-												+ "PLACE ON THE SPEAKER NOW\n", 
+												+ "DEVICE SHOULD BE ON SPEAKER NOW\n"
+												+ "IF IT IS NOT RESTART TEST", 
 							                      ButtonType.OK);
 												  //basePane.getChildren().remove(indicators);
 											RingIndicator.removeRing(basePane);
@@ -194,13 +195,13 @@ public class ConnectionStatus {
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
-									Alert alert = new Alert(AlertType.INFORMATION,
-											"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
-						                      + "...   OK TO UNPLUG  ...", 
-						                      ButtonType.OK);
+//									Alert alert = new Alert(AlertType.INFORMATION,
+//											"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
+//						                      + "...   OK TO UNPLUG  ...", 
+//						                      ButtonType.OK);
 											  //basePane.getChildren().remove(indicators);
 										RingIndicator.removeRing(basePane);								
-							            alert.showAndWait();
+//							            alert.showAndWait();
 							            waiting = true;
 							            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 							            //    task.cancel();
@@ -211,7 +212,7 @@ public class ConnectionStatus {
 								}
 							});
 						}					
-						else { //when the recording is save close EVERYTING!
+						else if (Recording.isSaved()){ //when the recording is save close EVERYTING!
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
@@ -220,7 +221,7 @@ public class ConnectionStatus {
 						                      ButtonType.OK);
 												//basePane.getChildren().remove(indicators);
 						        	  alert.showAndWait();
-						        	  Recording.setRecordingState(true);
+						        	  
 						        	  
 						        	  //disable all grid controls
 						        	  for (Node node : childrens) {

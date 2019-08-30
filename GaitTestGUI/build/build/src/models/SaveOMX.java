@@ -8,6 +8,7 @@ package models;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.io.FileUtils;
 import javax.swing.filechooser.FileSystemView;
@@ -56,7 +57,7 @@ public class SaveOMX {
 		return null;
     }
 	
-	public void saveFile(File file) {
+	public void saveFile(File file) throws NoSuchAlgorithmException, IOException {
 		
 		String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
 		String saveDir = docDir.concat("/GaitFiles");
@@ -75,6 +76,17 @@ public class SaveOMX {
 	        e.printStackTrace();
 	    }
 		System.out.println("Saved: " +  file.toString() + "to: " +saveFile.toString());
+		
+		// check file with 
+		if (CheckFiles.isIdentical(file.getAbsolutePath(), saveFile.getAbsolutePath())) {
+			System.out.println("File Copy passed MD5 Checksum test");
+			Recording.setSaved(true);
+			Recording.setRecordingState(true);
+		}
+		else {
+			System.out.println("File did not copy correctly try to copy again");
+			saveFile(file);
+		}
 	}
 
 	public String getSaveDriveLetter() {

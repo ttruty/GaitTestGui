@@ -1,6 +1,8 @@
 package serialcoms;
 import java.io.IOException;  
-import java.io.InputStream; 
+import java.io.InputStream;
+
+import models.Recording; 
    
 public class CommPortReceiver extends Thread {  
    
@@ -28,8 +30,12 @@ public class CommPortReceiver extends Thread {
                 // wait 10ms when stream is broken and check again  
                 sleep(10);  
             }  
-        } catch (IOException e) {  
-            e.printStackTrace();  
+        } catch (IOException e) { 
+        	
+            e.printStackTrace();
+            // This is when the device is set up after initial formatting
+            
+      	  	
         } catch (InterruptedException e) {  
             e.printStackTrace();  
         }   
