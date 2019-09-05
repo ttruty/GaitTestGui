@@ -81,7 +81,7 @@ public class SaveOMX {
 		if (CheckFiles.isIdentical(file.getAbsolutePath(), saveFile.getAbsolutePath())) {
 			System.out.println("File Copy passed MD5 Checksum test");
 			Recording.setSaved(true);
-			Recording.setRecordingState(true);
+			Recording.setRecordingState(false);
 		}
 		else {
 			System.out.println("File did not copy correctly try to copy again");

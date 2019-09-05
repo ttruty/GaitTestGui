@@ -37,7 +37,8 @@ public class Recording {
 	
 	// saving the omx objects
 	private static SaveOMX saveObj;
-	protected static boolean isSaved;
+	protected static boolean isSaved = false;
+	protected static boolean isFinished = false;
 	
 	public static String getRecordingId() {
 		return recordingId;
@@ -53,6 +54,12 @@ public class Recording {
 	}
 	public static void setSaved(boolean isSaved) {
 		Recording.isSaved = isSaved;
+	}
+	public static boolean isFinished() {
+		return isFinished;
+	}
+	public static void setFinished(boolean isFinished) {
+		Recording.isFinished = isFinished;
 	}
 	public static void setRecordingState(boolean recordingState) {
 		Recording.recordingState = recordingState;
@@ -168,6 +175,8 @@ public class Recording {
 	public static void setHearingImpaired(boolean hearingImpaired) {
 		Recording.hearingImpaired = hearingImpaired;
 	}
+	
+	
 	
 	
 }

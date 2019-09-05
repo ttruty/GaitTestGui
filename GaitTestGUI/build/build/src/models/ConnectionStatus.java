@@ -6,7 +6,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.controlsfx.control.StatusBar;
 
+import controllers.LoginManager;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -14,6 +17,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
@@ -29,12 +33,17 @@ public class ConnectionStatus {
 	
 	//status bar	 
 	StringProperty connectedString = new SimpleStringProperty();
+	private BooleanProperty waitingProperty = new SimpleBooleanProperty(false);
 	boolean waiting = false;
+	
+	public boolean isWaiting() {
+		return this.waiting;
+	}
 		 
 	public void ShowStatus(ImageView statusImage, StatusBar statusBar, ComConnect com, AnchorPane basePane, Button[] buttons, GridPane gridPane) {
 		connectedString.set("Gait Test in Progress...");
 		AtomicInteger taskExecution = new AtomicInteger(0);
-		
+				
 		Recording.connectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -71,7 +80,7 @@ public class ConnectionStatus {
 							// set the start time stamp of recroding when device is uplugged after the start button is pressed
 							Image image = new Image("file:resources/disconnect.png");
 							statusImage.setImage(image);
-							if (Recording.isRecording()) {
+							if (Recording.isRecording() && waiting) {
 						        LocalDateTime timeSet = LocalDateTime.now();
 						        Recording.setRecordingStartTimeStamp(timeSet);
 						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
@@ -138,7 +147,8 @@ public class ConnectionStatus {
 								                    if (!isCancelled()) {
 								                        updateProgress(i, N_ITERATIONS);
 								                    }
-								 
+								                    waiting = false;
+								                    waitingProperty.set(false);
 								                    return null;
 								                }
 								            };
@@ -152,10 +162,11 @@ public class ConnectionStatus {
 								                    "task-thread-" + taskExecution.getAndIncrement()
 								            );
 								            taskThread.start();
+								            
 								 
 								            //alert.initOwner(stage);
 								            alert.showAndWait();
-								            waiting = false;
+								            
 								            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 								            //    task.cancel();
 								           // }
@@ -174,6 +185,38 @@ public class ConnectionStatus {
 		
 		statusBar.textProperty().bind(connectedString);
 	  
+	}
+	
+	public void closeAlert(Alert alert) {
+		alert.show();
+		waitingProperty.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+				if (newValue)
+				{
+					//System.out.println("Plugged IN>>>>");
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							System.out.println("START ALERT CHANGED:");
+						}
+					});
+					
+					//connected.set("Connected: " + Recording.isConnected());				
+				}
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							System.out.println("START ALERT CHANGED:" + newValue.toString());
+							alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+							alert.close();
+						}
+					});
+				}
+			}
+		});
 	}
 	
 	
@@ -203,6 +246,7 @@ public class ConnectionStatus {
 										RingIndicator.removeRing(basePane);								
 //							            alert.showAndWait();
 							            waiting = true;
+							            waitingProperty.set(true);
 							            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 							            //    task.cancel();
 							           // }
@@ -211,15 +255,40 @@ public class ConnectionStatus {
 									//connectedString.set("Ok to UNPLUG");
 								}
 							});
-						}					
-						else if (Recording.isSaved()){ //when the recording is save close EVERYTING!
+						}
+						
+						else if (Recording.isFinished()){ //when the recording is save close EVERYTING!
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								
 									Alert alert = new Alert(AlertType.INFORMATION, 
-						                      "Gait Test Saved!", 
+						                      "Gait Test Finished \n"
+											+ " Hit OK to CLOSE Program", 
 						                      ButtonType.OK);
 												//basePane.getChildren().remove(indicators);
+						        	  alert.showAndWait();
+						        	  
+									RingIndicator.removeRing(basePane);
+									Platform.exit();
+						        	//basePane.getChildren().remove(indicators);
+									
+//						        	startTest.setDisable(true);
+//						        	stopTest.setDisable(true);
+//						        	saveButton.setDisable(true);
+//						        	sampleSoundButton.setDisable(true);
+								}
+							});
+						}
+						
+						else if (Recording.isSaved()){ //when the recording is save close EVERYTING!
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {								
+									Alert alert = new Alert(AlertType.NONE, 
+						                      "Saving Gait Test \n"
+											+ "Please Wait");
+												//basePane.getChildren().remove(indicators);
+									  Recording.setFinished(true);
 						        	  alert.showAndWait();
 						        	  
 						        	  
@@ -228,6 +297,7 @@ public class ConnectionStatus {
 						  				node.setDisable(true);					  			    
 						  			}
 									RingIndicator.removeRing(basePane);
+									
 
 						        	//basePane.getChildren().remove(indicators);
 						        	
@@ -241,7 +311,6 @@ public class ConnectionStatus {
 								}
 							});
 						}
-				
 					}						
 				}
 				});

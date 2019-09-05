@@ -8,6 +8,8 @@ import org.controlsfx.control.StatusBar;
 
 import controllers.LoginManager;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,12 +33,17 @@ public class ConnectionStatus {
 	
 	//status bar	 
 	StringProperty connectedString = new SimpleStringProperty();
+	private BooleanProperty waitingProperty = new SimpleBooleanProperty(false);
 	boolean waiting = false;
+	
+	public boolean isWaiting() {
+		return this.waiting;
+	}
 		 
 	public void ShowStatus(ImageView statusImage, StatusBar statusBar, ComConnect com, AnchorPane basePane, Button[] buttons, GridPane gridPane) {
 		connectedString.set("Gait Test in Progress...");
 		AtomicInteger taskExecution = new AtomicInteger(0);
-		
+				
 		Recording.connectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -73,7 +80,7 @@ public class ConnectionStatus {
 							// set the start time stamp of recroding when device is uplugged after the start button is pressed
 							Image image = new Image("file:resources/disconnect.png");
 							statusImage.setImage(image);
-							if (Recording.isRecording()) {
+							if (Recording.isRecording() && waiting) {
 						        LocalDateTime timeSet = LocalDateTime.now();
 						        Recording.setRecordingStartTimeStamp(timeSet);
 						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
@@ -140,7 +147,8 @@ public class ConnectionStatus {
 								                    if (!isCancelled()) {
 								                        updateProgress(i, N_ITERATIONS);
 								                    }
-								 
+								                    waiting = false;
+								                    waitingProperty.set(false);
 								                    return null;
 								                }
 								            };
@@ -154,10 +162,11 @@ public class ConnectionStatus {
 								                    "task-thread-" + taskExecution.getAndIncrement()
 								            );
 								            taskThread.start();
+								            
 								 
 								            //alert.initOwner(stage);
 								            alert.showAndWait();
-								            waiting = false;
+								            
 								            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 								            //    task.cancel();
 								           // }
@@ -176,6 +185,38 @@ public class ConnectionStatus {
 		
 		statusBar.textProperty().bind(connectedString);
 	  
+	}
+	
+	public void closeAlert(Alert alert) {
+		alert.show();
+		waitingProperty.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+				if (newValue)
+				{
+					//System.out.println("Plugged IN>>>>");
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							System.out.println("START ALERT CHANGED:");
+						}
+					});
+					
+					//connected.set("Connected: " + Recording.isConnected());				
+				}
+				else {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {						
+							System.out.println("START ALERT CHANGED:" + newValue.toString());
+							alert.getDialogPane().getButtonTypes().add(ButtonType.OK);
+							alert.close();
+						}
+					});
+				}
+			}
+		});
 	}
 	
 	
@@ -205,6 +246,7 @@ public class ConnectionStatus {
 										RingIndicator.removeRing(basePane);								
 //							            alert.showAndWait();
 							            waiting = true;
+							            waitingProperty.set(true);
 							            //if (result.isPresent() && result.get() == ButtonType.CANCEL && task.isRunning()) {
 							            //    task.cancel();
 							           // }

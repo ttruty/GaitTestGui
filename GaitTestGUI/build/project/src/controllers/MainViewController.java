@@ -340,7 +340,12 @@ public class MainViewController {
  	 text.setFont(Font.font ("Verdana", 24));
  	 text.setFill(Color.RED);
  	 promptTextFlow.getChildren().add(text); 
-	 
+ 	 
+ 	// Connection Status images and status bar update
+	  ConnectionStatus connStatus = new ConnectionStatus();
+	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
+	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
+ 
 	 //start button
      startTest.setOnAction((e) -> {
     	 
@@ -351,10 +356,20 @@ public class MainViewController {
     	 textCal.setFill(Color.RED);
     	 promptTextFlow.getChildren().add(textCal); 
     	 
-    	 Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION, 
-    			 "PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n", 
-                 ButtonType.OK);
-    	 alert1.showAndWait();
+    	 Platform.runLater(new Runnable() {
+				@Override
+				public void run() {								
+					Alert alertStart = new Alert(AlertType.NONE,
+							"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
+							+ "WHEN DEVICE IS ON SPEAKER- UNPLUG");
+					connStatus.closeAlert(alertStart);
+				}
+ 	 });
+    	 
+//    	 Alert alert1 = new Alert(AlertType.CONFIRMATION, 
+//    			 "PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n", 
+//                 ButtonType.OK);
+//    	 alert1.show();
     	 
     	 if (assistedMode.isSelected())
     	 {
@@ -392,6 +407,13 @@ public class MainViewController {
       
       //stop button
 	  stopTest.setOnAction((e) -> {
+		  
+		  promptTextFlow.getChildren().clear();
+	      Text textStop = new Text("Connect Device to Save Measures");
+	      textStop.setWrappingWidth(600);
+	      textStop.setFont(Font.font ("Verdana", 24));
+	      textStop.setFill(Color.RED);
+	      promptTextFlow.getChildren().add(textStop); 
 		  	
 		  Recording.setMarkerList(markerList);
 		  ControlButton.Stop();
@@ -405,13 +427,19 @@ public class MainViewController {
 			}); 
 	  // end stop button	  
 	  
-	  // Connection Status images and status bar update
-	  ConnectionStatus connStatus = new ConnectionStatus();
-	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
-	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
+	  
 	  
 	//save button
 	  saveButton.setOnAction((e) -> {
+		  
+		  promptTextFlow.getChildren().clear();
+	      Text textSave = new Text("Connect Device to Save Measures");
+	      textSave.setWrappingWidth(600);
+	      textSave.setFont(Font.font ("Verdana", 24));
+	      textSave.setFill(Color.RED);
+	      promptTextFlow.getChildren().add(textSave); 
+		  
+		  
 		  Recording.setMarkerList(markerList);
 		  try {
 			ControlButton.Save(com, basePane);
@@ -850,6 +878,8 @@ public class MainViewController {
 	 	};
 	    gameLoop.start();
 	}
+	
+
 	
 	/**
 	   * Sets the battery bar on gui
