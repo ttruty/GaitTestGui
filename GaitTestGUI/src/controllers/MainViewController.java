@@ -600,12 +600,11 @@ public class MainViewController {
 	  		gridPane.setStyle("-fx-background-color: #BCED91");
 	  		start = time;
 
-	  		if (isDelay) {
+	  		if (isDelay & !hearingCheck.isSelected()) {
 	  			int randomDelay = delay.nextInt(high-low) + low;
 	  			delayTime = randomDelay;
-	  			soundTimer(delayTime, startTime, button, true);
-	  			
-	  		}
+	  			soundTimer(delayTime, startTime, button, true);	  			
+	  		}  			  		
 	  		
 	  		else if (!isDelay & label.equals("calibrate"))
 	  		{
@@ -613,6 +612,22 @@ public class MainViewController {
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}
+	  		
+	  		//If hearing impaired is checked	  		
+	  		else if (isDelay & hearingCheck.isSelected())
+	  		{
+	  			int randomDelay = 0; // 2 ms delay for calibrate
+	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button, false);
+	  		}
+	  		
+	  		else if (!isDelay & hearingCheck.isSelected())
+	  		{
+	  			int randomDelay = 0; // 2 ms delay for calibrate
+	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button, false);
+	  		}  		
+	  		
 	  		else {
 	  			int randomDelay = 0; // 0 ms delay balance
 	  			delayTime = randomDelay; 
@@ -644,18 +659,15 @@ public class MainViewController {
 		   	
 		   	marker.setCount(clickCount);		   	
 		   	perfList.add(label);
-	  	}	  	
-	  	//stop timer
+	  	}	
 	  	
-	  	else {
-	  		
+	  	//stop timer	  	
+	  	else {	  		
 	  		promptTextFlow.getChildren().clear(); //clear out textflow
 	  		
 	  		// prompt side bar
-	  		if (labelList.indexOf(label) < 15)
-	  		{		
-		  		
-		  		
+	  		if (labelList.indexOf(label) < 15) 	
+	  		{	
 		  		String promtLabel = labelList.get(labelList.indexOf(label) + 1);
 		  		Text text = prompts.get(promtLabel);
 		  		text.setWrappingWidth(600);
@@ -848,6 +860,8 @@ public class MainViewController {
 				    if( input.isPageDownPressed()) {
 				       //System.out.println("PAGE DOWN");
 				        bQueue.element().fire();
+				        Button b = bQueue.peek();
+				        b.setStyle("-fx-background-color: red");
 				        pageDownPressed = true;
 				        } 
 				    else if( input.isPageUpPressed()) {
@@ -864,7 +878,11 @@ public class MainViewController {
 				    else if (input.isSlideShowPressed() && !taskRunning)
 				        {
 				        bQueue.element().setDisable(true);
+//				        Button prevb = bQueue.peek();
+//				        prevb.setStyle("-fx-background-color: gainsboro");
 				        bQueue.remove();
+//				        Button b = bQueue.peek();
+//				        b.setStyle("-fx-background-color: cyan");
 				        slideShowPressed=true;
 				        }
 				}

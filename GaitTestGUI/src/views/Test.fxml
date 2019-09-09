@@ -140,21 +140,66 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="perf_ll" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Left Leg Stand" GridPane.rowIndex="6" />
-                        <Button fx:id="perf_3602" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="360 Trial 2" GridPane.rowIndex="7" />
-                        <Button fx:id="perf_eo" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Eye Open" GridPane.rowIndex="4" />
-                        <Button fx:id="perf_8ft2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="8Ft Trial 2" GridPane.rowIndex="3" />
-                        <Button fx:id="perf_3601" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="360 Trial 1" GridPane.rowIndex="5" />
-                        <Button fx:id="perf_ec" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Eye Closed" GridPane.rowIndex="8" />
-                        <Button fx:id="perf_tug1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="TUG Trial 1" GridPane.rowIndex="9" />
-                        <Button fx:id="perf_rl" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Right Leg Stand" GridPane.rowIndex="10" />
-                        <Button fx:id="perf_tug2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="TUG Trial 2" GridPane.rowIndex="11" />
-                        <Button fx:id="perf_tan" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Tandem" GridPane.rowIndex="12" />
-                        <Button fx:id="perf_32ft" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="32Ft" GridPane.rowIndex="13" />
-                        <Button fx:id="perf_toe" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Toe Stand" GridPane.rowIndex="14" />
-                        <Button fx:id="perf_cog1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 1" GridPane.rowIndex="15" />
-                        <Button fx:id="perf_cog2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 2" GridPane.rowIndex="16" />
-                        <Button fx:id="perf_8ft1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="8Ft Trial 1" GridPane.rowIndex="2" />
+                        <Button fx:id="perf_ll" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Left Leg Stand" GridPane.rowIndex="6">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_3602" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="360 Trial 2" GridPane.rowIndex="7">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_eo" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Eye Open" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_8ft2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="8Ft Trial 2" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_3601" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="360 Trial 1" GridPane.rowIndex="5">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_ec" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Eye Closed" GridPane.rowIndex="8">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_tug1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="TUG Trial 1" GridPane.rowIndex="9">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_rl" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Right Leg Stand" GridPane.rowIndex="10">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_tug2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="TUG Trial 2" GridPane.rowIndex="11">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_tan" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Tandem" GridPane.rowIndex="12">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_32ft" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="32Ft" GridPane.rowIndex="13">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_toe" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Toe Stand" GridPane.rowIndex="14">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_cog1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 1" GridPane.rowIndex="15">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_cog2" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="COG TUG 2" GridPane.rowIndex="16">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
+                        <Button fx:id="perf_8ft1" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="8Ft Trial 1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
                         <Label fx:id="perf_8ft1_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
                               <Font size="24.0" />
@@ -336,7 +381,10 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Button fx:id="perf_calib" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Calibration" GridPane.rowIndex="1" />
+                        <Button fx:id="perf_calib" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Calibration" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Button>
                         <Label fx:id="perf_calib_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
                               <Font size="24.0" />
