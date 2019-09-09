@@ -5,27 +5,27 @@ import java.util.Map;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class ScriptPrompts {
-	Map<String, Text>prompt = new HashMap<String, Text>();
+	Map<String, TextFlow>prompt = new HashMap<String, TextFlow>();
 
-	public Map<String,Text> generate() {
+	public Map<String,TextFlow> generate() {
 		
-		//Calibrate
-		Text calibrateText = new Text("CALIBRATE\r\n"
-				+ "Before unplugging the DynaPort, make sure the device "
+		//Calibrate		
+		Text calibrateTitle = new Text("CALIBRATE\r\n");
+		Text calibrateText = new Text("Before unplugging the DynaPort, make sure the device "
 				+ "is placed directly on the laptop’s speaker; make sure the belt is facing "
 				+ "up and is NOT between the speaker and the DynaPort.  After unplugging the "
 				+ "device, make sure it is completely still and run the calibration test.  "
 				+ "Once the calibration test is complete, the device can be removed from the laptop.");
-		calibrateText.setWrappingWidth(600);
-		calibrateText.setFont(Font.font ("Verdana", 24));
 		
-		prompt.put("calibrate", calibrateText);
+		TextFlow calFlow = makeTextFlow(calibrateTitle, calibrateText);
+		prompt.put("calibrate", calFlow);
 		
 		// 8 Foot 1
-		Text walk8Text1 = new Text("8 FOOT WALK 1\r\n"
-				+ "“Now I am going to observe how you walk at your normal pace. "
+		Text walk8Title1 = new Text("8 FOOT WALK 1\r\n");
+		Text walk8Text1 = new Text("“Now I am going to observe how you walk at your normal pace. "
 				+ "This is our walking course. I want you to walk to the other end of the course "
 				+ "at your usual speed, just as if you were walking to the store.  I want you to "
 				+ "begin when you hear the sound [or “when I say ‘begin’” in the case that the "
@@ -38,14 +38,12 @@ public class ScriptPrompts {
 				+ " you hear the sound. Ready?” [Press begin button or say “Begin”], \r\n" + 
 				"“Stop” Record seconds  [Record Seconds and Steps]\r\n" + 
 				"");
-		walk8Text1.setWrappingWidth(600);
-		walk8Text1.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("walk_8ft_1", walk8Text1);
+		TextFlow walk8Flow1 = makeTextFlow(walk8Title1, walk8Text1);
+		prompt.put("perf_8ft1", walk8Flow1);
 		
 		// 8 Foot 2
-		Text walk8Text2 = new Text("8 FOOT WALK 2\r\n"
-				+ "“Now I want you to walk this course again at your normal pace."
+		Text walk8Title2 = new Text("8 FOOT WALK 2\r\n");
+		Text walk8Text2 = new Text("“Now I want you to walk this course again at your normal pace."
 				+ " I want you to begin when you hear the sound. Remember I want you to walk all "
 				+ "the way past this line and then stop. Remember after you cross the line, I want"
 				+ " you to stop and do not turn around until I tell you to do so. Remember to look"
@@ -53,14 +51,12 @@ public class ScriptPrompts {
 				+ " [Press begin button], \r\n" + 
 				" “Stop” [Record Seconds and Steps]\r\n" + 
 				"");
-		walk8Text2.setWrappingWidth(600);
-		walk8Text2.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("walk_8ft_2", walk8Text2);
+		TextFlow walk8Flow2 = makeTextFlow(walk8Title2, walk8Text2);
+		prompt.put("perf_8ft2", walk8Flow2);
 		
 		// eo
-		Text eoText = new Text("EYE OPEN STAND\r\n"
-				+ "“For the next exercise, I would like you to place one foot beside"
+		Text eoTitle = new Text("EYE OPEN STAND\r\n");
+		Text eoText = new Text("“For the next exercise, I would like you to place one foot beside"
 				+ " the other in a comfortable position on this line. When you hear the sound, I "
 				+ "just want you to continue standing.” [ Demonstrate the position] \r\n" + 
 				"“You may use your arms, bend your knees, or move your body to maintain your "
@@ -72,15 +68,13 @@ public class ScriptPrompts {
 				+ " [Press begin button] “Stop”  [20-Second Maximum]\r\n" + 
 				"*Note: If less than 10 seconds , mark as unable.  No aid is allowed.\r\n" + 
 				"");
-		eoText.setWrappingWidth(600);
-		eoText.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("eo", eoText);
+		TextFlow eoFlow = makeTextFlow(eoTitle, eoText);
+		prompt.put("perf_eo", eoFlow);
 
 
 		// turn_360_1
-		Text turn_360_1Text = new Text("360 TURN 1\r\n"
-				+ "“Now I would like you to make a complete turn at your "
+		Text turn_360_1Title = new Text("360 TURN 1\r\n");
+		Text turn_360_1Text = new Text("“Now I would like you to make a complete turn at your "
 				+ "normal walking pace and turn until you reach your starting point, "
 				+ "just like this.” [Demonstrate]  \r\n" + 
 				"“I want you to begin when you hear the sound.  Now you try it. Line "
@@ -89,14 +83,12 @@ public class ScriptPrompts {
 				+ "ahead and stay as still as possible until you hear the sound. Ready?” [Press begin button]\r\n" + 
 				" “Stop” [Record Seconds and Steps]\r\n" + 
 				"");
-		turn_360_1Text.setWrappingWidth(600);
-		turn_360_1Text.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("turn_360_1", turn_360_1Text);
+		TextFlow turn_360_1Flow = makeTextFlow(turn_360_1Title, turn_360_1Text);
+		prompt.put("perf_3601", turn_360_1Flow);
 		
 		// ll
-		Text llText = new Text("LEFT LEG STAND\r\n"
-				+ "“For the next exercise, I would like you to raise your "
+		Text llTitle = new Text("LEFT LEG STAND\r\n");
+		Text llText = new Text("“For the next exercise, I would like you to raise your "
 				+ "right leg off the floor and balance on your left leg, like this. I "
 				+ "want you to get into position and when you hear the sound, just continue "
 				+ "standing on your left leg.” [Demonstrate the position] \r\n" + 
@@ -110,15 +102,13 @@ public class ScriptPrompts {
 				"“Stop” [Record for 10 seconds]\r\n" + 
 				"*Note: If time <1second, record as unable.  No aid is allowed.\r\n" + 
 				"");
-		llText.setWrappingWidth(600);
-		llText.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("ll", llText);		
+		TextFlow llFlow = makeTextFlow(llTitle, llText);
+		prompt.put("perf_ll", llFlow);		
 
 		
 		// turn_360_2
-		Text turn_360_2Text = new Text("360 TURN 2\r\n"
-				+ "“Now I would like you to make a complete turn "
+		Text turn_360_2Title = new Text("360 TURN 2\r\n");
+		Text turn_360_2Text = new Text("“Now I would like you to make a complete turn "
 				+ "at your normal walking pace and turn until you reach your starting "
 				+ "point, just like you did before. Line your feet on top of the tape "
 				+ "and begin turning when you hear the sound and turn until you reach "
@@ -129,14 +119,12 @@ public class ScriptPrompts {
 				"“Stop” [Record Seconds and Steps]\r\n" + 
 				"*Note: P should turn in the same direction for both trials\r\n" + 
 				"");
-		turn_360_2Text.setWrappingWidth(600);
-		turn_360_2Text.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("turn_360_2", turn_360_2Text);		
+		TextFlow turn_360_2Flow = makeTextFlow(turn_360_2Title, turn_360_2Text);		
+		prompt.put("perf_3602", turn_360_2Flow);		
 
 		// turn_360_2
-		Text ecText = new Text("EYES CLOSED STAND\r\n"
-				+ "“For the next exercise, I would like you to place one foot "
+		Text ecTitle = new Text("EYES CLOSED STAND\r\n");
+		Text ecText = new Text("“For the next exercise, I would like you to place one foot "
 				+ "beside the other in a comfortable position on this line, but this time I"
 				+ " would like you to close your eyes. I just want you to continue standing"
 				+ " with your eyes closed when you hear the sound. You may use your arms, bend"
@@ -149,14 +137,12 @@ public class ScriptPrompts {
 				"“Stop” [Record for 20 seconds]\r\n" + 
 				"*Note: If time <20 sec, record as unable.  No aid is allowed.\r\n" + 
 				"");
-		ecText.setWrappingWidth(600);
-		ecText.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("ec", ecText);
+		TextFlow ecFlow = makeTextFlow(ecTitle, ecText);		
+		prompt.put("perf_ec", ecFlow);
 		
 		// tug_1
-		Text tug_1Text = new Text("GET UP AND GO 1\r\n"
-				+ "“This next exercise is called the Get Up and Go. "
+		Text tug_1Title = new Text("GET UP AND GO 1\r\n");
+		Text tug_1Text = new Text("“This next exercise is called the Get Up and Go. "
 				+ "For this performance, I would like you to walk this course again, "
 				+ "but this time you are going to be seated in this chair with your "
 				+ "back rested against the back of the chair.  When you hear the sound "
@@ -168,14 +154,12 @@ public class ScriptPrompts {
 				"“Stop” [Press button on remote to end time once P’s back touches the back of the chair] \r\n" + 
 				"*Note: Record protocol deviation if the only available chair is atypical. \r\n" + 
 				"");
-		tug_1Text.setWrappingWidth(600);
-		tug_1Text.setFont(Font.font ("Verdana", 24));
-		
-		prompt.put("tug_1", tug_1Text);
+		TextFlow tug1Flow = makeTextFlow(tug_1Title, tug_1Text);		
+		prompt.put("perf_tug1", tug1Flow);
 		
 		// rl
-		Text rlText = new Text("RIGHT LEG STAND\r\n"
-				+ "“For this next exercise, I would like you to raise your "
+		Text rlTitle = new Text("RIGHT LEG STAND\r\n");
+		Text rlText = new Text("“For this next exercise, I would like you to raise your "
 				+ "left leg off the floor and balance on your right leg, like this. I "
 				+ "want you to get into position and when you hear the sound, just continue "
 				+ "standing on your right leg.”  [Demonstrate the position] \r\n" + 
@@ -188,14 +172,12 @@ public class ScriptPrompts {
 				"“Stop” [Record for 10 seconds]\r\n" + 
 				"*Note: If time <1second, record as unable.  No aid is allowed.\r\n" + 
 				"");
-		rlText.setWrappingWidth(600);
-		rlText.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("rl", rlText);
+		TextFlow rlFlow = makeTextFlow(rlTitle, rlText);	
+		prompt.put("perf_rl", rlFlow);
 		
 		// tug_2
-		Text tug_2Text = new Text("GET UP AND GO 2\r\n"
-				+ "“Now I am going to have you repeat the Get Up and "
+		Text tug_2Title = new Text("GET UP AND GO 2\r\n");
+		Text tug_2Text = new Text("“Now I am going to have you repeat the Get Up and "
 				+ "Go Task which you performed before. This is the performance where you "
 				+ "begin seated in this chair with your back rested against the back of the "
 				+ "chair.  When you hear the sound you are going to stand up from this chair, "
@@ -205,14 +187,12 @@ public class ScriptPrompts {
 				"“Stop” [Press button on remote to end time once P’s back touches the back of the chair]\r\n" + 
 				"*Note: Record protocol deviation if the only available chair is atypical. \r\n" + 
 				"");
-		tug_2Text.setWrappingWidth(600);
-		tug_2Text.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("tug_2", tug_2Text);		
+		TextFlow tug2Flow = makeTextFlow(tug_2Title, tug_2Text);	
+		prompt.put("perf_tug2", tug2Flow);		
 		
 		// tan
-		Text tanText = new Text("TANDEM WALK\r\n"
-				+ "“Now I want you to walk this course again but this time, "
+		Text tanTitle = new Text("TANDEM WALK\r\n");
+		Text tanText = new Text("“Now I want you to walk this course again but this time, "
 				+ "when you hear the sound, I want you to place one foot in front of the "
 				+ "other with the heel touching the toe of the other foot like this, alternating feet. [Demonstrate]\r\n" + 
 				"“If you feel you are losing your balance, step out like this and then resume "
@@ -226,15 +206,13 @@ public class ScriptPrompts {
 				+ "the tandem walk, code as UNABLE. For example, code as unable if the participants "
 				+ "cannot touch their heel to their toe or if they keep touching the wall.\r\n" + 
 				"");
-		tanText.setWrappingWidth(600);
-		tanText.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("tan", tanText);		
+		TextFlow tanFlow = makeTextFlow(tanTitle, tanText);	
+		prompt.put("perf_tan", tanFlow);		
 		
 		
 		// walk_32ft
-		Text walk_32ftText = new Text("32 FOOT WALK\r\n"
-				+ "“I would like you to walk this course again, normally. "
+		Text walk_32ftTitle = new Text("32 FOOT WALK\r\n");
+		Text walk_32ftText = new Text("“I would like you to walk this course again, normally. "
 				+ "I want you to walk to the other end of the course at your usual speed, just "
 				+ "as if you were walking to the store. This time, however, when you hear the sound, "
 				+ "I want you to walk all the way past this line, turn around and walk back to the "
@@ -246,15 +224,13 @@ public class ScriptPrompts {
 				+ "straight ahead and stay as still as possible until you hear the sound. Ready?” "
 				+ "[Press begin button]… “Stop”\r\n" + 
 				"");
-		walk_32ftText.setWrappingWidth(600);
-		walk_32ftText.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("walk_32ft", walk_32ftText);		
+		TextFlow walk_32ftFlow = makeTextFlow(walk_32ftTitle, walk_32ftText);	
+		prompt.put("perf_32ft", walk_32ftFlow);		
 		
 		
 		// tug_2
-		Text toeText = new Text("TOE STAND\r\n"
-				+ "“For the next exercise, I want you to raise your heels "
+		Text toeTitle = new Text("TOE STAND\r\n");
+		Text toeText = new Text("“For the next exercise, I want you to raise your heels "
 				+ "off the floor and balance on the balls of your feet, like this.” "
 				+ "[Demonstrate]\r\n" + 
 				"You may use your arms, bend your knees, or move your body to maintain "
@@ -266,15 +242,13 @@ public class ScriptPrompts {
 				"“Stop” [Record for 10 seconds]\r\n" + 
 				"*Note: If time <1second, record as unable.  No aid is allowed.\r\n" + 
 				"");
-		toeText.setWrappingWidth(600);
-		toeText.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("toe", toeText);		
+		TextFlow toeFlow = makeTextFlow(toeTitle, toeText);	
+		prompt.put("perf_toe", toeFlow);		
 		
 		
 		// cog_1
-		Text cog_1Text = new Text("COGNITIVE TUG 1.\r\n"
-				+ "“Now I am going to have you repeat the Get Up and Go Task "
+		Text cog_1Title = new Text("COGNITIVE TUG 1\r\n");
+		Text cog_1Text = new Text("“Now I am going to have you repeat the Get Up and Go Task "
 				+ "which you performed before. However, now you are going to count backwards "
 				+ "by 3 while you are performing this task. Please start the count backwards, "
 				+ "out loud so I can hear you, starting from 100 by 3 and continue counting "
@@ -295,15 +269,13 @@ public class ScriptPrompts {
 				"*Note: Record protocol deviation if the only available chair is atypical. "
 				+ "Record errors as well as spontaneous corrections, and document as a comment if P trails off counting during walk.\r\n" + 
 				"");
-		cog_1Text.setWrappingWidth(600);
-		cog_1Text.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("cog_1", cog_1Text);		
+		TextFlow cog_1Flow = makeTextFlow(cog_1Title, cog_1Text);	
+		prompt.put("perf_cog1", cog_1Flow);		
 		
 		
 		// cog_2
-		Text cog_2Text = new Text("COGNITIVE TUG 2\r\n"
-				+ "“Now I want you to do that again. Please begin the count backwards, "
+		Text cog_2Title = new Text("COGNITIVE TUG 2\r\n");
+		Text cog_2Text = new Text("“Now I want you to do that again. Please begin the count backwards, "
 				+ "out loud so I can hear you, starting from 100 by 3 and continue counting while you "
 				+ "perform this task. Remember after you sit back down in the chair, do not get up until "
 				+ "I tell you to do so. Remember to look straight ahead and stay as still as possible "
@@ -313,21 +285,33 @@ public class ScriptPrompts {
 				"*Note: Record errors as well as spontaneous corrections.  "
 				+ "Document as a comment if P trails off/stops counting during TUG \r\n" + 
 				"");
-		cog_2Text.setWrappingWidth(600);
-		cog_2Text.setFont(Font.font ("Verdana", 24));
-
-		prompt.put("cog_2", cog_2Text);	
+		TextFlow cog_2Flow = makeTextFlow(cog_2Title, cog_2Text);	
+		prompt.put("perf_cog2", cog_2Flow);	
 		
 		// Finished Test
+		Text finishedTitle = new Text("GAIT TEST FINISHED\r\n");
 		Text finishedText = new Text("If testing is complete Press the STOP Button and "
 				+ "Remeber to plug the device in and follow promts on screen");
-		cog_2Text.setWrappingWidth(600);
-		cog_2Text.setFont(Font.font ("Verdana", 24));
 
-		prompt.put("finish", finishedText);		
+		TextFlow finishFlow = makeTextFlow(finishedTitle, finishedText);	
+		prompt.put("finish", finishFlow);		
 		
 		
 		return prompt;
+	}
+	
+	private TextFlow makeTextFlow(Text title, Text body)
+	{
+		TextFlow flow = new TextFlow();
+		
+		title.setStyle("-fx-font-weight: bold");
+		title.setFont(Font.font ("Verdana", 32));
+		
+		
+		body.setFont(Font.font ("Verdana", 18));
+		flow.setMaxWidth(400);
+		flow.getChildren().addAll(title, body);
+		return flow;
 	}
 }
 

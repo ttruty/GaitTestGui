@@ -191,7 +191,7 @@ public class MainViewController {
   MediaPlayer mediaPlayer = new MediaPlayer(sound);
   
   // prompt vars
-  Map<String, Text> prompts = new HashMap<String, Text>();
+  Map<String, TextFlow> prompts = new HashMap<String, TextFlow>();
     
   /**
    * Initialize the main running project
@@ -328,18 +328,21 @@ public class MainViewController {
 	  		        1
 	  		);
 	 });
-	 //end sound button
+	 //end sound button	 
 	 
-	 Text text = new Text("Before unplugging the DynaPort, make sure the device "
+	 Text title = new Text("CALIBRATION\r\n");		
+	 Text body = new Text("Before unplugging the DynaPort, make sure the device "
  	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
  	 		+ "is facing DOWN and IS between the speaker and the DynaPort.  "
  	 		+ "After unplugging the device, make sure it is completely still "
  	 		+ "and run the calibration test.  Once the calibration test is "
  	 		+ "complete, the device can be removed from the laptop.");
- 	 text.setWrappingWidth(600);
- 	 text.setFont(Font.font ("Verdana", 24));
- 	 text.setFill(Color.RED);
- 	 promptTextFlow.getChildren().add(text); 
+	 
+	title.setStyle("-fx-font-weight: bold");
+	title.setFont(Font.font ("Verdana", 32));		
+	body.setFont(Font.font ("Verdana", 18));
+	promptTextFlow.setMaxWidth(400);
+ 	promptTextFlow.getChildren().addAll(title, body); 
  	 
  	// Connection Status images and status bar update
 	  ConnectionStatus connStatus = new ConnectionStatus();
@@ -347,15 +350,19 @@ public class MainViewController {
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
  
 	 //start button
-     startTest.setOnAction((e) -> {
-    	 
+     startTest.setOnAction((e) -> {    	 
     	 promptTextFlow.getChildren().clear();
-    	 Text textCal = new Text("MAKE SURE DEVICE IS ON SPEAKER BEFORE UNPLUGGING FOR CALIBRATION");
-    	 textCal.setWrappingWidth(600);
-    	 textCal.setFont(Font.font ("Verdana", 24));
-    	 textCal.setFill(Color.RED);
-    	 promptTextFlow.getChildren().add(textCal); 
+    	 Text calTitle = new Text("CALIBRATION\r\n");
+    	 Text calBody = new Text("MAKE SURE DEVICE IS ON SPEAKER BEFORE UNPLUGGING FOR CALIBRATION AND RUNNING CALIBRATION");
     	 
+    	 calTitle.setStyle("-fx-font-weight: bold");
+    	 calTitle.setFont(Font.font ("Verdana", 32));		
+    	 calBody.setFont(Font.font ("Verdana", 18));
+    	 promptTextFlow.setMaxWidth(400);
+    	 promptTextFlow.getChildren().addAll(calTitle, calBody); 
+    	  
+    	 
+    	 if(!Recording.isDebugMode()) {    		 
     	 Platform.runLater(new Runnable() {
 				@Override
 				public void run() {								
@@ -364,29 +371,43 @@ public class MainViewController {
 							+ "WHEN DEVICE IS ON SPEAKER- UNPLUG");
 					connStatus.closeAlert(alertStart);
 				}
- 	 });
+    	 	});
+    	 }
+    	 else {
+    		 Platform.runLater(new Runnable() {
+ 				@Override
+ 				public void run() {								
+ 					Alert alertStart = new Alert(AlertType.WARNING, 							
+ 							"DEVICE IS IN DEBUG MODE \n"
+ 							+ "NOT RECORDING ON ANY DEVICE");
+ 					connStatus.closeAlert(alertStart);
+ 				}
+     	 	});
+    	 }
     	 
 //    	 Alert alert1 = new Alert(AlertType.CONFIRMATION, 
 //    			 "PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n", 
 //                 ButtonType.OK);
 //    	 alert1.show();
     	 
-    	 if (assistedMode.isSelected())
-    	 {
-    		 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//    		 alert.getButtonTypes().set(0, ButtonType.NO);
-//    		 alert.getButtonTypes().set(1, ButtonType.YES);
-    		 alert.getDialogPane().getStylesheets().add("/styles/style.css");
-//			 alert.setGraphic(new ImageView(getIcon(icon)));
-    		 Label lb = (Label) alert.getDialogPane().getChildren().get(1);
-    		 lb.setWrapText(true); //Attempt to set wrapText option
-    		 alert.setTitle("GAIT SCRIPT");
-    		 alert.setHeaderText("Prompt");
-    		 alert.getDialogPane().setContent(text);
-    		 //alert.setContentText(content);
-    		 
-    		 alert.showAndWait();
-    	 }
+//    	 if (assistedMode.isSelected())
+//    	 {
+//    		 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+////    		 alert.getButtonTypes().set(0, ButtonType.NO);
+////    		 alert.getButtonTypes().set(1, ButtonType.YES);
+//    		 alert.getDialogPane().getStylesheets().add("/styles/style.css");
+////			 alert.setGraphic(new ImageView(getIcon(icon)));
+//    		 Label lb = (Label) alert.getDialogPane().getChildren().get(1);
+//    		 lb.setWrapText(true); //Attempt to set wrapText option
+//    		 alert.setTitle("GAIT SCRIPT");
+//    		 alert.setHeaderText("Prompt");
+//    		 alert.getDialogPane().setContent(text);
+//    		 //alert.setContentText(content);
+//    		 
+//    		 alert.showAndWait();
+//    	 }
+    	 
+    	 
     	 
     	 
     	 Recording.setRecordingState(true);
@@ -403,7 +424,7 @@ public class MainViewController {
 		  startTest.setDisable(true);
 		  
 		  }); 
-      //end start button
+      	//end start button
       
       //stop button
 	  stopTest.setOnAction((e) -> {
@@ -433,11 +454,14 @@ public class MainViewController {
 	  saveButton.setOnAction((e) -> {
 		  
 		  promptTextFlow.getChildren().clear();
-	      Text textSave = new Text("Connect Device to Save Measures");
-	      textSave.setWrappingWidth(600);
-	      textSave.setFont(Font.font ("Verdana", 24));
-	      textSave.setFill(Color.RED);
-	      promptTextFlow.getChildren().add(textSave); 
+	    	 Text saveTitle = new Text("SAVE\r\n");
+	    	 Text saveBody = new Text("Connect Device to Save Measures");
+	    	 
+	    	 saveTitle.setStyle("-fx-font-weight: bold");
+	    	 saveTitle.setFont(Font.font ("Verdana", 32));		
+	    	 saveBody.setFont(Font.font ("Verdana", 18));
+	    	 promptTextFlow.setMaxWidth(400);
+	    	 promptTextFlow.getChildren().addAll(saveTitle, saveBody); 
 		  
 		  
 		  Recording.setMarkerList(markerList);
@@ -567,7 +591,7 @@ public class MainViewController {
 	  		
 	  		//Assisted mode
 	  		if (assistedMode.isSelected())	  		{  				  			
-	  			Text text = prompts.get(label);
+	  			TextFlow text = prompts.get(label);
 	  			ButtonType start = new ButtonType("Start", ButtonData.OK_DONE);
 	  			ButtonType skip = new ButtonType("Skip", ButtonData.CANCEL_CLOSE);
 	  			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -600,12 +624,11 @@ public class MainViewController {
 	  		gridPane.setStyle("-fx-background-color: #BCED91");
 	  		start = time;
 
-	  		if (isDelay) {
+	  		if (isDelay & !hearingCheck.isSelected()) {
 	  			int randomDelay = delay.nextInt(high-low) + low;
 	  			delayTime = randomDelay;
-	  			soundTimer(delayTime, startTime, button, true);
-	  			
-	  		}
+	  			soundTimer(delayTime, startTime, button, true);	  			
+	  		}  			  		
 	  		
 	  		else if (!isDelay & label.equals("calibrate"))
 	  		{
@@ -613,6 +636,22 @@ public class MainViewController {
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}
+	  		
+	  		//If hearing impaired is checked	  		
+	  		else if (isDelay & hearingCheck.isSelected())
+	  		{
+	  			int randomDelay = 0; // 2 ms delay for calibrate
+	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button, false);
+	  		}
+	  		
+	  		else if (!isDelay & hearingCheck.isSelected())
+	  		{
+	  			int randomDelay = 0; // 2 ms delay for calibrate
+	  			delayTime = randomDelay;
+	  			soundTimer(delayTime, startTime, button, false);
+	  		}  		
+	  		
 	  		else {
 	  			int randomDelay = 0; // 0 ms delay balance
 	  			delayTime = randomDelay; 
@@ -638,39 +677,18 @@ public class MainViewController {
 		   		if (b.getId() != (button.getId()))
 		   		{
 		   			b.setDisable(true);
+		   			
 		   		}
 		   	}
 
 		   	
 		   	marker.setCount(clickCount);		   	
 		   	perfList.add(label);
-	  	}	  	
-	  	//stop timer
+	  	}	
 	  	
-	  	else {
-	  		
-	  		promptTextFlow.getChildren().clear(); //clear out textflow
-	  		
-	  		// prompt side bar
-	  		if (labelList.indexOf(label) < 15)
-	  		{		
-		  		
-		  		
-		  		String promtLabel = labelList.get(labelList.indexOf(label) + 1);
-		  		Text text = prompts.get(promtLabel);
-		  		text.setWrappingWidth(600);
-		    	text.setFont(Font.font ("Verdana", 24));
-		    	text.setFill(Color.RED);
-		    	promptTextFlow.getChildren().add(text); 
-	  		}
-	  		else {
-	  			Text text = prompts.get("finish");
-		  		text.setWrappingWidth(600);
-		    	text.setFont(Font.font ("Verdana", 24));
-		    	text.setFill(Color.RED);
-		    	promptTextFlow.getChildren().add(text); 
-	  		}
-	  		
+	  	//stop timer	  	
+	  	else {	  		
+	  			  		
 	  		marker.setUnixTimeStampInSound(unixTimeStampInSound); // set sound timestamp when stopped to make sure the task is finished
 		  	
 	  		timeline.stop();
@@ -831,6 +849,8 @@ public class MainViewController {
 	   	batteryLevel.setProgress(battery);
 	   	BatteryBar(batteryLevel);
 	   	batteryLabel.setText(String.valueOf((battery*100)) + "%");
+  	
+	   	
   	}
 	
 	/**
@@ -848,6 +868,8 @@ public class MainViewController {
 				    if( input.isPageDownPressed()) {
 				       //System.out.println("PAGE DOWN");
 				        bQueue.element().fire();
+				        Button b = bQueue.peek();
+				        b.setStyle("-fx-background-color: red");
 				        pageDownPressed = true;
 				        } 
 				    else if( input.isPageUpPressed()) {
@@ -863,9 +885,20 @@ public class MainViewController {
 				        } 
 				    else if (input.isSlideShowPressed() && !taskRunning)
 				        {
-				        bQueue.element().setDisable(true);
-				        bQueue.remove();
-				        slideShowPressed=true;
+					        bQueue.element().setDisable(true);
+					        Button prevb = bQueue.peek();
+					        prevb.setStyle("-fx-background-color: gainsboro");
+					        bQueue.remove();
+					        Button b = bQueue.peek();
+					        if (b != null) {
+						        b.setStyle("-fx-background-color: cyan");
+						        //String perf = b != null ? b.getId() : "finish";
+						        ShowInstructions(b.getId()); 		
+						        slideShowPressed=true;
+					        }
+					        else {
+					        	ShowInstructions("finish");
+					        }				        	
 				        }
 				}
 			    input.setPageDownPressed(false);
@@ -878,6 +911,37 @@ public class MainViewController {
 	 	};
 	    gameLoop.start();
 	}
+	
+	//prompt side bar
+	private void ShowInstructions(String perf)
+	{
+		promptTextFlow.getChildren().clear(); //clear out textflow
+		System.out.println(perf);
+		
+		TextFlow text = prompts.get(perf);
+//		text.setWrappingWidth(600);
+//    	text.setFont(Font.font ("Verdana", 24));
+//    	text.setFill(Color.RED);
+    	promptTextFlow.getChildren().add(text); 
+		
+		
+		// prompt side bar
+//		if (labelList.indexOf(label) < 15) 	
+//		{	
+//  		String promtLabel = labelList.get(labelList.indexOf(label) + 1);
+//  		Text text = prompts.get(promtLabel);
+//  		text.setWrappingWidth(600);
+//    	text.setFont(Font.font ("Verdana", 24));
+//    	text.setFill(Color.RED);
+//    	promptTextFlow.getChildren().add(text); 
+//		}
+//		else {
+//			Text text = prompts.get("finish");
+//  		text.setWrappingWidth(600);
+//    	text.setFont(Font.font ("Verdana", 24));
+//    	text.setFill(Color.RED);
+//    	promptTextFlow.getChildren().add(text); 
+		}
 	
 
 	

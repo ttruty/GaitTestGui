@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="GaitTestGUI.jar" size="81366" download="eager" />
+    <jar href="GaitTestGUI.jar" size="83001" download="eager" />
     <jar href="libs\RXTXcomm.jar" size="60984" download="eager" />
     <jar href="libs\commons-io-2.6.jar" size="214788" download="eager" />
     <jar href="libs\controlsfx-8.40.14.jar" size="1215643" download="eager" />
