@@ -430,11 +430,15 @@ public class MainViewController {
 	  stopTest.setOnAction((e) -> {
 		  
 		  promptTextFlow.getChildren().clear();
-	      Text textStop = new Text("Connect Device to Save Measures");
-	      textStop.setWrappingWidth(600);
-	      textStop.setFont(Font.font ("Verdana", 24));
-	      textStop.setFill(Color.RED);
-	      promptTextFlow.getChildren().add(textStop); 
+	    	 Text saveTitle = new Text("SAVE\r\n");
+	    	 Text saveBody = new Text("Connect Device to Save Measures");
+	    	 
+	    	 saveTitle.setStyle("-fx-font-weight: bold");
+	    	 saveTitle.setFont(Font.font ("Verdana", 32));		
+	    	 saveBody.setFont(Font.font ("Verdana", 18));
+	    	 promptTextFlow.setMaxWidth(400);
+	    	 promptTextFlow.getChildren().addAll(saveTitle, saveBody); 
+		  
 		  	
 		  Recording.setMarkerList(markerList);
 		  ControlButton.Stop();
@@ -454,8 +458,8 @@ public class MainViewController {
 	  saveButton.setOnAction((e) -> {
 		  
 		  promptTextFlow.getChildren().clear();
-	    	 Text saveTitle = new Text("SAVE\r\n");
-	    	 Text saveBody = new Text("Connect Device to Save Measures");
+	    	 Text saveTitle = new Text("SAVEING\r\n");
+	    	 Text saveBody = new Text("Please wait while the measure is saved!");
 	    	 
 	    	 saveTitle.setStyle("-fx-font-weight: bold");
 	    	 saveTitle.setFont(Font.font ("Verdana", 32));		
@@ -864,7 +868,7 @@ public class MainViewController {
 			public void handle(long now) {
 				 // vertical direction
 				//System.out.println(input.isPressed());
-				if (!bQueue.isEmpty()) {
+				if (!bQueue.isEmpty() && Recording.isRecording()) {
 				    if( input.isPageDownPressed()) {
 				       //System.out.println("PAGE DOWN");
 				        bQueue.element().fire();
