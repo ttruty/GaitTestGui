@@ -458,7 +458,7 @@ public class MainViewController {
 	  saveButton.setOnAction((e) -> {
 		  
 		  promptTextFlow.getChildren().clear();
-	    	 Text saveTitle = new Text("SAVEING\r\n");
+	    	 Text saveTitle = new Text("SAVING\r\n");
 	    	 Text saveBody = new Text("Please wait while the measure is saved!");
 	    	 
 	    	 saveTitle.setStyle("-fx-font-weight: bold");
