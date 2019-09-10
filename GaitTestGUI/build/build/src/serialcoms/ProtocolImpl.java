@@ -147,8 +147,6 @@ public class ProtocolImpl implements Protocol {
         // recording command
         CommPortSender.send(getMessage("RECORDING=1"));
         buffWait(5000);
-        
-        Recording.setRecordingState(true);
-        
+                
     }
 }  
