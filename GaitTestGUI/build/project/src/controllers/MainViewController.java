@@ -112,6 +112,7 @@ public class MainViewController {
   @FXML private Button perf_toe;
   @FXML private Button perf_cog1;
   @FXML private Button perf_cog2;
+  @FXML private Button perf_calib2;
  
   @FXML private Label perf_calib_start;
   @FXML private Label perf_8ft1_start;
@@ -129,6 +130,7 @@ public class MainViewController {
   @FXML private Label perf_toe_start;
   @FXML private Label perf_cog1_start;
   @FXML private Label perf_cog2_start;
+  @FXML private Label perf_calib2_start;
   
   @FXML private Label perf_calib_count;
   @FXML private Label perf_8ft1_count;
@@ -146,6 +148,7 @@ public class MainViewController {
   @FXML private Label perf_cog1_count;
   @FXML private Label perf_cog2_count;
   @FXML private Label perf_ec_count;
+  @FXML private Label perf_calib2_count;
   
   //Group indicators = new Group();
 
@@ -165,7 +168,7 @@ public class MainViewController {
   long unixTimeStampInSound; // set this in when the sound is played
 
   //arrays of buttons on gui
-  Button[] buttonList = new Button[16];
+  Button[] buttonList = new Button[17];
   Button[] controlsList = new Button[4];
   Queue<Button> bQueue;
   
@@ -222,6 +225,7 @@ public class MainViewController {
 	  buttonList[13] = perf_toe;
 	  buttonList[14] = perf_cog1;
 	  buttonList[15] = perf_cog2;
+	  buttonList[16] = perf_calib2;
 	  
 	  // setting control button array
 	  controlsList[0] = startTest;
@@ -531,6 +535,9 @@ public class MainViewController {
 	  perf_cog2.setOnAction((e) -> {
 		  	perfButton(perf_cog2, "cog_2", perf_cog2_start, perf_cog2_count, true);
 				});
+	  perf_calib2.setOnAction((e) -> {
+		  	perfButton(perf_calib2, "calibrate2", perf_calib2_start, perf_calib2_count, false);
+				});
   	}
   
   /**
@@ -562,6 +569,7 @@ public class MainViewController {
 			labelList.add("toe");
 			labelList.add("cog_1");
 			labelList.add("cog_2");
+			labelList.add("calibrate2");
 		
 		long time = System.currentTimeMillis();
 		

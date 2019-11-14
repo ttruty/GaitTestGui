@@ -16,7 +16,7 @@ public class ScriptPrompts {
 		Text calibrateTitle = new Text("CALIBRATE\r\n");
 		Text calibrateText = new Text("Before unplugging the DynaPort, make sure the device "
 				+ "is placed directly on the laptop’s speaker; make sure the belt is facing "
-				+ "up and is NOT between the speaker and the DynaPort.  After unplugging the "
+				+ "down.  After unplugging the "
 				+ "device, make sure it is completely still and run the calibration test.  "
 				+ "Once the calibration test is complete, the device can be removed from the laptop.");
 		
@@ -288,6 +288,18 @@ public class ScriptPrompts {
 		TextFlow cog_2Flow = makeTextFlow(cog_2Title, cog_2Text);	
 		prompt.put("perf_cog2", cog_2Flow);	
 		
+		// end calibration
+		Text calibrate2Title = new Text("CALIBRATE 2\r\n");
+		Text calibrate2Text = new Text("Before plugging the DynaPort back into computer, make sure the device "
+				+ "is placed directly on the laptop’s speaker; make sure the belt is facing down. "
+				+ "Make sure it is completely still and run the calibration test.  "
+				+ "Once the calibration test is complete, the device can be plugged in." );
+		
+		TextFlow cal2Flow = makeTextFlow(calibrate2Title, calibrate2Text);
+		prompt.put("calibrate2", cal2Flow);
+		
+		
+
 		// Finished Test
 		Text finishedTitle = new Text("GAIT TEST FINISHED\r\n");
 		Text finishedText = new Text("If testing is complete Press the STOP Button and "

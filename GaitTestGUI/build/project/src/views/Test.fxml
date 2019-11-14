@@ -138,6 +138,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Button fx:id="perf_ll" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefWidth="155.0" text="Left Leg Stand" textAlignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
@@ -392,6 +393,22 @@
                         </Label>
                         <Button fx:id="perf_calib_complete" mnemonicParsing="false" onAction="#ReRunPerf" prefHeight="25.0" prefWidth="70.0" text="Re-Run" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Label fx:id="perf_calib_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="perf_calib2" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" prefWidth="155.0" text="Calibration 2" textAlignment="CENTER" GridPane.rowIndex="17">
+                           <font>
+                              <Font name="Arial Black" size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="perf_calib2_start" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="17">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" onAction="#ReRunPerf" prefHeight="25.0" prefWidth="70.0" text="Re-Run" GridPane.columnIndex="2" GridPane.rowIndex="17" />
+                        <Label fx:id="perf_calib2_count" alignment="CENTER" prefHeight="17.0" prefWidth="77.0" GridPane.columnIndex="3" GridPane.rowIndex="17">
                            <font>
                               <Font size="24.0" />
                            </font>
