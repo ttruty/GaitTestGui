@@ -59,8 +59,9 @@ public class SaveOMX {
 	
 	public void saveFile(File file) throws NoSuchAlgorithmException, IOException {
 		
-		String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
-		String saveDir = docDir.concat("/GaitFiles");
+		//String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
+		//String saveDir = docDir.concat("/GaitFiles");
+		String saveDir = "c:/studies/dynaport";
 		File directory = new File(saveDir);
 	    if (! directory.exists()){
 	        directory.mkdir();
@@ -77,7 +78,7 @@ public class SaveOMX {
 	    }
 		System.out.println("Saved: " +  file.toString() + "to: " +saveFile.toString());
 		
-		// check file with 
+		// check file with hash
 		if (CheckFiles.isIdentical(file.getAbsolutePath(), saveFile.getAbsolutePath())) {
 			System.out.println("File Copy passed MD5 Checksum test");
 			Recording.setSaved(true);

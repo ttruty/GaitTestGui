@@ -296,7 +296,7 @@ public class ScriptPrompts {
 				+ "Once the calibration test is complete, the device can be plugged in." );
 		
 		TextFlow cal2Flow = makeTextFlow(calibrate2Title, calibrate2Text);
-		prompt.put("calibrate2", cal2Flow);
+		prompt.put("perf_calib2", cal2Flow);
 		
 		
 

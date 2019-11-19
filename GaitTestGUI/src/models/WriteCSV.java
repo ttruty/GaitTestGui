@@ -27,8 +27,9 @@ public class WriteCSV {
     	setBaseFilename(Recording.getRecordingId() + "_"+ Recording.getFuYear() + "_"+ saveCsvFormat.format( CsvDate ));
     	
     	
-    	String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
-		String saveDir = docDir.concat("/GaitFiles");
+    	//String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
+		//String saveDir = docDir.concat("/GaitFiles");
+    	String saveDir = "c:/studies/dynaport";
 		File directory = new File(saveDir);
 	    if (! directory.exists()){
 	        directory.mkdir();
