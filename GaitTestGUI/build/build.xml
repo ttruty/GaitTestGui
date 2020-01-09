@@ -20,24 +20,24 @@
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\KinectProcessing\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
+			<fileset dir="C:\Users\ttrut\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
+				<filename name="controlsfx-8.40.14.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\ttrut\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
 				<filename name="RXTXcomm.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\KinectProcessing\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
+			<fileset dir="C:\Users\ttrut\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
 				<filename name="commons-io-2.6.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\KinectProcessing\Documents\GitHub\GaitTestGui\GaitTestGUI\resources\requiredLibs">
-				<filename name="controlsfx-8.40.14.jar"/>
 			</fileset>
 		</copy>
 	
 		<mkdir dir="project" />
 		<copy todir="project">
-			<fileset dir="C:\Users\KinectProcessing\Documents\GitHub\GaitTestGui\GaitTestGUI">
+			<fileset dir="C:\Users\ttrut\Documents\GitHub\GaitTestGui\GaitTestGUI">
 				<include name="src/**" />
 			</fileset>
 		</copy>

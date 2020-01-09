@@ -334,7 +334,7 @@ public class MainViewController {
 	 });
 	 //end sound button	 
 	 
-	 Text title = new Text("CALIBRATION\r\n");		
+	 Text title = new Text("PRESS START BUTTON\r\n");		
 	 Text body = new Text("Before unplugging the DynaPort, make sure the device "
  	 		+ "is placed directly on the laptop’s speaker; make sure the belt "
  	 		+ "is facing DOWN and IS between the speaker and the DynaPort.  "
@@ -642,9 +642,9 @@ public class MainViewController {
 	  			soundTimer(delayTime, startTime, button, true);	  			
 	  		}  			  		
 	  		
-	  		else if (!isDelay & label.equals("calibrate"))
+	  		else if (!isDelay & (label.equals("calibrate") ||  label.equals("calibrate2")))
 	  		{
-	  			int randomDelay = 500; // 2 ms delay for calibrate
+	  			int randomDelay = 500; // 500 ms delay for calibrate
 	  			delayTime = randomDelay;
 	  			soundTimer(delayTime, startTime, button, true);
 	  		}

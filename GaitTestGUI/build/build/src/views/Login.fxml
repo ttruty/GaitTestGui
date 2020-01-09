@@ -68,7 +68,7 @@
             <Image url="@../../../../../Pictures/rushlog.jpg" />
          </image>
       </ImageView>
-      <CheckBox fx:id="debugCheck" disable="true" layoutX="30.0" layoutY="246.0" mnemonicParsing="false" prefWidth="78.0" text="Debug" visible="false" />
+      <CheckBox fx:id="debugCheck" layoutX="30.0" layoutY="246.0" mnemonicParsing="false" prefWidth="78.0" text="Debug" />
       <StackPane alignment="BOTTOM_CENTER" layoutX="313.0" layoutY="304.0" prefHeight="165.0" prefWidth="190.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="366.0">
          <children>
             <ImageView id="statusImage" fx:id="statusImage" fitHeight="174.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
