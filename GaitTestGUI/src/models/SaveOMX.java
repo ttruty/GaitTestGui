@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.io.FileUtils;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
+
 import javax.swing.filechooser.FileSystemView;
 
 public class SaveOMX {
@@ -72,22 +77,37 @@ public class SaveOMX {
 	    
 	    try{
 	    	FileUtils.copyFile(file, saveFile);
+	    	System.out.println("Saved: " +  file.toString() + "to: " +saveFile.toString());
+	    	// check file with hash
+			if (CheckFiles.isIdentical(file.getAbsolutePath(), saveFile.getAbsolutePath())) {
+				System.out.println("File Copy passed MD5 Checksum test");
+				Recording.setSaved(true);
+				Recording.setRecordingState(false);
+			}
+			else {
+				System.out.println("File did not copy correctly try to copy again");
+				
+				Alert alert = new Alert(AlertType.WARNING, 
+	                      "Saved OMX file did not pass, \n "
+	                      + "MD5 Checksum, trying again", 
+	                      ButtonType.OK);
+	        	  alert.showAndWait();
+				
+				saveFile(file);
+			}
 	    }
 	    catch (IOException e){
 	        e.printStackTrace();
+	        Alert alert = new Alert(AlertType.WARNING, 
+                    "Could not copy OMX, try again \n "
+                    + " If error persists, contact coordinator ", 
+                    ButtonType.OK);
+      	  alert.showAndWait();
+      	  saveFile(file);
 	    }
-		System.out.println("Saved: " +  file.toString() + "to: " +saveFile.toString());
 		
-		// check file with hash
-		if (CheckFiles.isIdentical(file.getAbsolutePath(), saveFile.getAbsolutePath())) {
-			System.out.println("File Copy passed MD5 Checksum test");
-			Recording.setSaved(true);
-			Recording.setRecordingState(false);
-		}
-		else {
-			System.out.println("File did not copy correctly try to copy again");
-			saveFile(file);
-		}
+		
+		
 	}
 
 	public String getSaveDriveLetter() {

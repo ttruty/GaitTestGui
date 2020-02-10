@@ -26,7 +26,6 @@ public class ControlButton {
 	}
 	
 	public static void Save(ComConnect com, AnchorPane basePane) throws NoSuchAlgorithmException, IOException {
-		
 		if(Recording.isConnected() || Recording.isDebugMode()) 
 	    {
 	    	
@@ -50,15 +49,12 @@ public class ControlButton {
 		   				   	
 		   	if (!Recording.isDebugMode())
 		   	{
-		   		
-		   		SaveOMX saveObj = Recording.getSaveObj();
+	   			SaveOMX saveObj = Recording.getSaveObj();
 			   	
 			   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
 			   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
 			   	
-			   	saveObj.saveFile(rawSaveFile);			   	        	 
-		        
-			   	
+			   	saveObj.saveFile(rawSaveFile);	
 			   	
 		   		com.stopRecording();
 		   		

@@ -30,7 +30,7 @@ public class Main extends Application {
 	    stage.setTitle("RADC Gait Test");
 	    //stage.setFullScreen(true);
 	    stage.setWidth(1045);
-	    stage.setHeight(670);
+	    stage.setHeight(785);
 	    Image icon = new Image("file:resources/icon.png");
 	    stage.getIcons().add(icon);
 	    //stage.setHeight(bounds.getHeight());
