@@ -7,7 +7,6 @@
 
 package controllers;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -19,13 +18,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import org.controlsfx.control.StatusBar;
 
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
@@ -41,11 +37,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Control;
@@ -57,7 +50,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -89,7 +81,7 @@ public class MainViewController {
   @FXML private Label  fuYearLabel;  
   @FXML private Label  staffIdLabel;    
   @FXML private Label  comPortLabel;    
-  @FXML private StatusBar statusBar;
+  //@FXML private StatusBar statusBar;
   @FXML private GridPane gridPane;
   @FXML private AnchorPane basePane;
   @FXML private MenuBar fileMenuBar;
@@ -176,9 +168,6 @@ public class MainViewController {
   ArrayList<String> perfList = new ArrayList<String>(); 
   ArrayList<Marker> markerList = new ArrayList<Marker>();
   
-  //Drive info
-  String driveLetter;
-  String driveName;
   
   // input info
   Input input;
@@ -189,7 +178,7 @@ public class MainViewController {
   boolean taskRunning = false;
   
   //sound
-  String musicFile = "resources\\start.wav";     // For example
+  String musicFile = "resources\\start.wav";     //sound re
   Media sound = new Media(new File(musicFile).toURI().toString());
   MediaPlayer mediaPlayer = new MediaPlayer(sound);
   
@@ -242,12 +231,12 @@ public class MainViewController {
 	  //}
 	  
 	  //Assisted Mode debugging
-	  assistedMode.setOnAction(new EventHandler<ActionEvent>() {
-		    public void handle(ActionEvent e) {
-		        System.out.println("assistedMode Enabled!");
-		        System.out.println(assistedMode.isSelected());
-		    }
-		});
+//	  assistedMode.setOnAction(new EventHandler<ActionEvent>() {
+//		    public void handle(ActionEvent e) {
+//		        System.out.println("assistedMode Enabled!");
+//		        System.out.println(assistedMode.isSelected());
+//		    }
+//		});
 	  ScriptPrompts scriptPrompts = new ScriptPrompts();
 	  prompts = scriptPrompts.generate();
 	  
@@ -261,7 +250,7 @@ public class MainViewController {
 	  //Set text and indicators on gui
 	  System.out.println(sessionID);
 	  sessionLabel.setText("Session ID: " + sessionID);
-	  timeLabel.setText("00:00:00");
+	  //timeLabel.setText("00:00:00");
 	  projIdLabel.setText("ProjID: " + Recording.getRecordingId());
 	  fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
 	  staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
@@ -303,17 +292,17 @@ public class MainViewController {
  	 // Time label
  	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
 	 
-	 final Timeline timeline = new Timeline(
-	     new KeyFrame(
-	         Duration.millis( 500 ),
-	         event -> {
-	             final long time = System.currentTimeMillis();
-	             timeLabel.setText( timeFormat.format( time ) );
-	             }
-	         )
-	     );
-	 timeline.setCycleCount( Animation.INDEFINITE );
-	 timeline.play();
+//	 final Timeline timeline = new Timeline(
+//	     new KeyFrame(
+//	         Duration.millis( 500 ),
+//	         event -> {
+//	             final long time = System.currentTimeMillis();
+//	             timeLabel.setText( timeFormat.format( time ) );
+//	             }
+//	         )
+//	     );
+//	 timeline.setCycleCount( Animation.INDEFINITE );
+//	 timeline.play();
 	 // end Time label
 	  
  	
@@ -350,7 +339,7 @@ public class MainViewController {
  	 
  	// Connection Status images and status bar update
 	  ConnectionStatus connStatus = new ConnectionStatus();
-	  connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
+	  //connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
 	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
  
 	 //start button
@@ -586,8 +575,8 @@ public class MainViewController {
 		
 		// Time label
  		//DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
- 		StringProperty timeLabel = new SimpleStringProperty();
- 		timeLabel.set("0.00");
+ 		//StringProperty timeLabel = new SimpleStringProperty();
+ 		//timeLabel.set("0.00");
 		
 	  	//random delay generation
 	  	Random delay = new Random();
@@ -602,33 +591,33 @@ public class MainViewController {
 	  		
 	  		
 	  		//Assisted mode
-	  		if (assistedMode.isSelected())	  		{  				  			
-	  			TextFlow text = prompts.get(label);
-	  			ButtonType start = new ButtonType("Start", ButtonData.OK_DONE);
-	  			ButtonType skip = new ButtonType("Skip", ButtonData.CANCEL_CLOSE);
-	  			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-	  			alert.getButtonTypes().set(0, start);
-	  			alert.getButtonTypes().set(1, skip);
-	  			//alert.getDialogPane().getStylesheets().add("/styles/style.css");
-	  			//alert.setGraphic(new ImageView(getIcon(icon)));
-	  			Label lb = (Label) alert.getDialogPane().getChildren().get(1);
-	  			lb.setWrapText(true); //Attempt to set wrapText option
-	  			alert.setTitle("GAIT SCRIPT");
-	  			alert.setHeaderText(label);
-	  			alert.getDialogPane().setContent(text);
-	  			//alert.setContentText(content);
-	  			//Platform.runLater(alert::showAndWait);
-	  			Optional<ButtonType> result = alert.showAndWait();
-	  			if (result.orElse(skip) == start) {
-	  			    System.out.println("Continue");
-	  			} 
-	  			if (result.orElse(start) == skip) {
-	  				button.setStyle("-fx-background-color: gray");
-	  		  		gridPane.setStyle("-fx-background-color: #DCDCDC");
-	  				return;
-	  			}
-	  			
-	  		}
+//	  		if (assistedMode.isSelected())	  		{  				  			
+//	  			TextFlow text = prompts.get(label);
+//	  			ButtonType start = new ButtonType("Start", ButtonData.OK_DONE);
+//	  			ButtonType skip = new ButtonType("Skip", ButtonData.CANCEL_CLOSE);
+//	  			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//	  			alert.getButtonTypes().set(0, start);
+//	  			alert.getButtonTypes().set(1, skip);
+//	  			//alert.getDialogPane().getStylesheets().add("/styles/style.css");
+//	  			//alert.setGraphic(new ImageView(getIcon(icon)));
+//	  			Label lb = (Label) alert.getDialogPane().getChildren().get(1);
+//	  			lb.setWrapText(true); //Attempt to set wrapText option
+//	  			alert.setTitle("GAIT SCRIPT");
+//	  			alert.setHeaderText(label);
+//	  			alert.getDialogPane().setContent(text);
+//	  			//alert.setContentText(content);
+//	  			//Platform.runLater(alert::showAndWait);
+//	  			Optional<ButtonType> result = alert.showAndWait();
+//	  			if (result.orElse(skip) == start) {
+//	  			    System.out.println("Continue");
+//	  			} 
+//	  			if (result.orElse(start) == skip) {
+//	  				button.setStyle("-fx-background-color: gray");
+//	  		  		gridPane.setStyle("-fx-background-color: #DCDCDC");
+//	  				return;
+//	  			}
+//	  			
+//	  		}
 	  		
 	  		button.setDisable(true);
 	  		
@@ -799,7 +788,7 @@ public class MainViewController {
   		            	
   		            	timeWatch = Duration.ZERO;
   		            	timeline = new Timeline(
-  		     	  		     new KeyFrame(Duration.millis(10),
+  		     	  		     new KeyFrame(Duration.millis(100),
   		     	  		    		 new EventHandler<ActionEvent>() {
   		     	  		    	 @Override
   		     	  		    	 public void handle (ActionEvent t) {
@@ -928,7 +917,7 @@ public class MainViewController {
 	private void ShowInstructions(String perf)
 	{
 		promptTextFlow.getChildren().clear(); //clear out textflow
-		System.out.println(perf);
+		//System.out.println(perf);
 		
 		TextFlow text = prompts.get(perf);
 //		text.setWrappingWidth(600);
@@ -970,7 +959,7 @@ public class MainViewController {
 		final String[] barColorStyleClasses = { RED_BAR, ORANGE_BAR, YELLOW_BAR, GREEN_BAR };
 		
 		double progress = bar.progressProperty().doubleValue();
-		System.out.println(progress);
+		//System.out.println(progress);
 		bar.getStyleClass().removeAll(barColorStyleClasses);
 		
         if (progress < 0.2) {

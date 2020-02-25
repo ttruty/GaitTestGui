@@ -14,21 +14,16 @@ import java.time.format.DateTimeFormatter;
 import org.controlsfx.control.StatusBar;
 
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import models.CheckProjId;
 import models.ConnectionStatus;
@@ -99,7 +94,7 @@ public class LoginController {
 			  if(debugCheck.isSelected())
 			  {
 				  usb.setIsConnected(true);
-				  System.out.println("DEBUG MODE");
+				  //System.out.println("DEBUG MODE");
 				  Recording.setDebugMode(true);
 				  StringBuilder sessionText = null;
 				  sessionText = authorize();					
@@ -111,7 +106,7 @@ public class LoginController {
 	        	  currComPort = usb.comPort;
 	        	  StringBuilder sessionText = null;
 	        	  sessionText = authorize();
-	        	  System.out.print(sessionText);
+	        	  //System.out.print(sessionText);
 	        	  loginManager.authenticated(Integer.toString(sessionID)); // switches screen to main view
 	        	  Recording.setRecordingStart(System.currentTimeMillis());
 	          } else {
@@ -120,7 +115,7 @@ public class LoginController {
 	                      + "Unplug and reconnect", 
 	                      ButtonType.OK);
 	        	  alert.showAndWait();
-	        	  System.out.println("Device not connected!!!");
+	        	  //System.out.println("Device not connected!!!");
 	          }
 		  } else {
         	  Alert alert = new Alert(AlertType.ERROR, 
@@ -128,12 +123,12 @@ public class LoginController {
                       + "Please re-enter a correct project ID", 
                       ButtonType.OK);
         	  alert.showAndWait();
-        	  System.out.println("Project ID error");
+        	  //System.out.println("Project ID error");
           }
 	});
    
 	clearButton.setOnAction((e) -> {
-		System.out.print("cleared fields");    	  
+		//System.out.print("cleared fields");    	  
 		  //clear text fields
 		  staffIdField.clear();
 		  projIdField.clear();

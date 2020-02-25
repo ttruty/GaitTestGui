@@ -14,7 +14,7 @@ public class CommPortSender {
         try { 
         	// uncomment to see serial sends
         	
-            System.out.println("SENDING: " + new String(bytes, 0, bytes.length));  
+            //System.out.println("SENDING: " + new String(bytes, 0, bytes.length));  
               
             // sending through serial port is simply writing into OutputStream  
             out.write(bytes);  

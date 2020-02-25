@@ -63,7 +63,7 @@ public class ConnectionStatus {
 								LocalDateTime timeSet = LocalDateTime.now();
 								DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
 						        String time = timeSet.format(formatTime);
-								System.out.println("RECONNECTED at  " + time);
+								//System.out.println("RECONNECTED at  " + time);
 								
 								Recording.setReconnectTime(System.currentTimeMillis());
 							}
@@ -85,14 +85,14 @@ public class ConnectionStatus {
 						        Recording.setRecordingStartTimeStamp(timeSet);
 						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
 						        String time = timeSet.format(formatTime);
-						        System.out.println("UNPLUGGED at " + time);
+						        //System.out.println("UNPLUGGED at " + time);
 						        
 						        Image image1 = new Image("file:resources/walk_icon.png");
 								statusImage.setImage(image1);
 								
-								System.out.println("Connection NEW  OBSERVATION");						
+								//System.out.println("Connection NEW  OBSERVATION");						
 								
-								System.out.println("Plug Alert Changed: waiting");
+								//System.out.println("Plug Alert Changed: waiting");
 								Platform.runLater(new Runnable() {
 									@Override
 									public void run() {								
