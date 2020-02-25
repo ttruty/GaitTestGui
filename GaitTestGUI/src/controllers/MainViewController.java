@@ -10,8 +10,6 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +51,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.ConnectionStatus;
 import models.ControlButton;
@@ -287,24 +284,6 @@ public class MainViewController {
 			node.setDisable(true);
 	    }
  	 }
-	 
-	 
- 	 // Time label
- 	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
-	 
-//	 final Timeline timeline = new Timeline(
-//	     new KeyFrame(
-//	         Duration.millis( 500 ),
-//	         event -> {
-//	             final long time = System.currentTimeMillis();
-//	             timeLabel.setText( timeFormat.format( time ) );
-//	             }
-//	         )
-//	     );
-//	 timeline.setCycleCount( Animation.INDEFINITE );
-//	 timeline.play();
-	 // end Time label
-	  
  	
 	 //Sound button
 	 sampleSoundButton.setOnAction((e) -> {
@@ -317,10 +296,9 @@ public class MainViewController {
 	  		            	mediaPlayer.play();	  		                
 	  		            	this.cancel();
 	  		            }
-	  		        }, 
-	  		        1
-	  		);
-	 });
+	  		        },
+	  		   1);
+		 });
 	 //end sound button	 
 	 
 	 Text title = new Text("PRESS START BUTTON\r\n");		
@@ -763,8 +741,6 @@ public class MainViewController {
      * @param button	boolean for if sound is played
      */
   	private void soundTimer(Long delay, Label label, Button button, boolean isSound) {
-  		 	
-  		long soundTimeStamp;
   		timeline.stop();
   		DoubleProperty timeSeconds = new SimpleDoubleProperty();
   		StringProperty timeLabel = new SimpleStringProperty();
@@ -976,8 +952,6 @@ public class MainViewController {
 	//About menu item on menu bar
 	  @FXML
 	  public void aboutHelp(ActionEvent event) {
-		  // select file from the menu bar
-		  Stage stage = (Stage) fileMenuBar.getScene().getWindow();
 		  Alert alert = new Alert(AlertType.INFORMATION,
 	 	           "Gait Initiation GUI\n\n\n"
 	 	         + "- Used to signal the start of gait activities with sound\n "

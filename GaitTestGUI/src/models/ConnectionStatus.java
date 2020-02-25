@@ -1,12 +1,8 @@
 package models;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.controlsfx.control.StatusBar;
-
-import controllers.LoginManager;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,7 +13,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
@@ -40,7 +35,7 @@ public class ConnectionStatus {
 		return this.waiting;
 	}
 		 
-	public void ShowStatus(ImageView statusImage, StatusBar statusBar, ComConnect com, AnchorPane basePane, Button[] buttons, GridPane gridPane) {
+	public void ShowStatus(ImageView statusImage, ComConnect com, AnchorPane basePane, Button[] buttons, GridPane gridPane) {
 		connectedString.set("Gait Test in Progress...");
 		AtomicInteger taskExecution = new AtomicInteger(0);
 				
@@ -59,12 +54,7 @@ public class ConnectionStatus {
 							statusImage.setImage(image);
 							
 							if (!Recording.isSaved() && !Recording.isRecording() && Recording.getStartButtonPressed() != null)
-							{
-								LocalDateTime timeSet = LocalDateTime.now();
-								DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
-						        String time = timeSet.format(formatTime);
-								//System.out.println("RECONNECTED at  " + time);
-								
+							{								
 								Recording.setReconnectTime(System.currentTimeMillis());
 							}
 						}
@@ -83,9 +73,6 @@ public class ConnectionStatus {
 							if (Recording.isRecording() && waiting) {
 						        LocalDateTime timeSet = LocalDateTime.now();
 						        Recording.setRecordingStartTimeStamp(timeSet);
-						        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd,HH:mm:ss.SSS");
-						        String time = timeSet.format(formatTime);
-						        //System.out.println("UNPLUGGED at " + time);
 						        
 						        Image image1 = new Image("file:resources/walk_icon.png");
 								statusImage.setImage(image1);
@@ -183,7 +170,7 @@ public class ConnectionStatus {
 			}
 			});  
 		
-		statusBar.textProperty().bind(connectedString);
+		//statusBar.textProperty().bind(connectedString);
 	  
 	}
 	

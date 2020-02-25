@@ -33,7 +33,6 @@ public class SystemComs {
 		    		 }
 		    	}
 	    	}
-		this.comList = comList;
 	    }
 	}
 

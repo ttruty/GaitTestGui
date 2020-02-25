@@ -1,8 +1,6 @@
 package serialcoms;
 import java.io.IOException;  
 import java.io.InputStream;
-
-import models.Recording; 
    
 public class CommPortReceiver extends Thread {  
    

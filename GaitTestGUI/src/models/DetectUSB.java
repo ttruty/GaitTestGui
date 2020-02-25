@@ -11,7 +11,6 @@ import javax.swing.filechooser.FileSystemView;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import serialcoms.ComPort;
 import serialcoms.SystemComs;
 
 public class DetectUSB implements Runnable

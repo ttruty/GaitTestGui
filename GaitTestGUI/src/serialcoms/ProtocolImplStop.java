@@ -3,10 +3,6 @@ package serialcoms;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import models.Recording;
 
 public class ProtocolImplStop implements Protocol {  

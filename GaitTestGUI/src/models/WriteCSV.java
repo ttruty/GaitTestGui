@@ -14,8 +14,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.filechooser.FileSystemView;
-
 public class WriteCSV {
 	String filename;
 	String baseFilename;

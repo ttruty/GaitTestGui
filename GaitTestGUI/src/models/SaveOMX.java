@@ -16,8 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 
-import javax.swing.filechooser.FileSystemView;
-
 public class SaveOMX {
 	
 	private String saveDriveName;
