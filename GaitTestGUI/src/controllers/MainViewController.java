@@ -70,7 +70,7 @@ public class MainViewController {
   @FXML private Button stopTest;
   @FXML private Button saveButton;
   @FXML private Button sampleSoundButton;
-  @FXML private CheckBox  hearingCheck;
+  @FXML private CheckBox hearingCheck;
   
   @FXML private Label  sessionLabel;
   @FXML private Label  timeLabel;
@@ -316,9 +316,9 @@ public class MainViewController {
  	promptTextFlow.getChildren().addAll(title, body); 
  	 
  	// Connection Status images and status bar update
-	  ConnectionStatus connStatus = new ConnectionStatus();
-	  //connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
-	  connStatus.unplugStatus(com, basePane, controlsList, gridPane);
+	ConnectionStatus connStatus = new ConnectionStatus();
+	//connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
+	connStatus.unplugStatus(com, basePane, controlsList, gridPane);
  
 	 //start button
      startTest.setOnAction((e) -> {    	 
@@ -428,6 +428,8 @@ public class MainViewController {
 	//save button
 	  saveButton.setOnAction((e) -> {
 		  
+		  Recording.setHearingImpaired(hearingCheck.isSelected());
+		  
 		  promptTextFlow.getChildren().clear();
 	    	 Text saveTitle = new Text("SAVING\r\n");
 	    	 Text saveBody = new Text("Please wait while the measure is saved!");
@@ -449,7 +451,6 @@ public class MainViewController {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}	
-		  Recording.setHearingImpaired(hearingCheck.isSelected());
 		    }); 
 	  // end save button
 	  

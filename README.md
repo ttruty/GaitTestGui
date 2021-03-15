@@ -20,6 +20,11 @@ Version 1.0 of the Gait Test GUI implements all current aims.
 - Staff id can be any 3 digits.
 - Then you will be able to enter the main test screen
 
+## To Develope
+- [Install e(fx)clipe to work with the GUI](https://stackoverflow.com/questions/28011734/some-javafx-classes-cannot-be-resolved-in-eclipse-using-java-se-8u25)
+- [Install Java 1.8 on system](https://stackoverflow.com/questions/23746431/jfxrt-jar-not-in-jdk-1-8)
+- [Make exe from Java](https://github.com/fabnicolas/launch4j_exe_tutorial)
+
 ## UI overview
 ### Device connection
 1. The entry screen allows for 3 user inputs

@@ -8,6 +8,9 @@
 package controllers;
 
 import java.sql.SQLException;
+
+import org.controlsfx.control.StatusBar;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -20,8 +23,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import models.CheckProjId;
+import models.ConnectionStatus;
 import models.DetectUSB;
 import models.Recording;
+import serialcoms.ComConnect;
 
 /** Controls the login screen */ 
 public class LoginController {
@@ -32,7 +37,7 @@ public class LoginController {
   @FXML private Button startButton;
   @FXML private Button clearButton;
   @FXML private Label connectionLbl;
-  //@FXML private StatusBar  statusBar;
+  @FXML private StatusBar  statusBar;
   @FXML private ImageView  statusImage;
   @FXML private ImageView  rushLogo;
   @FXML private CheckBox  debugCheck;
@@ -57,7 +62,7 @@ public class LoginController {
 	  DetectUSB usb = new DetectUSB();
 	 
 	  //connecting object open the connection to talk to the object
-	  //ComConnect com = new ComConnect();
+	  ComConnect com = new ComConnect();
 	  
 	  // start usb connection thread
 	  Thread thread = new Thread(usb);
@@ -75,10 +80,9 @@ public class LoginController {
 	 connectedString.set("Connect Device");
 	 //recording.addListener((observable, oldValue, newValue) -> {
 	 
-	 
-	//Connection
- 	 //ConnectionStatus connStatus = new ConnectionStatus();
- 	 //connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
+	 //Connection
+ 	 ConnectionStatus connStatus = new ConnectionStatus();
+ 	 connStatus.ShowStatus(statusImage, com, basePane, controlsList, gridPane);
  	 
  	 // pressing the start button will alert if errors or start main view
 	  startButton.setOnAction((e) -> {	

@@ -27,12 +27,14 @@ public class WriteCSV {
     	
     	//String docDir = FileSystemView.getFileSystemView().getDefaultDirectory().getPath() ;
 		//String saveDir = docDir.concat("/GaitFiles");
+    	
+    	// If you require it to make the entire directory path including parents,
     	String saveDir = "c:/studies/dynaport";
-		File directory = new File(saveDir);
-	    if (! directory.exists()){
-	        directory.mkdir();
-	    }
-	    
+    	File directory = new File(saveDir);
+    	if (! directory.exists()){
+    		directory.mkdirs();    	
+    	}
+    	
 	    filename =  getBaseFilename() + ".csv"; // returns "txt"
 	    File saveFile = new File(saveDir + "/" + filename);
 
@@ -52,6 +54,8 @@ public class WriteCSV {
         	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         	LocalDateTime time = LocalDateTime.now();        	       	    
 	        String timeString = time.format(timeFormat);
+	        
+	        
        	    
             fileWriter = new FileWriter(saveFile);
             //Write the CSV file header
