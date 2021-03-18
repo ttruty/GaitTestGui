@@ -8,6 +8,8 @@
 package controllers;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.controlsfx.control.StatusBar;
 
@@ -92,16 +94,16 @@ public class LoginController {
 				  usb.setIsConnected(true);
 				  //System.out.println("DEBUG MODE");
 				  Recording.setDebugMode(true);
-				  //StringBuilder sessionText = null;
-				  //sessionText = authorize();					
+				  StringBuilder sessionText = null;
+				  sessionText = authorize();					
 			  }
 			  
 	          if(usb.getIsConnected()) 
 			  //if (1==1) //debug. do not need device in to test
 	          {
 	        	  currComPort = usb.comPort;
-	        	  //StringBuilder sessionText = null;
-	        	  //sessionText = authorize();
+	        	  StringBuilder sessionText = null;
+	        	  sessionText = authorize();
 	        	  //System.out.print(sessionText);
 	        	  loginManager.authenticated(Integer.toString(sessionID)); // switches screen to main view
 	        	  Recording.setRecordingStart(System.currentTimeMillis());
@@ -142,36 +144,36 @@ public class LoginController {
  * @throws Exception 
  * @throws SQLException 
    */   
-//  private StringBuilder authorize() {
-//
-//	  setProjIdField(projIdField);
-//	  setFuField(fuField);
-//	  setStaffIdField(staffIdField);
-//	  	  
-//	  // set time on device
-//      LocalDateTime timeSet = LocalDateTime.now();
-//      DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-//      String time = timeSet.format(formatTime);
-//	  	  
-//	  StringBuilder sb = new StringBuilder();
-//	  
-//	  sb.append("Staff Id: " + staffIdField.getText() + "\n");
-//	  sb.append("Project Id: " + projIdField.getText() + "\n");
-//	  sb.append("F/U year: " + fuField.getText() + "\n");
-//	  sb.append("Access on com port: " + currComPort + "\n");
-//	  sb.append("Time of start: " + time + "\n");
-//	  
-//	  sb.append(generateSessionID() + "\n");
-//    
-//	  return sb;
-//  }
+  private StringBuilder authorize() {
+
+	  setProjIdField(projIdField);
+	  setFuField(fuField);
+	  setStaffIdField(staffIdField);
+	  	  
+	  // set time on device
+      LocalDateTime timeSet = LocalDateTime.now();
+      DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+      String time = timeSet.format(formatTime);
+	  	  
+	  StringBuilder sb = new StringBuilder();
+	  
+	  sb.append("Staff Id: " + staffIdField.getText() + "\n");
+	  sb.append("Project Id: " + projIdField.getText() + "\n");
+	  sb.append("F/U year: " + fuField.getText() + "\n");
+	  sb.append("Access on com port: " + currComPort + "\n");
+	  sb.append("Time of start: " + time + "\n");
+	  
+	  sb.append(generateSessionID() + "\n");
+    
+	  return sb;
+  }
   
   
 
-//  private String generateSessionID() {
-//    sessionID++;
-//    return  projIdField.getText() + " - session " + sessionID;
-//  }
+  private String generateSessionID() {
+    sessionID++;
+    return  projIdField.getText() + " - session " + sessionID;
+  }
 
 	public TextField getStaffIdField() {
 		return staffIdField;
