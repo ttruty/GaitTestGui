@@ -1,4 +1,5 @@
 package serialcoms;
+import java.io.Console;
 import java.io.IOException;  
 import java.io.InputStream;
    
@@ -29,8 +30,8 @@ public class CommPortReceiver extends Thread {
                 sleep(10);  
             }  
         } catch (IOException e) { 
-        	
-            e.printStackTrace();
+        	System.out.println("Connection Disconnected");	
+
             // This is when the device is set up after initial formatting
             
       	  	

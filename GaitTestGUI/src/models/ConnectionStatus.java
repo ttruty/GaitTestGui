@@ -190,9 +190,10 @@ public class ConnectionStatus {
 						}
 					});
 					
-					//connected.set("Connected: " + Recording.isConnected());				
+				//connected.set("Connected: " + Recording.isConnected());				
 				}
 				else {
+					//System.out.println("Plugged OUT>>>>");
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {						
@@ -218,10 +219,10 @@ public class ConnectionStatus {
 					
 					if (newValue)
 					{
-						System.out.println("Plug Alert NEW  OBSERVATION");
+						//System.out.println("Plug Alert NEW  OBSERVATION");
 						if (!Recording.isSaved() && !waiting)
 						{
-							System.out.println("Plug Alert Changed: set up");
+							//System.out.println("Plug Alert Changed: set up");
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {								

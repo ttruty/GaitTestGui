@@ -101,11 +101,10 @@ public class ComConnect {
    	  	if (common.size() == 1)
    	  	{ 
    	  		this.setAccessComPort(common.get(0));
-   	  		System.out.println("ACCESS COM PORT:" + accessComPort);
+   	  		//System.out.println("ACCESS COM PORT:" + accessComPort);
    	  		new ComConnect().connect(this.getAccessComPort(), new ProtocolImpl());
+   	  		System.out.println("Connection made");
    	  		CommPortSender.send(new ProtocolImpl().getMessage("SAMPLE=1"));
-   	  		
-
    	  		CommPortSender.send(new ProtocolImpl().getMessage("AT"));
 		}
    	  	else if (common.isEmpty()) {

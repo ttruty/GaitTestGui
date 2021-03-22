@@ -10,6 +10,8 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -247,7 +249,7 @@ public class MainViewController {
 	  //Set text and indicators on gui
 	  System.out.println(sessionID);
 	  sessionLabel.setText("Session ID: " + sessionID);
-	  //timeLabel.setText("00:00:00");
+	  timeLabel.setText("00:00:00");
 	  projIdLabel.setText("ProjID: " + Recording.getRecordingId());
 	  fuYearLabel.setText("F/U Year: " + Recording.getFuYear());
 	  staffIdLabel.setText("Staff ID: " + Recording.getStaffId());
@@ -284,6 +286,24 @@ public class MainViewController {
 			node.setDisable(true);
 	    }
  	 }
+ 	 
+ 	// Time label
+ 	 	 DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
+
+ 		 final Timeline timeline = new Timeline(
+ 		     new KeyFrame(
+ 		         Duration.millis( 500 ),
+ 		         event -> {
+ 		             final long time = System.currentTimeMillis();
+ 		             timeLabel.setText( timeFormat.format( time ) );
+ 		             }
+ 		         )
+ 		     );
+ 		 timeline.setCycleCount( Animation.INDEFINITE );
+ 		 timeline.play();
+ 		 // end Time label
+ 	 
+ 	 
  	
 	 //Sound button
 	 sampleSoundButton.setOnAction((e) -> {
@@ -317,9 +337,9 @@ public class MainViewController {
  	 
  	// Connection Status images and status bar update
 	ConnectionStatus connStatus = new ConnectionStatus();
-	//connStatus.ShowStatus(statusImage, statusBar, com, basePane, controlsList, gridPane);
+	
+	connStatus.ShowStatus(statusImage, com, basePane, controlsList, gridPane);
 	connStatus.unplugStatus(com, basePane, controlsList, gridPane);
- 
 	 //start button
      startTest.setOnAction((e) -> {    	 
     	 promptTextFlow.getChildren().clear();
@@ -354,31 +374,7 @@ public class MainViewController {
  					connStatus.closeAlert(alertStart);
  				}
      	 	});
-    	 }
-    	 
-//    	 Alert alert1 = new Alert(AlertType.CONFIRMATION, 
-//    			 "PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n", 
-//                 ButtonType.OK);
-//    	 alert1.show();
-    	 
-//    	 if (assistedMode.isSelected())
-//    	 {
-//    		 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-////    		 alert.getButtonTypes().set(0, ButtonType.NO);
-////    		 alert.getButtonTypes().set(1, ButtonType.YES);
-//    		 alert.getDialogPane().getStylesheets().add("/styles/style.css");
-////			 alert.setGraphic(new ImageView(getIcon(icon)));
-//    		 Label lb = (Label) alert.getDialogPane().getChildren().get(1);
-//    		 lb.setWrapText(true); //Attempt to set wrapText option
-//    		 alert.setTitle("GAIT SCRIPT");
-//    		 alert.setHeaderText("Prompt");
-//    		 alert.getDialogPane().setContent(text);
-//    		 //alert.setContentText(content);
-//    		 
-//    		 alert.showAndWait();
-//    	 }
-    	 
-    	 
+    	 }   	 
     	 
     	 
     	 Recording.setRecordingState(true);
@@ -554,8 +550,8 @@ public class MainViewController {
 		
 		// Time label
  		//DateFormat timeFormat = new SimpleDateFormat( "HH:mm:ss" );
- 		//StringProperty timeLabel = new SimpleStringProperty();
- 		//timeLabel.set("0.00");
+ 		StringProperty timeLabel = new SimpleStringProperty();
+ 		timeLabel.set("0.00");
 		
 	  	//random delay generation
 	  	Random delay = new Random();
@@ -649,7 +645,6 @@ public class MainViewController {
 	  		marker.setUnixTimeStamp(time + delayTime);
 	  		marker.setMarkerType("Start");
 	  		
-	  		//StringProperty timeLabel = new SimpleStringProperty();
 	  	
 		   	//diable buttons
 		   	for (Button b : buttonList)
