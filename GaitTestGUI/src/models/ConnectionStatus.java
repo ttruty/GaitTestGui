@@ -258,6 +258,7 @@ public class ConnectionStatus {
 						        	  
 									RingIndicator.removeRing(basePane);
 									Platform.exit();
+									System.exit(0);
 						        	//basePane.getChildren().remove(indicators);
 									
 //						        	startTest.setDisable(true);

@@ -29,7 +29,12 @@ public class WriteCSV {
 		//String saveDir = docDir.concat("/GaitFiles");
     	
     	// If you require it to make the entire directory path including parents,
-    	String saveDir = "c:/studies/dynaport";
+    	String saveDir = "c:/studies"; 
+    	if (Recording.getDeviceType() == "AX6") {
+    		saveDir = "c:/studies/ax6"; 
+    	} else {
+    		saveDir = "c:/studies/dynaport";    		
+    	}
     	File directory = new File(saveDir);
     	if (! directory.exists()){
     		directory.mkdirs();    	

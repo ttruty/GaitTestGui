@@ -29,6 +29,9 @@ import models.ConnectionStatus;
 import models.DetectUSB;
 import models.Recording;
 import serialcoms.ComConnect;
+import openmovement.Device;
+import openmovement.JOM;
+import openmovement.JOMAPI;
 
 /** Controls the login screen */ 
 public class LoginController {
@@ -37,6 +40,7 @@ public class LoginController {
   @FXML private TextField projIdField;
   @FXML private TextField fuField;
   @FXML private Button startButton;
+  @FXML private Button startAX6;
   @FXML private Button clearButton;
   @FXML private Label connectionLbl;
   @FXML private StatusBar  statusBar;
@@ -52,6 +56,8 @@ public class LoginController {
   //session id counter
   private static int sessionID = 0;
   private String currComPort = null;
+  
+  private JOMAPI omapi;
 
   /**
    * Initializes usb threads and connection in project
@@ -115,6 +121,47 @@ public class LoginController {
 	        	  alert.showAndWait();
 	        	  //System.out.println("Device not connected!!!");
 	          }
+		  } else {
+        	  Alert alert = new Alert(AlertType.ERROR, 
+                      "Project ID is not valid, \n "
+                      + "Please re-enter a correct project ID", 
+                      ButtonType.OK);
+        	  alert.showAndWait();
+        	  //System.out.println("Project ID error");
+          }
+	});
+	  
+	  // pressing the start button will alert if errors or start main view
+	  startAX6.setOnAction((e) -> {	
+		  if (validityCheck(projIdField.getText())) {
+			  usb.setIsConnected(true);
+			  StringBuilder sessionText = null;
+			  //System.out.println("DEBUG MODE");
+			  Recording.setDeviceType("AX6");
+				int result;
+				System.out.println("JOM: OmStartup()");
+				System.out.println(JOMAPI.OM_VERSION);
+
+				result = JOMAPI.OmStartup(JOMAPI.OM_VERSION);
+				if (result < 0)
+				{
+					System.out.println("JOM: Error during OmStartup() = " + result);
+					Alert alert = new Alert(AlertType.ERROR, 
+		                      "AX6 Error, \n "
+		                      + "Please try reconnecting device", 
+		                      ButtonType.OK);
+		        	  alert.showAndWait();
+				}
+				else
+				{
+					System.out.println("JOM: ...OK");
+					System.out.println("DEVICE CONNECTED ID IS: " + Device.getDeviceId());
+					sessionText = authorize();		
+					loginManager.authenticated(Integer.toString(sessionID)); // switches screen to main view
+		        	Recording.setRecordingStart(System.currentTimeMillis());
+				}
+					
+				
 		  } else {
         	  Alert alert = new Alert(AlertType.ERROR, 
                       "Project ID is not valid, \n "

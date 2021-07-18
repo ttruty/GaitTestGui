@@ -14,7 +14,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public class Recording {
-	 
+	
+	private static String deviceType;
 	private static String recordingId;
 	private static String fuYear;
 	private static String staffId;
@@ -175,8 +176,10 @@ public class Recording {
 	public static void setHearingImpaired(boolean hearingImpaired) {
 		Recording.hearingImpaired = hearingImpaired;
 	}
-	
-	
-	
-	
+	public static String getDeviceType() {
+		return deviceType;
+	}
+	public static void setDeviceType(String deviceType) {
+		Recording.deviceType = deviceType;
+	}
 }

@@ -6,6 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
+import openmovement.Device;
+import openmovement.JOMAPI;
+import openmovement.JOMAPIListener;
 import serialcoms.ComConnect;
 import javafx.scene.control.Alert.AlertType;
 
@@ -24,7 +27,7 @@ public class ControlButton {
 	}
 	
 	public static void Save(ComConnect com, AnchorPane basePane) throws NoSuchAlgorithmException, IOException {
-		if(Recording.isConnected() || Recording.isDebugMode()) 
+		if(Recording.isConnected() || Recording.isDebugMode() || Recording.getDeviceType() == "AX6") 
 	    {
 	    	
 	    	//ring progress bar
@@ -47,14 +50,24 @@ public class ControlButton {
 		   				   	
 		   	if (!Recording.isDebugMode())
 		   	{
-	   			SaveOMX saveObj = Recording.getSaveObj();
+		   		if (Recording.getDeviceType() == "AX6")
+		   		{
+		   			
+					System.out.println("JOM: ...OK");
+					System.out.println("DEVICE CONNECTED ID IS: " + Device.getDeviceId());
+					// download file
+					JOMAPI.OmBeginDownloading(Device.getDeviceId(), 0, -1, "c:/studies/ax6/" + Recording.getRecordingId() + Recording.getFuYear() + ".cwa");
+					RingIndicator.removeRing(basePane);	
+		   		} else {
+		   			SaveOMX saveObj = Recording.getSaveObj();
+		   			
+		   			File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
+		   			saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
+		   			
+		   			saveObj.saveFile(rawSaveFile);		   			
+		   			com.stopRecording();
+		   		}
 			   	
-			   	File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
-			   	saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
-			   	
-			   	saveObj.saveFile(rawSaveFile);	
-			   	
-		   		com.stopRecording();
 		   		
 		   	}
 		   	else {

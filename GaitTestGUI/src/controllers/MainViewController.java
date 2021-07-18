@@ -39,6 +39,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Control;
@@ -61,6 +62,8 @@ import models.Marker;
 import models.Recording;
 import models.RingIndicator;
 import models.ScriptPrompts;
+import openmovement.Device;
+import openmovement.JOMAPI;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import serialcoms.ComConnect;
@@ -359,7 +362,8 @@ public class MainViewController {
 				public void run() {								
 					Alert alertStart = new Alert(AlertType.NONE,
 							"PLACE DEVICE ON SPEAKER BEFORE UNPLUGGING \n"
-							+ "WHEN DEVICE IS ON SPEAKER- UNPLUG");
+							+ "WHEN DEVICE IS ON SPEAKER- UNPLUG",
+						    ButtonType.OK);
 					connStatus.closeAlert(alertStart);
 				}
     	 	});
@@ -389,6 +393,11 @@ public class MainViewController {
 	   	  saveButton.setDisable(false);
 		  stopTest.setDisable(false);
 		  startTest.setDisable(true);
+		  
+		  //AX6 Start Recording
+		  if (Recording.getDeviceType() == "AX6") {
+			  JOMAPI.beginRecording(Device.getDeviceId(), Integer.parseInt(Recording.getRecordingId()));
+		  }
 		  
 		  }); 
       	//end start button
