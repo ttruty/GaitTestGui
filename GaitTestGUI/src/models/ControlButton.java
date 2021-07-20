@@ -58,6 +58,7 @@ public class ControlButton {
 					// download file
 					JOMAPI.OmBeginDownloading(Device.getDeviceId(), 0, -1, "c:/studies/ax6/" + Recording.getRecordingId() + Recording.getFuYear() + ".cwa");
 					RingIndicator.removeRing(basePane);	
+		   		
 		   		} else {
 		   			SaveOMX saveObj = Recording.getSaveObj();
 		   			

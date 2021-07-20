@@ -138,27 +138,31 @@ public class LoginController {
 			  StringBuilder sessionText = null;
 			  //System.out.println("DEBUG MODE");
 			  Recording.setDeviceType("AX6");
-				int result;
-				System.out.println("JOM: OmStartup()");
-				System.out.println(JOMAPI.OM_VERSION);
-
-				result = JOMAPI.OmStartup(JOMAPI.OM_VERSION);
-				if (result < 0)
+			  Recording.setRecordingStart(System.currentTimeMillis());
+			  int result;
+		      System.out.println("JOM: OmStartup()");
+		      System.out.println(JOMAPI.OM_VERSION);
+				
+			  result = JOMAPI.OmStartup(JOMAPI.OM_VERSION);
+		      if (result < 0)
 				{
 					System.out.println("JOM: Error during OmStartup() = " + result);
 					Alert alert = new Alert(AlertType.ERROR, 
-		                      "AX6 Error, \n "
-		                      + "Please try reconnecting device", 
-		                      ButtonType.OK);
-		        	  alert.showAndWait();
+					          "AX6 Error, \n "
+					          + "Please try reconnecting device", 
+					              ButtonType.OK);
+						  alert.showAndWait();
 				}
 				else
 				{
 					System.out.println("JOM: ...OK");
 					System.out.println("DEVICE CONNECTED ID IS: " + Device.getDeviceId());
-					sessionText = authorize();		
+					sessionText = authorize();	
+					
+					LocalDateTime timeSet = LocalDateTime.now();
+			        Recording.setRecordingStartTimeStamp(timeSet);
+			        
 					loginManager.authenticated(Integer.toString(sessionID)); // switches screen to main view
-		        	Recording.setRecordingStart(System.currentTimeMillis());
 				}
 					
 				

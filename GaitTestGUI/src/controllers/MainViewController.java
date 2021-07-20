@@ -343,7 +343,8 @@ public class MainViewController {
 	
 	connStatus.ShowStatus(statusImage, com, basePane, controlsList, gridPane);
 	connStatus.unplugStatus(com, basePane, controlsList, gridPane);
-	 //start button
+	
+	//start button
      startTest.setOnAction((e) -> {    	 
     	 promptTextFlow.getChildren().clear();
     	 Text calTitle = new Text("CALIBRATION\r\n");
