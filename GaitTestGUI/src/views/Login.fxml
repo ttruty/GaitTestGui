@@ -52,6 +52,11 @@
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
+          <Menu mnemonicParsing="false" onAction="#checks" text="Checks">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Check Marker File" />
+            </items>
+          </Menu>
         </menus>
       </MenuBar>
       <Label layoutX="47.0" layoutY="54.0" text="Proj ID">
@@ -71,12 +76,20 @@
             <Image url="@../../../../../Pictures/rushlog.jpg" />
          </image>
       </ImageView>
-      <CheckBox fx:id="debugCheck" layoutX="30.0" layoutY="246.0" mnemonicParsing="false" prefWidth="78.0" text="Debug" />
+      <CheckBox fx:id="debugCheck" layoutX="30.0" layoutY="246.0" mnemonicParsing="false" prefWidth="78.0" text="Debug" visible="false" />
       <StackPane alignment="BOTTOM_CENTER" layoutX="313.0" layoutY="304.0" prefHeight="165.0" prefWidth="190.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="313.0" AnchorPane.rightAnchor="366.0">
          <children>
             <ImageView id="statusImage" fx:id="statusImage" fitHeight="174.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
-      <Button id="startButton" fx:id="startAX6" layoutX="210.0" layoutY="239.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="86.0" text="AX6 Start" />
+      <Button id="startButton" fx:id="startAX6" layoutX="189.0" layoutY="239.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="86.0" text="AX6 Start" visible="false" />
+      <Button id="startButton" fx:id="startBoth" layoutX="278.0" layoutY="238.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="86.0" text="AX6/Dyno" visible="false" />
+      <TableView fx:id="marker_check_table" layoutX="554.0" layoutY="24.0" prefHeight="508.0" prefWidth="254.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="proj_id" prefWidth="117.0" text="proj_id" />
+          <TableColumn fx:id="fu_year" prefWidth="49.0" text="fu_year" />
+            <TableColumn fx:id="date" prefWidth="87.0" text="date" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

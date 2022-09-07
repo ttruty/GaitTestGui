@@ -9,7 +9,12 @@ import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;  
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Alert.AlertType;
+import models.RingIndicator;  
    
 public class ComConnect { 
 	
@@ -108,11 +113,23 @@ public class ComConnect {
    	  		CommPortSender.send(new ProtocolImpl().getMessage("AT"));
 		}
    	  	else if (common.isEmpty()) {
-   	  		System.out.println("NO USABLE COMM PORT CONNECTION");
+   	  		System.out.println("NO USABLE COM PORT CONNECTION");
+	   	  	Alert alert = new Alert(AlertType.INFORMATION,
+					"NO USABLE COM PORT CONNECTION\n"
+					+ "CHECK CONNECTED DEVICE AND RESTART\n", 
+	                  ButtonType.OK);
+					  //basePane.getChildren().remove(indicators);				
+				alert.setHeaderText("CONNECTION ERROR... ");
    	  	}
    	  	else if (common.size() > 1)
    	  	{
    	  		System.out.println("TOO MANY COMM PORT CONNECTIONS");
+   	  	Alert alert = new Alert(AlertType.INFORMATION,
+				"TOO MANY COM PORT CONNECTIONS\n"
+				+ "CHECK CONNECTED DEVICE AND RESTART\n", 
+                  ButtonType.OK);
+				  //basePane.getChildren().remove(indicators);				
+			alert.setHeaderText("CONNECTION ERROR... ");
    	  	}
    	 return null;
    	 }  

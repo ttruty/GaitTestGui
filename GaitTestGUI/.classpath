@@ -9,7 +9,9 @@
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="lib" path="D:/Github/GaitTestGui/GaitTestGUI/resources/requiredLibs/commons-io-2.6.jar"/>
 	<classpathentry kind="lib" path="D:/Github/GaitTestGui/GaitTestGUI/resources/requiredLibs/controlsfx-8.40.14.jar"/>
-	<classpathentry kind="lib" path="D:/Github/GaitTestGui/Build-3.21.2021/libs/RXTXcomm.jar"/>
 	<classpathentry kind="lib" path="D:/CodeTutorials/openmovement/Software/OM/jomapi/lib/JOMAPI.jar"/>
+	<classpathentry kind="lib" path="D:/Github/GaitTestGui/Build-ax6/libs/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="D:/Github/GaitTestGui/Build-ax6/libs/opencsv-5.6.jar"/>
+	<classpathentry kind="lib" path="D:/Github/GaitTestGui/Build-ax6/libs/commons-lang3-3.12.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

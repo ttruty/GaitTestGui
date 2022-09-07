@@ -19,7 +19,9 @@ public class ControlButton {
 	   	Recording.setRecordingState(false);
 	   	Alert alert = new Alert(AlertType.WARNING, 
                 "Recording stopped, \n "
-                + "Please plug in device to save", 
+                + "Please plug in device to save \n" +
+                		"WAIT FOR DEVICE TO FLASH GREEN \n" +
+                "Then press OK",
                 ButtonType.OK);
   	  alert.showAndWait();
   	  
@@ -59,7 +61,7 @@ public class ControlButton {
 					JOMAPI.OmBeginDownloading(Device.getDeviceId(), 0, -1, "c:/studies/ax6/" + Recording.getRecordingId() + Recording.getFuYear() + ".cwa");
 					RingIndicator.removeRing(basePane);	
 		   		
-		   		} else {
+		   		} else if (Recording.getDeviceType() == "Dyno") {
 		   			SaveOMX saveObj = Recording.getSaveObj();
 		   			
 		   			File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
@@ -67,9 +69,22 @@ public class ControlButton {
 		   			
 		   			saveObj.saveFile(rawSaveFile);		   			
 		   			com.stopRecording();
-		   		}
+		   		} else if (Recording.getDeviceType() == "Both") {
+					
+					   // download file ax6
+					System.out.println("JOM: ...OK");
+					System.out.println("DEVICE CONNECTED ID IS: " + Device.getDeviceId());
+					JOMAPI.OmBeginDownloading(Device.getDeviceId(), 0, -1, "c:/studies/ax6/" + Recording.getRecordingId() + Recording.getFuYear() + ".cwa");
+
+					// download file dynoport
+					SaveOMX saveObj = Recording.getSaveObj();
+					
+					File rawSaveFile = saveObj.fileSearch(saveObj.getSaveDriveLetter());
+					saveObj.setSaveFileName(writer.getBaseFilename()+ ".OMX");
+					
+					saveObj.saveFile(rawSaveFile);		   			
+					com.stopRecording();
 			   	
-		   		
 		   	}
 		   	else {
 		   		Alert alert = new Alert(AlertType.WARNING, 
@@ -88,5 +103,6 @@ public class ControlButton {
         	  alert.showAndWait();
         	  //System.out.println("Device not connected!!!");
         	  }
+	    }
 	}
 }

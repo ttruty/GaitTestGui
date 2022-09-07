@@ -197,8 +197,7 @@ public class MainViewController {
    */
   public void initSessionID(final LoginManager loginManager, String sessionID, Input input) {	  
 	  // play sound first on load to avoid lag later
-	  mediaPlayer.play();
-	  
+	  mediaPlayer.play();  
 	  // setting button array
 	  buttonList[0] = perf_calib;
 	  buttonList[1] = perf_8ft1;
@@ -662,7 +661,6 @@ public class MainViewController {
 		   		if (b.getId() != (button.getId()))
 		   		{
 		   			b.setDisable(true);
-		   			
 		   		}
 		   	}
 
@@ -802,8 +800,12 @@ public class MainViewController {
   	private void StartDeviceRecording(ComConnect com)
   	{  		
   		Recording.setRecordingStart(System.currentTimeMillis());
+  		LocalDateTime timeSet = LocalDateTime.now();
+        Recording.setRecordingStartTimeStamp(timeSet);
    	    com.makeConnection();
-	   	
+   	    
+   	    System.out.println("STARTING TIME:" + Recording.getRecordingStart().toString());
+   	    
 	   	//ring progress bar
    	    RingIndicator.RingProgress(basePane);
    	    

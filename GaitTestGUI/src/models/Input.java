@@ -4,7 +4,6 @@
  * @author Tim Truty
  *
  */
-
 package models;
 
 import java.util.BitSet;
